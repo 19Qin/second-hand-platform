@@ -313,7 +313,12 @@ page: 1                    // 页码，从1开始
 size: 4                    // 每页数量，默认4（瀑布流）
 category: 11               // 分类ID（可选）
 keyword: iPhone            // 搜索关键词（商品标题模糊搜索）
-filter: popular            // 筛选：popular流行, discount打折, brand品牌
+filter: popular            // 筛选：all全部, popular流行, discount打折, brand品牌, accessories配件
+                           // - all: 显示所有商品
+                           // - popular: 显示热门商品（基于浏览量、收藏量等）
+                           // - discount: 显示有折扣的商品（有originalPrice且低于原价）
+                           // - brand: 显示品牌商品（知名品牌标识）
+                           // - accessories: 显示配件类商品
 sort: time_desc            // 排序：time_desc最新, price_asc价格升序, price_desc价格降序
 minPrice: 1000             // 最低价格（可选）
 maxPrice: 10000            // 最高价格（可选）
@@ -370,14 +375,59 @@ radius: 500                // 搜索半径，单位米（默认500米）
       "hasNext": true
     },
     "filters": {                     // 当前筛选条件汇总
+      "filter": "popular",           // 当前筛选类型
+      "filterText": "热门商品",      // 筛选类型显示文本
       "category": "手机",
       "priceRange": "1000-10000",
-      "condition": "几乎全新",
+      "condition": "几乎全新", 
       "location": "北京市朝阳区"
     }
   }
 }
 ```
+
+### 筛选功能使用示例
+
+**获取热门商品：**
+```
+GET /products?filter=popular&page=1&size=10
+```
+
+**获取打折商品：**
+```
+GET /products?filter=discount&category=11&minPrice=1000&maxPrice=5000
+```
+
+**获取品牌商品：**
+```
+GET /products?filter=brand&keyword=iPhone&sort=price_asc
+```
+
+**获取配件类商品：**
+```
+GET /products?filter=accessories&location=北京&radius=1000
+```
+
+**综合筛选示例：**
+```
+GET /products?filter=popular&category=11&condition=LIKE_NEW&hasWarranty=true&minPrice=2000&maxPrice=8000&sort=time_desc&page=1&size=4
+```
+
+### 筛选逻辑说明
+
+| 筛选类型 | 筛选逻辑 | 备注 |
+|---------|---------|------|
+| `all` | 不应用特殊筛选，显示所有符合其他条件的商品 | 默认值 |
+| `popular` | 根据综合热度排序（浏览量×0.4 + 收藏量×0.3 + 聊天量×0.3） | 近7天数据加权 |
+| `discount` | 仅显示有原价且当前价格低于原价的商品 | 必须有originalPrice字段且price < originalPrice |
+| `brand` | 显示标记为知名品牌的商品 | 基于商品标题关键词匹配或商品标签 |
+| `accessories` | 显示配件类商品 | 基于分类ID或标题关键词识别 |
+
+**注意事项：**
+- 筛选参数可与其他查询参数组合使用
+- 筛选结果仍受分页参数控制  
+- 排序参数会影响筛选结果的展示顺序
+- 地理位置筛选仅在提供经纬度时生效
 
 ## 2.5 获取商品详情
 

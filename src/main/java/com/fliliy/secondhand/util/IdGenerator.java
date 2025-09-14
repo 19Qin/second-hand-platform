@@ -37,6 +37,13 @@ public class IdGenerator {
     }
     
     /**
+     * 生成商品ID（雪花算法）
+     */
+    public static long generateProductId() {
+        return snowflake.nextId();
+    }
+    
+    /**
      * 生成设备ID
      */
     public static String generateDeviceId() {
