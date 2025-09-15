@@ -1,5 +1,7 @@
 package com.fliliy.secondhand.service;
 
+import com.fliliy.secondhand.dto.request.SendMessageRequest;
+import com.fliliy.secondhand.dto.response.ChatMessageResponse;
 import com.fliliy.secondhand.entity.ChatMessage;
 import com.fliliy.secondhand.entity.ChatRoom;
 import com.fliliy.secondhand.entity.Product;
@@ -361,5 +363,67 @@ public class ChatService {
         
         return userRepository.findById(otherUserId)
                 .orElseThrow(() -> new RuntimeException("聊天对象不存在"));
+    }
+
+    /**
+     * 检查用户是否有权限访问聊天室
+     */
+    @Transactional(readOnly = true)
+    public boolean hasAccessToChatRoom(Long chatRoomId, Long userId) {
+        return canAccessChatRoom(chatRoomId, userId);
+    }
+
+    /**
+     * 发送消息 - WebSocket使用
+     */
+    public ChatMessageResponse sendMessage(Long chatRoomId, Long senderId, SendMessageRequest request) {
+        ChatMessage message;
+        
+        switch (request.getType()) {
+            case "TEXT":
+                message = sendTextMessage(chatRoomId, senderId, request.getContent());
+                break;
+            case "IMAGE":
+                message = sendImageMessage(chatRoomId, senderId, request.getContent(), 
+                    request.getThumbnail(), null, null, null);
+                break;
+            case "VOICE":
+                message = sendVoiceMessage(chatRoomId, senderId, request.getContent(), 
+                    request.getDuration(), null);
+                break;
+            default:
+                throw new RuntimeException("不支持的消息类型: " + request.getType());
+        }
+        
+        return convertToChatMessageResponse(message);
+    }
+
+    /**
+     * 将ChatMessage转换为ChatMessageResponse
+     */
+    private ChatMessageResponse convertToChatMessageResponse(ChatMessage message) {
+        ChatMessageResponse response = new ChatMessageResponse();
+        response.setId(message.getId());
+        response.setSenderId(message.getSenderId());
+        response.setType(message.getMessageType().name());
+        response.setContent(message.getContent());
+        response.setSentAt(message.getSentAt());
+        response.setIsFromMe(false); // 在实际使用时需要根据当前用户判断
+        response.setStatus("SENT");
+        
+        // 设置额外信息
+        if (message.getMessageType() == ChatMessage.MessageType.IMAGE) {
+            response.setThumbnail(message.getThumbnailUrl());
+            if (message.getImageWidth() != null && message.getImageHeight() != null) {
+                response.setImageWidth(message.getImageWidth());
+                response.setImageHeight(message.getImageHeight());
+            }
+        } else if (message.getMessageType() == ChatMessage.MessageType.VOICE) {
+            response.setDuration(message.getVoiceDuration());
+        } else if (message.getMessageType() == ChatMessage.MessageType.SYSTEM) {
+            response.setSystemData(message.getSystemData());
+        }
+        
+        return response;
     }
 }
