@@ -621,6 +621,78 @@ INSERT INTO system_configs (config_key, config_value, config_type, description, 
 ('pagination.max_size', '50', 'number', '最大分页大小', true);
 
 -- ================================
+-- 16. 交易管理表 [新增]
+-- ================================
+CREATE TABLE transactions (
+    id BIGINT PRIMARY KEY COMMENT '交易ID，使用雪花算法生成',
+    buyer_id BIGINT NOT NULL COMMENT '买家ID',
+    seller_id BIGINT NOT NULL COMMENT '卖家ID',
+    product_id BIGINT NOT NULL COMMENT '商品ID',
+    chat_room_id BIGINT COMMENT '聊天室ID',
+    
+    -- 交易状态和类型
+    status ENUM('INQUIRY', 'AGREED', 'COMPLETED', 'CANCELLED') NOT NULL DEFAULT 'INQUIRY' COMMENT '交易状态',
+    inquiry_type ENUM('PURCHASE', 'INFO') COMMENT '咨询类型：购买咨询或信息咨询',
+    
+    -- 价格信息
+    price DECIMAL(10,2) COMMENT '交易价格',
+    
+    -- 交易验证码
+    transaction_code VARCHAR(4) COMMENT '4位交易验证码',
+    transaction_code_expires_at TIMESTAMP COMMENT '验证码过期时间',
+    
+    -- 见面交易信息
+    meeting_time TIMESTAMP COMMENT '约定见面时间',
+    contact_name VARCHAR(50) COMMENT '联系人姓名',
+    contact_phone VARCHAR(20) COMMENT '联系电话',
+    meeting_location_name VARCHAR(100) COMMENT '见面地点名称',
+    meeting_detail_address VARCHAR(255) COMMENT '详细见面地址',
+    meeting_longitude DECIMAL(11,8) COMMENT '见面地点经度',
+    meeting_latitude DECIMAL(10,8) COMMENT '见面地点纬度',
+    notes VARCHAR(500) COMMENT '交易备注',
+    
+    -- 取消相关
+    cancel_reason VARCHAR(255) COMMENT '取消原因',
+    cancel_type ENUM('BUYER_CANCEL', 'SELLER_CANCEL') COMMENT '取消类型',
+    
+    -- 评价相关
+    feedback VARCHAR(500) COMMENT '交易评价',
+    rating INT COMMENT '评分1-5星',
+    
+    -- 时间记录
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    completed_at TIMESTAMP COMMENT '完成时间',
+    cancelled_at TIMESTAMP COMMENT '取消时间',
+    
+    -- 外键关系
+    FOREIGN KEY (buyer_id) REFERENCES users(id),
+    FOREIGN KEY (seller_id) REFERENCES users(id),
+    FOREIGN KEY (product_id) REFERENCES products(id),
+    FOREIGN KEY (chat_room_id) REFERENCES chat_rooms(id) ON DELETE SET NULL,
+    
+    -- 索引优化
+    INDEX idx_buyer_id (buyer_id),
+    INDEX idx_seller_id (seller_id),
+    INDEX idx_product_id (product_id),
+    INDEX idx_chat_room_id (chat_room_id),
+    INDEX idx_status (status),
+    INDEX idx_inquiry_type (inquiry_type),
+    INDEX idx_transaction_code (transaction_code),
+    INDEX idx_created_at (created_at),
+    INDEX idx_completed_at (completed_at),
+    
+    -- 复合索引
+    INDEX idx_buyer_status (buyer_id, status),
+    INDEX idx_seller_status (seller_id, status),
+    INDEX idx_buyer_product (buyer_id, product_id),
+    INDEX idx_status_created (status, created_at),
+    
+    -- 唯一约束（一个买家对一个商品只能有一个进行中的交易）
+    UNIQUE KEY uk_buyer_product_active (buyer_id, product_id, status)
+) ENGINE=InnoDB COMMENT='交易管理表';
+
+-- ================================
 -- 17. 用户登录日志表 [扩展]
 -- ================================
 CREATE TABLE user_login_logs (

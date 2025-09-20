@@ -185,4 +185,27 @@ public class ChatMessageResponse {
     public void setRecalledAt(LocalDateTime recalledAt) {
         this.recalledAt = recalledAt;
     }
+    
+    // 为了兼容ChatService中的使用，添加便利方法
+    public void setImageWidth(Integer width) {
+        if (this.imageSize == null) {
+            this.imageSize = new ImageSize();
+        }
+        this.imageSize.setWidth(width);
+    }
+    
+    public void setImageHeight(Integer height) {
+        if (this.imageSize == null) {
+            this.imageSize = new ImageSize();
+        }
+        this.imageSize.setHeight(height);
+    }
+    
+    public Integer getImageWidth() {
+        return this.imageSize != null ? this.imageSize.getWidth() : null;
+    }
+    
+    public Integer getImageHeight() {
+        return this.imageSize != null ? this.imageSize.getHeight() : null;
+    }
 }

@@ -9,7 +9,7 @@ import javax.validation.constraints.Pattern;
 public class SendSmsRequest {
     
     @NotBlank(message = "手机号不能为空")
-    @Pattern(regexp = "^1[3-9]\\d{9}$", message = "手机号格式错误")
+    @Pattern(regexp = "^(1[3-9]\\d{9}|0[4-5]\\d{8})$", message = "手机号格式错误")
     private String mobile;
     
     @NotBlank(message = "验证码类型不能为空")

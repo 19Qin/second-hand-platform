@@ -173,7 +173,6 @@
                 <version>${spring-boot.version}</version>
                 <configuration>
                     <mainClass>com.fliliy.secondhand.SecondHandApplication</mainClass>
-                    <skip>true</skip>
                 </configuration>
                 <executions>
                     <execution>

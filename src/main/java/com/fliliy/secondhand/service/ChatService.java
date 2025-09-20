@@ -18,10 +18,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -46,6 +49,7 @@ public class ChatService {
     /**
      * 创建或获取聊天室
      */
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public ChatRoom createOrGetChatRoom(Long productId, Long buyerId) {
         // 验证商品和买家存在
         Optional<Product> productOpt = productRepository.findById(productId);
@@ -376,6 +380,7 @@ public class ChatService {
     /**
      * 发送消息 - WebSocket使用
      */
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public ChatMessageResponse sendMessage(Long chatRoomId, Long senderId, SendMessageRequest request) {
         ChatMessage message;
         
@@ -419,9 +424,14 @@ public class ChatService {
                 response.setImageHeight(message.getImageHeight());
             }
         } else if (message.getMessageType() == ChatMessage.MessageType.VOICE) {
-            response.setDuration(message.getVoiceDuration());
+            response.setDuration(message.getDuration());
         } else if (message.getMessageType() == ChatMessage.MessageType.SYSTEM) {
-            response.setSystemData(message.getSystemData());
+            // 需要将systemData从String转换为Map
+            if (message.getSystemData() != null) {
+                Map<String, Object> systemDataMap = new HashMap<>();
+                systemDataMap.put("data", message.getSystemData());
+                response.setSystemData(systemDataMap);
+            }
         }
         
         return response;

@@ -8,7 +8,9 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -173,28 +175,46 @@ public class WebSocketMessageService {
     /**
      * 获取聊天室中的在线用户列表
      */
-    @SuppressWarnings("unchecked")
     public Set<String> getChatRoomUsers(Long chatRoomId) {
         String key = CHATROOM_USERS_KEY + chatRoomId;
         try {
-            return (Set<String>) redisTemplate.opsForSet().members(key);
+            Set<Object> members = redisTemplate.opsForSet().members(key);
+            if (members == null) {
+                return Collections.emptySet();
+            }
+            Set<String> result = new HashSet<>();
+            for (Object member : members) {
+                if (member != null) {
+                    result.add(member.toString());
+                }
+            }
+            return result;
         } catch (Exception e) {
             log.error("Failed to get users in chatRoom {}: {}", chatRoomId, e.getMessage());
-            return Set.of();
+            return Collections.emptySet();
         }
     }
 
     /**
      * 获取用户所在的聊天室列表
      */
-    @SuppressWarnings("unchecked")
     public Set<String> getUserChatRooms(Long userId) {
         String key = "websocket:user:chatrooms:" + userId;
         try {
-            return (Set<String>) redisTemplate.opsForSet().members(key);
+            Set<Object> members = redisTemplate.opsForSet().members(key);
+            if (members == null) {
+                return Collections.emptySet();
+            }
+            Set<String> result = new HashSet<>();
+            for (Object member : members) {
+                if (member != null) {
+                    result.add(member.toString());
+                }
+            }
+            return result;
         } catch (Exception e) {
             log.error("Failed to get chatRooms for user {}: {}", userId, e.getMessage());
-            return Set.of();
+            return Collections.emptySet();
         }
     }
 
@@ -238,13 +258,22 @@ public class WebSocketMessageService {
     /**
      * 获取所有在线用户
      */
-    @SuppressWarnings("unchecked")
     public Set<String> getOnlineUsers() {
         try {
-            return (Set<String>) redisTemplate.opsForSet().members(ONLINE_USERS_KEY);
+            Set<Object> members = redisTemplate.opsForSet().members(ONLINE_USERS_KEY);
+            if (members == null) {
+                return Collections.emptySet();
+            }
+            Set<String> result = new HashSet<>();
+            for (Object member : members) {
+                if (member != null) {
+                    result.add(member.toString());
+                }
+            }
+            return result;
         } catch (Exception e) {
             log.error("Failed to get online users: {}", e.getMessage());
-            return Set.of();
+            return Collections.emptySet();
         }
     }
 
