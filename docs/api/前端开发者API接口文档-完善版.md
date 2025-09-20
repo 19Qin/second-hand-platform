@@ -218,13 +218,19 @@ const checkSystemHealth = async () => {
 ### 请求参数
 ```json
 {
-  "mobile": "13800138000",      // 必填：手机号，11位数字
+  "mobile": "13800138000",      // 必填：中国手机号(13-19开头11位)或澳洲手机号(04-05开头10位)
   "type": "register"            // 必填：类型 register|login|reset
+}
+
+// 澳洲手机号示例
+{
+  "mobile": "0412345678",       // 澳洲手机号：04或05开头10位数字
+  "type": "register"
 }
 ```
 
 ### 参数校验规则
-- `mobile`: 必须为11位手机号格式
+- `mobile`: 支持中国手机号(13-19开头11位)和澳洲手机号(04-05开头10位)
 - `type`: 只能是 `register`、`login`、`reset` 之一
 
 ### 响应示例
@@ -409,7 +415,7 @@ const validateRegisterForm = (formData) => {
     errors.push('用户名至少2个字符');
   }
   
-  if (!/^1[3-9]\d{9}$/.test(formData.mobile)) {
+  if (!/^(1[3-9]\d{9}|0[4-5]\d{8})$/.test(formData.mobile)) {
     errors.push('手机号格式不正确');
   }
   

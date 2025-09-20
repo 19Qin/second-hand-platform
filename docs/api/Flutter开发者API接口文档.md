@@ -465,7 +465,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 decoration: const InputDecoration(labelText: '手机号'),
                 keyboardType: TextInputType.phone,
                 validator: (value) {
-                  if (value == null || !RegExp(r'^1[3-9]\d{9}$').hasMatch(value)) {
+                  if (value == null || !RegExp(r'^(1[3-9]\d{9}|0[4-5]\d{8})$').hasMatch(value)) {
                     return '手机号格式不正确';
                   }
                   return null;
