@@ -5,7 +5,8 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "chat_rooms")
+@Table(name = "chat_rooms", 
+       uniqueConstraints = @UniqueConstraint(columnNames = {"buyer_id", "seller_id"}))
 public class ChatRoom {
     
     @Id
@@ -13,9 +14,6 @@ public class ChatRoom {
     
     @Column(name = "transaction_id")
     private Long transactionId;
-    
-    @Column(name = "product_id", nullable = false)
-    private Long productId;
     
     @Column(name = "buyer_id", nullable = false)
     private Long buyerId;
@@ -52,6 +50,19 @@ public class ChatRoom {
     @Column(name = "total_messages")
     private Integer totalMessages = 0;
     
+    // 高级功能字段
+    @Column(name = "buyer_pinned")
+    private Boolean buyerPinned = false;
+    
+    @Column(name = "seller_pinned")
+    private Boolean sellerPinned = false;
+    
+    @Column(name = "buyer_muted")
+    private Boolean buyerMuted = false;
+    
+    @Column(name = "seller_muted")
+    private Boolean sellerMuted = false;
+    
     @Column(name = "created_at")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
@@ -61,10 +72,6 @@ public class ChatRoom {
     private LocalDateTime updatedAt;
     
     // 关联实体
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", insertable = false, updatable = false)
-    private Product product;
-    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "buyer_id", insertable = false, updatable = false)
     private User buyer;
@@ -79,14 +86,13 @@ public class ChatRoom {
     }
     
     public enum MessageType {
-        TEXT, IMAGE, VOICE, SYSTEM
+        TEXT, IMAGE, VOICE, SYSTEM, PRODUCT_CARD
     }
     
     // 构造函数
     public ChatRoom() {}
     
-    public ChatRoom(Long productId, Long buyerId, Long sellerId) {
-        this.productId = productId;
+    public ChatRoom(Long buyerId, Long sellerId) {
         this.buyerId = buyerId;
         this.sellerId = sellerId;
         this.status = ChatRoomStatus.ACTIVE;
@@ -157,6 +163,40 @@ public class ChatRoom {
         return 0;
     }
     
+    public boolean isPinned(Long userId) {
+        if (userId.equals(buyerId)) {
+            return buyerPinned != null && buyerPinned;
+        } else if (userId.equals(sellerId)) {
+            return sellerPinned != null && sellerPinned;
+        }
+        return false;
+    }
+    
+    public boolean isMuted(Long userId) {
+        if (userId.equals(buyerId)) {
+            return buyerMuted != null && buyerMuted;
+        } else if (userId.equals(sellerId)) {
+            return sellerMuted != null && sellerMuted;
+        }
+        return false;
+    }
+    
+    public void setPinned(Long userId, boolean pinned) {
+        if (userId.equals(buyerId)) {
+            this.buyerPinned = pinned;
+        } else if (userId.equals(sellerId)) {
+            this.sellerPinned = pinned;
+        }
+    }
+    
+    public void setMuted(Long userId, boolean muted) {
+        if (userId.equals(buyerId)) {
+            this.buyerMuted = muted;
+        } else if (userId.equals(sellerId)) {
+            this.sellerMuted = muted;
+        }
+    }
+    
     // Getter和Setter方法
     public Long getId() {
         return id;
@@ -174,13 +214,6 @@ public class ChatRoom {
         this.transactionId = transactionId;
     }
     
-    public Long getProductId() {
-        return productId;
-    }
-    
-    public void setProductId(Long productId) {
-        this.productId = productId;
-    }
     
     public Long getBuyerId() {
         return buyerId;
@@ -286,13 +319,6 @@ public class ChatRoom {
         this.updatedAt = updatedAt;
     }
     
-    public Product getProduct() {
-        return product;
-    }
-    
-    public void setProduct(Product product) {
-        this.product = product;
-    }
     
     public User getBuyer() {
         return buyer;

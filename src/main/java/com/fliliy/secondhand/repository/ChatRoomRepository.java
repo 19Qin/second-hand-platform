@@ -16,20 +16,28 @@ import java.util.Optional;
 public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
     
     /**
-     * 根据商品和买家查找聊天室
+     * 根据买家和卖家查找聊天室
      */
-    Optional<ChatRoom> findByProductIdAndBuyerId(Long productId, Long buyerId);
+    Optional<ChatRoom> findByBuyerIdAndSellerId(Long buyerId, Long sellerId);
+    
+    /**
+     * 查找两个用户之间的聊天室（不区分买家卖家角色）
+     */
+    @Query("SELECT cr FROM ChatRoom cr WHERE " +
+           "(cr.buyerId = :userId1 AND cr.sellerId = :userId2) OR " +
+           "(cr.buyerId = :userId2 AND cr.sellerId = :userId1)")
+    Optional<ChatRoom> findBetweenUsers(@Param("userId1") Long userId1, @Param("userId2") Long userId2);
     
     /**
      * 查找用户的所有聊天室（作为买家或卖家）
      */
-    @Query("SELECT cr FROM ChatRoom cr WHERE cr.buyerId = :userId OR cr.sellerId = :userId ORDER BY cr.updatedAt DESC")
+    @Query(value = "SELECT * FROM chat_rooms WHERE buyer_id = :userId OR seller_id = :userId ORDER BY updated_at DESC", nativeQuery = true)
     Page<ChatRoom> findByParticipant(@Param("userId") Long userId, Pageable pageable);
     
     /**
      * 查找用户的所有聊天室列表（不分页）
      */
-    @Query("SELECT cr FROM ChatRoom cr WHERE cr.buyerId = :userId OR cr.sellerId = :userId ORDER BY cr.updatedAt DESC")
+    @Query(value = "SELECT * FROM chat_rooms WHERE buyer_id = :userId OR seller_id = :userId ORDER BY updated_at DESC", nativeQuery = true)
     List<ChatRoom> findByParticipant(@Param("userId") Long userId);
     
     /**
@@ -42,21 +50,17 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
      */
     List<ChatRoom> findBySellerIdOrderByUpdatedAtDesc(Long sellerId);
     
-    /**
-     * 根据商品ID查找所有聊天室
-     */
-    List<ChatRoom> findByProductIdOrderByCreatedAtDesc(Long productId);
     
     /**
      * 查找活跃的聊天室
      */
-    @Query("SELECT cr FROM ChatRoom cr WHERE (cr.buyerId = :userId OR cr.sellerId = :userId) AND cr.status = 'ACTIVE' ORDER BY cr.updatedAt DESC")
+    @Query(value = "SELECT * FROM chat_rooms WHERE (buyer_id = :userId OR seller_id = :userId) AND status = 'ACTIVE' ORDER BY updated_at DESC", nativeQuery = true)
     List<ChatRoom> findActiveByParticipant(@Param("userId") Long userId);
     
     /**
      * 获取用户的总未读消息数
      */
-    @Query("SELECT COALESCE(SUM(CASE WHEN cr.buyerId = :userId THEN cr.buyerUnreadCount ELSE cr.sellerUnreadCount END), 0) FROM ChatRoom cr WHERE cr.buyerId = :userId OR cr.sellerId = :userId")
+    @Query(value = "SELECT COALESCE(SUM(CASE WHEN buyer_id = :userId THEN buyer_unread_count ELSE seller_unread_count END), 0) FROM chat_rooms WHERE buyer_id = :userId OR seller_id = :userId", nativeQuery = true)
     Long getTotalUnreadCount(@Param("userId") Long userId);
     
     /**
@@ -112,8 +116,16 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
     /**
      * 检查用户是否是聊天室参与者
      */
-    @Query("SELECT COUNT(cr) > 0 FROM ChatRoom cr WHERE cr.id = :chatRoomId AND (cr.buyerId = :userId OR cr.sellerId = :userId)")
-    boolean isParticipant(@Param("chatRoomId") Long chatRoomId, @Param("userId") Long userId);
+    @Query(value = "SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END FROM chat_rooms WHERE id = :chatRoomId AND (buyer_id = :userId OR seller_id = :userId)", nativeQuery = true)
+    Integer isParticipantCount(@Param("chatRoomId") Long chatRoomId, @Param("userId") Long userId);
+    
+    /**
+     * 检查用户是否是聊天室参与者 - 便利方法
+     */
+    default boolean isParticipant(Long chatRoomId, Long userId) {
+        Integer count = isParticipantCount(chatRoomId, userId);
+        return count != null && count > 0;
+    }
     
     /**
      * 根据交易ID查找聊天室

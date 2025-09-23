@@ -18,6 +18,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.ArrayList;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,22 +50,62 @@ public class ChatController {
     private JwtUtil jwtUtil;
     
     /**
-     * 创建或获取聊天室
+     * 创建或获取聊天室（直接指定卖家ID - 用于测试）
      */
     @PostMapping("/rooms")
-    public ResponseEntity<ApiResponse> createChatRoom(@RequestParam Long productId, HttpServletRequest request) {
+    public ResponseEntity<ApiResponse> createChatRoom(@RequestParam Long sellerId, HttpServletRequest request) {
         try {
-            Long userId = getCurrentUserId(request);
-            ChatRoom chatRoom = chatService.createOrGetChatRoom(productId, userId);
+            Long buyerId = getCurrentUserId(request);
             
-            ChatRoomResponse response = convertToChatRoomResponse(chatRoom, userId);
+            // 验证买家不能与自己聊天
+            if (buyerId.equals(sellerId)) {
+                return ResponseEntity.ok(ApiResponse.error("不能与自己聊天"));
+            }
             
-            logger.info("创建/获取聊天室成功 - 商品ID: {}, 用户ID: {}, 聊天室ID: {}", 
-                    productId, userId, chatRoom.getId());
+            ChatRoom chatRoom = chatService.createOrGetChatRoom(buyerId, sellerId);
+            
+            ChatRoomResponse response = convertToChatRoomResponse(chatRoom, buyerId);
+            
+            logger.info("创建/获取聊天室成功 - 买家ID: {}, 卖家ID: {}, 聊天室ID: {}", 
+                    buyerId, sellerId, chatRoom.getId());
             
             return ResponseEntity.ok(ApiResponse.success(response));
         } catch (Exception e) {
             logger.error("创建聊天室失败", e);
+            return ResponseEntity.ok(ApiResponse.error(e.getMessage()));
+        }
+    }
+    
+    /**
+     * 基于商品创建或获取聊天室（用户点击商品咨询按钮）
+     */
+    @PostMapping("/product-discussion")
+    public ResponseEntity<ApiResponse> startProductDiscussion(@RequestParam Long productId, 
+                                                             @RequestParam(required = false) String initialMessage,
+                                                             HttpServletRequest request) {
+        try {
+            Long buyerId = getCurrentUserId(request);
+            
+            // 发起商品讨论，自动创建聊天室并发送商品卡片
+            ChatMessageResponse productCard = chatService.startProductDiscussion(productId, buyerId);
+            
+            // 获取创建的聊天室信息
+            List<ChatRoom> userChatRooms = chatService.getAllChatRooms(buyerId);
+            ChatRoom chatRoom = userChatRooms.get(0); // 获取最新的聊天室
+            
+            // 如果有初始消息，发送文本消息
+            if (initialMessage != null && !initialMessage.trim().isEmpty()) {
+                chatService.sendTextMessage(chatRoom.getId(), buyerId, initialMessage);
+            }
+            
+            ChatRoomResponse response = convertToChatRoomResponse(chatRoom, buyerId);
+            
+            logger.info("开始商品讨论成功 - 买家ID: {}, 商品ID: {}, 聊天室ID: {}", 
+                    buyerId, productId, chatRoom.getId());
+            
+            return ResponseEntity.ok(ApiResponse.success(response));
+        } catch (Exception e) {
+            logger.error("开始商品讨论失败", e);
             return ResponseEntity.ok(ApiResponse.error(e.getMessage()));
         }
     }
@@ -108,20 +150,29 @@ public class ChatController {
             // 获取聊天室信息
             ChatRoom chatRoom = chatService.getChatRoomById(chatRoomId);
             User participant = chatService.getChatRoomParticipant(chatRoomId, userId);
-            Product product = productService.getProductById(chatRoom.getProductId());
+            // 获取聊天室讨论的商品列表
+            List<Long> discussedProducts = chatService.getDiscussedProducts(chatRoomId, userId);
             
             // 转换消息列表
             List<ChatMessageResponse> messageList = messages.getContent().stream()
                     .map(msg -> convertToChatMessageResponse(msg, userId))
                     .collect(Collectors.toList());
             
-            // 构建响应数据
-            Map<String, Object> productMap = new HashMap<>();
-            productMap.put("id", product.getId());
-            productMap.put("title", product.getTitle());
-            productMap.put("mainImage", product.getMainImage());
-            productMap.put("status", product.getStatus().toString());
-            productMap.put("price", product.getPrice().doubleValue());
+            // 构建讨论的商品列表
+            List<Map<String, Object>> productsData = new ArrayList<>();
+            for (Long productId : discussedProducts) {
+                try {
+                    Product product = productService.getProductById(productId);
+                    Map<String, Object> productMap = new HashMap<>();
+                    productMap.put("id", product.getId());
+                    productMap.put("title", product.getTitle());
+                    productMap.put("status", product.getStatus().toString());
+                    productMap.put("price", product.getPrice().doubleValue());
+                    productsData.add(productMap);
+                } catch (Exception e) {
+                    // 商品可能已删除，跳过
+                }
+            }
             
             Map<String, Object> participantMap = new HashMap<>();
             participantMap.put("id", participant.getId());
@@ -131,7 +182,7 @@ public class ChatController {
             
             Map<String, Object> chatInfoMap = new HashMap<>();
             chatInfoMap.put("chatRoomId", chatRoomId);
-            chatInfoMap.put("product", productMap);
+            chatInfoMap.put("discussedProducts", productsData);
             chatInfoMap.put("participant", participantMap);
             
             Map<String, Object> paginationMap = new HashMap<>();
@@ -290,6 +341,150 @@ public class ChatController {
         }
     }
     
+    /**
+     * 标记单个消息为已送达
+     */
+    @PostMapping("/messages/{messageId}/delivered")
+    public ResponseEntity<ApiResponse> markMessageAsDelivered(@PathVariable Long messageId, HttpServletRequest request) {
+        try {
+            Long userId = getCurrentUserId(request);
+            chatService.markMessageAsDelivered(messageId, userId);
+            
+            return ResponseEntity.ok(ApiResponse.success("标记已送达成功"));
+        } catch (Exception e) {
+            logger.error("标记消息已送达失败", e);
+            return ResponseEntity.ok(ApiResponse.error(e.getMessage()));
+        }
+    }
+    
+    /**
+     * 标记单个消息为已读
+     */
+    @PostMapping("/messages/{messageId}/read")
+    public ResponseEntity<ApiResponse> markSingleMessageAsRead(@PathVariable Long messageId, HttpServletRequest request) {
+        try {
+            Long userId = getCurrentUserId(request);
+            chatService.markMessageAsRead(messageId, userId);
+            
+            return ResponseEntity.ok(ApiResponse.success("标记已读成功"));
+        } catch (Exception e) {
+            logger.error("标记单个消息已读失败", e);
+            return ResponseEntity.ok(ApiResponse.error(e.getMessage()));
+        }
+    }
+    
+    /**
+     * 获取消息送达统计
+     */
+    @GetMapping("/{chatRoomId}/delivery-stats")
+    public ResponseEntity<ApiResponse> getMessageDeliveryStats(@PathVariable Long chatRoomId, HttpServletRequest request) {
+        try {
+            Long userId = getCurrentUserId(request);
+            Map<String, Long> stats = chatService.getMessageDeliveryStats(chatRoomId, userId);
+            
+            return ResponseEntity.ok(ApiResponse.success(stats));
+        } catch (Exception e) {
+            logger.error("获取消息送达统计失败", e);
+            return ResponseEntity.ok(ApiResponse.error(e.getMessage()));
+        }
+    }
+    
+    /**
+     * 获取在线用户状态
+     */
+    @GetMapping("/{chatRoomId}/online-status")
+    public ResponseEntity<ApiResponse> getChatRoomOnlineStatus(@PathVariable Long chatRoomId, HttpServletRequest request) {
+        try {
+            Long userId = getCurrentUserId(request);
+            
+            // 验证权限
+            if (!chatService.canAccessChatRoom(chatRoomId, userId)) {
+                return ResponseEntity.ok(ApiResponse.error("无权限访问此聊天室"));
+            }
+            
+            ChatRoom chatRoom = chatService.getChatRoomById(chatRoomId);
+            Long otherUserId = chatRoom.getOtherParticipant(userId);
+            
+            Map<String, Object> onlineStatus = new HashMap<>();
+            onlineStatus.put("chatRoomId", chatRoomId);
+            onlineStatus.put("participantId", otherUserId);
+            onlineStatus.put("isOnline", chatService.isUserOnline(otherUserId));
+            onlineStatus.put("timestamp", LocalDateTime.now());
+            
+            return ResponseEntity.ok(ApiResponse.success(onlineStatus));
+        } catch (Exception e) {
+            logger.error("获取在线状态失败", e);
+            return ResponseEntity.ok(ApiResponse.error(e.getMessage()));
+        }
+    }
+    
+    /**
+     * 切换聊天室置顶状态
+     */
+    @PostMapping("/{chatRoomId}/pin")
+    public ResponseEntity<ApiResponse> toggleChatRoomPin(@PathVariable Long chatRoomId, HttpServletRequest request) {
+        try {
+            Long userId = getCurrentUserId(request);
+            chatService.toggleChatRoomPin(chatRoomId, userId);
+            
+            return ResponseEntity.ok(ApiResponse.success("置顶状态切换成功"));
+        } catch (Exception e) {
+            logger.error("切换置顶状态失败", e);
+            return ResponseEntity.ok(ApiResponse.error(e.getMessage()));
+        }
+    }
+    
+    /**
+     * 切换聊天室免打扰状态
+     */
+    @PostMapping("/{chatRoomId}/mute")
+    public ResponseEntity<ApiResponse> toggleChatRoomMute(@PathVariable Long chatRoomId, HttpServletRequest request) {
+        try {
+            Long userId = getCurrentUserId(request);
+            chatService.toggleChatRoomMute(chatRoomId, userId);
+            
+            return ResponseEntity.ok(ApiResponse.success("免打扰状态切换成功"));
+        } catch (Exception e) {
+            logger.error("切换免打扰状态失败", e);
+            return ResponseEntity.ok(ApiResponse.error(e.getMessage()));
+        }
+    }
+    
+    /**
+     * 获取聊天室设置
+     */
+    @GetMapping("/{chatRoomId}/settings")
+    public ResponseEntity<ApiResponse> getChatRoomSettings(@PathVariable Long chatRoomId, HttpServletRequest request) {
+        try {
+            Long userId = getCurrentUserId(request);
+            Map<String, Object> settings = chatService.getChatRoomSettings(chatRoomId, userId);
+            
+            return ResponseEntity.ok(ApiResponse.success(settings));
+        } catch (Exception e) {
+            logger.error("获取聊天室设置失败", e);
+            return ResponseEntity.ok(ApiResponse.error(e.getMessage()));
+        }
+    }
+    
+    /**
+     * 导出聊天记录
+     */
+    @GetMapping("/{chatRoomId}/export")
+    public ResponseEntity<ApiResponse> exportChatHistory(@PathVariable Long chatRoomId,
+                                                        @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime startTime,
+                                                        @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime endTime,
+                                                        HttpServletRequest request) {
+        try {
+            Long userId = getCurrentUserId(request);
+            Map<String, Object> exportData = chatService.exportChatHistory(chatRoomId, userId, startTime, endTime);
+            
+            return ResponseEntity.ok(ApiResponse.success(exportData));
+        } catch (Exception e) {
+            logger.error("导出聊天记录失败", e);
+            return ResponseEntity.ok(ApiResponse.error(e.getMessage()));
+        }
+    }
+    
     // 工具方法
     private Long getCurrentUserId(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
@@ -305,28 +500,36 @@ public class ChatController {
         ChatRoomResponse response = new ChatRoomResponse();
         response.setChatRoomId(chatRoom.getId());
         response.setTransactionId(chatRoom.getTransactionId());
-        response.setUnreadCount(chatRoom.getUnreadCount(currentUserId));
+        // 根据当前用户角色获取未读数
+        Integer unreadCount = currentUserId.equals(chatRoom.getBuyerId()) ? 
+            chatRoom.getBuyerUnreadCount() : chatRoom.getSellerUnreadCount();
+        response.setUnreadCount(unreadCount);
         response.setTotalMessages(chatRoom.getTotalMessages());
         response.setCreatedAt(chatRoom.getCreatedAt());
         response.setUpdatedAt(chatRoom.getUpdatedAt());
         
-        // 设置商品信息
-        try {
-            Product product = productService.getProductById(chatRoom.getProductId());
-            ChatRoomResponse.ProductInfo productInfo = new ChatRoomResponse.ProductInfo();
-            productInfo.setId(product.getId());
-            productInfo.setTitle(product.getTitle());
-            productInfo.setPrice(product.getPrice().doubleValue());
-            productInfo.setMainImage(product.getMainImage());
-            productInfo.setStatus(product.getStatus().toString());
-            response.setProduct(productInfo);
-        } catch (Exception e) {
-            logger.warn("获取商品信息失败: {}", e.getMessage());
-        }
+        // 设置讨论的商品信息（暂时注释掉，逐步调试）
+        // try {
+        //     List<Long> discussedProducts = chatService.getDiscussedProducts(chatRoom.getId(), currentUserId);
+        //     if (!discussedProducts.isEmpty()) {
+        //         Long latestProductId = discussedProducts.get(0); // 取第一个（最新的）
+        //         Product product = productService.getProductById(latestProductId);
+        //         ChatRoomResponse.ProductInfo productInfo = new ChatRoomResponse.ProductInfo();
+        //         productInfo.setId(product.getId());
+        //         productInfo.setTitle(product.getTitle());
+        //         productInfo.setPrice(product.getPrice().doubleValue());
+        //         productInfo.setStatus(product.getStatus().toString());
+        //         response.setProduct(productInfo);
+        //     }
+        // } catch (Exception e) {
+        //     logger.warn("获取商品信息失败: {}", e.getMessage());
+        // }
         
-        // 设置参与者信息
+        // 设置参与者信息（聊天对方）
         try {
-            User participant = chatService.getChatRoomParticipant(chatRoom.getId(), currentUserId);
+            Long participantId = currentUserId.equals(chatRoom.getBuyerId()) ? 
+                chatRoom.getSellerId() : chatRoom.getBuyerId();
+            User participant = userService.getUserById(participantId);
             ChatRoomResponse.ParticipantInfo participantInfo = new ChatRoomResponse.ParticipantInfo();
             participantInfo.setId(participant.getId());
             participantInfo.setUsername(participant.getUsername());

@@ -166,4 +166,64 @@ public interface ChatMessageRepository extends JpaRepository<ChatMessage, Long> 
      * 查找失败的消息
      */
     List<ChatMessage> findByStatusAndSenderIdOrderBySentAtDesc(ChatMessage.MessageStatus status, Long senderId);
+    
+    /**
+     * 检查是否已经讨论过某个商品
+     */
+    @Query("SELECT COUNT(cm) FROM ChatMessage cm WHERE cm.chatRoomId = :chatRoomId AND cm.relatedProductId = :productId")
+    Long hasDiscussedProductCount(@Param("chatRoomId") Long chatRoomId, @Param("productId") Long productId);
+    
+    /**
+     * 检查是否已经讨论过某个商品 - 便利方法
+     */
+    default boolean hasDiscussedProduct(Long chatRoomId, Long productId) {
+        Long count = hasDiscussedProductCount(chatRoomId, productId);
+        return count != null && count > 0;
+    }
+    
+    /**
+     * 获取聊天室中讨论过的商品列表
+     */
+    @Query("SELECT DISTINCT cm.relatedProductId FROM ChatMessage cm WHERE cm.chatRoomId = :chatRoomId AND cm.relatedProductId IS NOT NULL ORDER BY cm.relatedProductId")
+    List<Long> getDiscussedProducts(@Param("chatRoomId") Long chatRoomId);
+    
+    /**
+     * 查找与某个商品相关的消息
+     */
+    @Query("SELECT cm FROM ChatMessage cm WHERE cm.chatRoomId = :chatRoomId AND cm.relatedProductId = :productId ORDER BY cm.sentAt DESC")
+    List<ChatMessage> findProductRelatedMessages(@Param("chatRoomId") Long chatRoomId, @Param("productId") Long productId);
+    
+    /**
+     * 查找商品卡片消息
+     */
+    @Query("SELECT cm FROM ChatMessage cm WHERE cm.chatRoomId = :chatRoomId AND cm.messageType = 'PRODUCT_CARD' ORDER BY cm.sentAt DESC")
+    List<ChatMessage> findProductCardMessages(@Param("chatRoomId") Long chatRoomId);
+    
+    /**
+     * 按状态统计发送者的消息数
+     */
+    Long countByChatRoomIdAndSenderIdAndStatus(Long chatRoomId, Long senderId, ChatMessage.MessageStatus status);
+    
+    /**
+     * 获取用户在聊天室中各状态的消息统计
+     */
+    @Query("SELECT cm.status as status, COUNT(cm) as count FROM ChatMessage cm " +
+           "WHERE cm.chatRoomId = :chatRoomId AND cm.senderId = :senderId " +
+           "GROUP BY cm.status")
+    List<Object[]> getMessageStatusStats(@Param("chatRoomId") Long chatRoomId, @Param("senderId") Long senderId);
+    
+    /**
+     * 批量更新消息状态为已送达
+     */
+    @Modifying
+    @Query("UPDATE ChatMessage cm SET cm.status = 'DELIVERED', cm.deliveredAt = CURRENT_TIMESTAMP " +
+           "WHERE cm.chatRoomId = :chatRoomId AND cm.senderId != :userId AND cm.status = 'SENT'")
+    void batchMarkAsDelivered(@Param("chatRoomId") Long chatRoomId, @Param("userId") Long userId);
+    
+    /**
+     * 获取等待送达确认的消息
+     */
+    @Query("SELECT cm FROM ChatMessage cm WHERE cm.chatRoomId = :chatRoomId AND cm.status = 'SENT' " +
+           "AND cm.senderId != :userId ORDER BY cm.sentAt DESC")
+    List<ChatMessage> findPendingDeliveryMessages(@Param("chatRoomId") Long chatRoomId, @Param("userId") Long userId);
 }

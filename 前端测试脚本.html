@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>澳洲手机号API测试</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .success { color: green; }
+        .error { color: red; }
+        input, button { margin: 5px; padding: 8px; }
+        pre { background: #f5f5f5; padding: 10px; border-radius: 3px; overflow-x: auto; }
+        .result { margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <h1>🇦🇺 澳洲手机号API测试工具</h1>
+    
+    <div class="test-section">
+        <h3>API基地址配置</h3>
+        <input type="text" id="baseUrl" value="http://localhost:8080/api/v1" placeholder="API基地址">
+        <button onclick="testHealth()">测试连接</button>
+        <div id="healthResult" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>1. 发送验证码</h3>
+        <input type="text" id="smsPhone" value="0435497013" placeholder="手机号">
+        <select id="smsType">
+            <option value="register">注册</option>
+            <option value="login">登录</option>
+        </select>
+        <button onclick="sendSms()">发送验证码</button>
+        <div id="smsResult" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>2. 用户注册</h3>
+        <input type="text" id="regUsername" value="澳洲测试用户" placeholder="用户名">
+        <input type="text" id="regMobile" value="0435497013" placeholder="手机号">
+        <input type="password" id="regPassword" value="TestPassword123" placeholder="密码">
+        <input type="text" id="regSmsCode" placeholder="验证码">
+        <input type="text" id="regSmsId" placeholder="SMS ID">
+        <button onclick="register()">注册</button>
+        <div id="regResult" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>3. 密码登录</h3>
+        <input type="text" id="loginMobile" value="0435497013" placeholder="手机号">
+        <input type="password" id="loginPassword" value="TestPassword123" placeholder="密码">
+        <button onclick="loginWithPassword()">密码登录</button>
+        <div id="loginResult" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>4. 短信登录</h3>
+        <input type="text" id="smsLoginMobile" value="0435497013" placeholder="手机号">
+        <input type="text" id="smsLoginCode" placeholder="验证码">
+        <input type="text" id="smsLoginId" placeholder="SMS ID">
+        <button onclick="loginWithSms()">短信登录</button>
+        <div id="smsLoginResult" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>5. 手机号格式验证</h3>
+        <input type="text" id="validatePhone" placeholder="输入手机号测试">
+        <button onclick="validatePhone()">验证格式</button>
+        <div id="validateResult" class="result"></div>
+        
+        <h4>测试用例：</h4>
+        <button onclick="testValidation('0435497013')">澳洲04号码</button>
+        <button onclick="testValidation('0567890123')">澳洲05号码</button>
+        <button onclick="testValidation('13800138000')">中国13号码</button>
+        <button onclick="testValidation('0312345678')">无效03号码</button>
+        <button onclick="testValidation('043549701')">无效9位</button>
+    </div>
+
+    <script>
+        const phonePattern = /^(1[3-9]\d{9}|0[4-5]\d{8})$/;
+        let currentTokens = {};
+
+        function getBaseUrl() {
+            return document.getElementById('baseUrl').value;
+        }
+
+        function showResult(elementId, content, isSuccess = true) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = `<pre class="${isSuccess ? 'success' : 'error'}">${JSON.stringify(content, null, 2)}</pre>`;
+        }
+
+        async function apiCall(endpoint, method = 'GET', data = null) {
+            try {
+                const options = {
+                    method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...(currentTokens.accessToken && {
+                            'Authorization': `Bearer ${currentTokens.accessToken}`
+                        })
+                    }
+                };
+                
+                if (data) {
+                    options.body = JSON.stringify(data);
+                }
+
+                const response = await fetch(`${getBaseUrl()}${endpoint}`, options);
+                const result = await response.json();
+                
+                // 保存token
+                if (result.data && result.data.accessToken) {
+                    currentTokens = {
+                        accessToken: result.data.accessToken,
+                        refreshToken: result.data.refreshToken
+                    };
+                }
+                
+                return result;
+            } catch (error) {
+                return { error: error.message };
+            }
+        }
+
+        async function testHealth() {
+            const result = await apiCall('/health');
+            showResult('healthResult', result, !result.error);
+        }
+
+        async function sendSms() {
+            const phone = document.getElementById('smsPhone').value;
+            const type = document.getElementById('smsType').value;
+            
+            const result = await apiCall('/auth/sms/send', 'POST', {
+                mobile: phone,
+                type: type
+            });
+            
+            if (result.data && result.data.smsId) {
+                // 自动填入SMS ID
+                if (type === 'register') {
+                    document.getElementById('regSmsId').value = result.data.smsId;
+                } else {
+                    document.getElementById('smsLoginId').value = result.data.smsId;
+                }
+            }
+            
+            showResult('smsResult', result, !result.error);
+        }
+
+        async function register() {
+            const data = {
+                username: document.getElementById('regUsername').value,
+                mobile: document.getElementById('regMobile').value,
+                password: document.getElementById('regPassword').value,
+                confirmPassword: document.getElementById('regPassword').value,
+                smsCode: document.getElementById('regSmsCode').value,
+                smsId: document.getElementById('regSmsId').value,
+                agreeTerms: true
+            };
+            
+            const result = await apiCall('/auth/register', 'POST', data);
+            showResult('regResult', result, !result.error);
+        }
+
+        async function loginWithPassword() {
+            const data = {
+                mobile: document.getElementById('loginMobile').value,
+                password: document.getElementById('loginPassword').value,
+                rememberMe: true
+            };
+            
+            const result = await apiCall('/auth/login/password', 'POST', data);
+            showResult('loginResult', result, !result.error);
+        }
+
+        async function loginWithSms() {
+            const data = {
+                mobile: document.getElementById('smsLoginMobile').value,
+                smsCode: document.getElementById('smsLoginCode').value,
+                smsId: document.getElementById('smsLoginId').value
+            };
+            
+            const result = await apiCall('/auth/login/sms', 'POST', data);
+            showResult('smsLoginResult', result, !result.error);
+        }
+
+        function validatePhone() {
+            const phone = document.getElementById('validatePhone').value;
+            testValidation(phone);
+        }
+
+        function testValidation(phone) {
+            document.getElementById('validatePhone').value = phone;
+            
+            const isValid = phonePattern.test(phone);
+            const result = {
+                phone: phone,
+                isValid: isValid,
+                length: phone.length,
+                type: getPhoneType(phone),
+                pattern: phonePattern.toString()
+            };
+            
+            showResult('validateResult', result, isValid);
+        }
+
+        function getPhoneType(phone) {
+            if (/^1[3-9]\d{9}$/.test(phone)) return '中国手机号';
+            if (/^0[4-5]\d{8}$/.test(phone)) return '澳洲手机号';
+            return '未知格式';
+        }
+
+        // 页面加载时测试连接
+        window.onload = function() {
+            testHealth();
+        };
+    </script>
+</body>
+</html>

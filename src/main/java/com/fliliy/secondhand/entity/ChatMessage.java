@@ -51,6 +51,13 @@ public class ChatMessage {
     @Column(name = "system_data", columnDefinition = "JSON")
     private String systemData;
     
+    // 商品相关字段
+    @Column(name = "related_product_id")
+    private Long relatedProductId;
+    
+    @Column(name = "product_snapshot", columnDefinition = "JSON")
+    private String productSnapshot;
+    
     // 消息状态
     @Enumerated(EnumType.STRING)
     private MessageStatus status = MessageStatus.SENT;
@@ -87,11 +94,15 @@ public class ChatMessage {
     
     // 枚举定义
     public enum MessageType {
-        TEXT, IMAGE, VOICE, SYSTEM
+        TEXT, IMAGE, VOICE, SYSTEM, PRODUCT_CARD
     }
     
     public enum MessageStatus {
-        SENT, DELIVERED, READ, FAILED
+        SENDING,     // 发送中
+        SENT,        // 已发送
+        DELIVERED,   // 已送达
+        READ,        // 已读
+        FAILED       // 发送失败
     }
     
     public enum SystemMessageType {
@@ -143,6 +154,14 @@ public class ChatMessage {
         ChatMessage message = new ChatMessage(chatRoomId, null, MessageType.SYSTEM, content);
         message.setSystemType(systemType);
         message.setSystemData(systemData);
+        return message;
+    }
+    
+    public static ChatMessage createProductCardMessage(Long chatRoomId, Long senderId, 
+                                                     Long productId, String productSnapshot) {
+        ChatMessage message = new ChatMessage(chatRoomId, senderId, MessageType.PRODUCT_CARD, "分享了商品");
+        message.setRelatedProductId(productId);
+        message.setProductSnapshot(productSnapshot);
         return message;
     }
     
@@ -199,6 +218,8 @@ public class ChatMessage {
                 return "[语音]";
             case SYSTEM:
                 return content;
+            case PRODUCT_CARD:
+                return "[商品卡片]";
             default:
                 return content;
         }
@@ -371,5 +392,21 @@ public class ChatMessage {
     
     public void setSender(User sender) {
         this.sender = sender;
+    }
+    
+    public Long getRelatedProductId() {
+        return relatedProductId;
+    }
+    
+    public void setRelatedProductId(Long relatedProductId) {
+        this.relatedProductId = relatedProductId;
+    }
+    
+    public String getProductSnapshot() {
+        return productSnapshot;
+    }
+    
+    public void setProductSnapshot(String productSnapshot) {
+        this.productSnapshot = productSnapshot;
     }
 }

@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -45,39 +46,135 @@ public class ChatService {
     @Autowired
     private ProductRepository productRepository;
     
+    @Autowired
+    private WebSocketMessageService webSocketMessageService;
+    
     
     /**
-     * 创建或获取聊天室
+     * 创建或获取聊天室 - 基于用户对唯一性
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public ChatRoom createOrGetChatRoom(Long productId, Long buyerId) {
-        // 验证商品和买家存在
-        Optional<Product> productOpt = productRepository.findById(productId);
-        if (!productOpt.isPresent()) {
-            throw new RuntimeException("商品不存在");
+    public ChatRoom createOrGetChatRoom(Long userId1, Long userId2) {
+        // 验证用户存在
+        if (!userRepository.existsById(userId1)) {
+            throw new RuntimeException("用户不存在: " + userId1);
+        }
+        if (!userRepository.existsById(userId2)) {
+            throw new RuntimeException("用户不存在: " + userId2);
         }
         
-        Product product = productOpt.get();
-        Long sellerId = product.getSellerId();
-        
-        // 买家和卖家不能是同一人
-        if (buyerId.equals(sellerId)) {
+        // 用户不能与自己聊天
+        if (userId1.equals(userId2)) {
             throw new RuntimeException("不能与自己聊天");
         }
         
-        // 检查是否已存在聊天室
-        Optional<ChatRoom> existingRoom = chatRoomRepository.findByProductIdAndBuyerId(productId, buyerId);
+        // 首先检查两个用户之间是否已存在聊天室（不区分角色）
+        Optional<ChatRoom> existingRoom = chatRoomRepository.findBetweenUsers(userId1, userId2);
         if (existingRoom.isPresent()) {
+            logger.info("找到已存在的聊天室 - 用户ID: {} 和 {}, 聊天室ID: {}", 
+                    userId1, userId2, existingRoom.get().getId());
             return existingRoom.get();
         }
         
+        // 如果不存在，则创建新聊天室
+        // 为了保证数据一致性，总是让较小的ID作为buyerId
+        Long buyerId = Math.min(userId1, userId2);
+        Long sellerId = Math.max(userId1, userId2);
+        
         // 创建新聊天室
-        ChatRoom chatRoom = new ChatRoom(productId, buyerId, sellerId);
+        ChatRoom chatRoom = new ChatRoom(buyerId, sellerId);
         chatRoom.setId(IdGenerator.generateProductId());
         
-        logger.info("创建新聊天室 - 商品ID: {}, 买家ID: {}, 卖家ID: {}", productId, buyerId, sellerId);
+        logger.info("创建新聊天室 - 用户1: {}, 用户2: {}, 聊天室ID: {}, 标准化为 buyer: {}, seller: {}", 
+                userId1, userId2, chatRoom.getId(), buyerId, sellerId);
         
         return chatRoomRepository.save(chatRoom);
+    }
+    
+    /**
+     * 创建或获取聊天室 - 保持向后兼容的方法
+     */
+    public ChatRoom createOrGetChatRoomByRole(Long buyerId, Long sellerId) {
+        return createOrGetChatRoom(buyerId, sellerId);
+    }
+    
+    /**
+     * 开始商品讨论 - 自动发送商品卡片
+     */
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public ChatMessageResponse startProductDiscussion(Long productId, Long buyerId) {
+        // 获取商品信息
+        Product product = productRepository.findById(productId)
+            .orElseThrow(() -> new RuntimeException("商品不存在"));
+        
+        Long sellerId = product.getSellerId();
+        
+        // 创建或获取聊天室
+        ChatRoom chatRoom = createOrGetChatRoom(buyerId, sellerId);
+        
+        // 检查是否已经讨论过这个商品
+        boolean hasDiscussed = chatMessageRepository.hasDiscussedProduct(chatRoom.getId(), productId);
+        
+        if (!hasDiscussed) {
+            // 自动发送商品卡片消息
+            String productSnapshot = createProductSnapshot(product);
+            ChatMessage productCard = ChatMessage.createProductCardMessage(
+                chatRoom.getId(), buyerId, productId, productSnapshot);
+            productCard.setId(IdGenerator.generateProductId());
+            
+            chatMessageRepository.save(productCard);
+            updateChatRoomLastMessage(chatRoom, productCard);
+            
+            return convertToChatMessageResponse(productCard);
+        }
+        
+        return null; // 已经讨论过，不重复发送商品卡片
+    }
+    
+    /**
+     * 发送带商品关联的消息
+     */
+    public ChatMessage sendMessageWithProduct(Long chatRoomId, Long senderId, 
+                                            String content, Long productId) {
+        ChatMessage message = sendTextMessage(chatRoomId, senderId, content);
+        if (productId != null) {
+            message.setRelatedProductId(productId);
+            chatMessageRepository.save(message);
+        }
+        return message;
+    }
+    
+    /**
+     * 获取聊天室讨论的商品列表
+     */
+    @Transactional(readOnly = true)
+    public List<Long> getDiscussedProducts(Long chatRoomId, Long userId) {
+        // 验证权限
+        if (!canAccessChatRoom(chatRoomId, userId)) {
+            throw new RuntimeException("无权限访问此聊天室");
+        }
+        
+        return chatMessageRepository.getDiscussedProducts(chatRoomId);
+    }
+    
+    /**
+     * 创建商品快照JSON
+     */
+    private String createProductSnapshot(Product product) {
+        // 创建商品快照JSON
+        Map<String, Object> snapshot = new HashMap<>();
+        snapshot.put("id", product.getId());
+        snapshot.put("title", product.getTitle());
+        snapshot.put("price", product.getPrice());
+        snapshot.put("imageUrl", ""); // 暂时设为空，后续可通过ProductImage关联获取
+        snapshot.put("status", product.getStatus());
+        snapshot.put("sellerId", product.getSellerId());
+        // 转换为JSON字符串 - 这里简化处理，实际项目中应该使用Jackson
+        try {
+            return new com.fasterxml.jackson.databind.ObjectMapper().writeValueAsString(snapshot);
+        } catch (Exception e) {
+            return "{}";
+        }
     }
     
     /**
@@ -152,6 +249,22 @@ public class ChatService {
         
         // 更新聊天室最后消息信息
         updateChatRoomLastMessage(chatRoom, message);
+        
+        // WebSocket实时推送
+        try {
+            ChatMessageResponse response = convertToChatMessageResponse(message);
+            webSocketMessageService.broadcastMessageToChatRoom(chatRoomId, response);
+            
+            // 向接收者发送推送通知
+            Long receiverId = chatRoom.getOtherParticipant(senderId);
+            if (receiverId != null && !webSocketMessageService.isUserOnline(receiverId)) {
+                // 如果接收者离线，可以发送推送通知
+                webSocketMessageService.sendNotificationToUser(receiverId, 
+                    "新消息", content, "chat_message");
+            }
+        } catch (Exception e) {
+            logger.warn("WebSocket推送失败 - 聊天室ID: {}, 错误: {}", chatRoomId, e.getMessage());
+        }
         
         logger.info("发送文本消息 - 聊天室ID: {}, 发送者ID: {}, 内容: {}", chatRoomId, senderId, content);
         
@@ -258,6 +371,59 @@ public class ChatService {
         chatRoomRepository.save(chatRoom);
         
         logger.info("标记消息为已读 - 聊天室ID: {}, 用户ID: {}", chatRoomId, userId);
+    }
+    
+    /**
+     * 标记特定消息为已送达
+     */
+    public void markMessageAsDelivered(Long messageId, Long userId) {
+        ChatMessage message = chatMessageRepository.findById(messageId)
+                .orElseThrow(() -> new RuntimeException("消息不存在"));
+        
+        // 验证权限：只有接收者可以标记为已送达
+        ChatRoom chatRoom = getChatRoomById(message.getChatRoomId());
+        if (!chatRoom.isParticipant(userId) || message.getSenderId().equals(userId)) {
+            throw new RuntimeException("无权限标记此消息");
+        }
+        
+        chatMessageRepository.markAsDelivered(messageId);
+        logger.info("标记消息为已送达 - 消息ID: {}, 用户ID: {}", messageId, userId);
+    }
+    
+    /**
+     * 标记特定消息为已读
+     */
+    public void markMessageAsRead(Long messageId, Long userId) {
+        ChatMessage message = chatMessageRepository.findById(messageId)
+                .orElseThrow(() -> new RuntimeException("消息不存在"));
+        
+        // 验证权限：只有接收者可以标记为已读
+        ChatRoom chatRoom = getChatRoomById(message.getChatRoomId());
+        if (!chatRoom.isParticipant(userId) || message.getSenderId().equals(userId)) {
+            throw new RuntimeException("无权限标记此消息");
+        }
+        
+        chatMessageRepository.markAsRead(messageId);
+        logger.info("标记消息为已读 - 消息ID: {}, 用户ID: {}", messageId, userId);
+    }
+    
+    /**
+     * 获取消息送达统计
+     */
+    @Transactional(readOnly = true)
+    public Map<String, Long> getMessageDeliveryStats(Long chatRoomId, Long userId) {
+        // 验证权限
+        if (!canAccessChatRoom(chatRoomId, userId)) {
+            throw new RuntimeException("无权限访问此聊天室");
+        }
+        
+        Map<String, Long> stats = new HashMap<>();
+        stats.put("sent", chatMessageRepository.countByChatRoomIdAndSenderIdAndStatus(chatRoomId, userId, ChatMessage.MessageStatus.SENT));
+        stats.put("delivered", chatMessageRepository.countByChatRoomIdAndSenderIdAndStatus(chatRoomId, userId, ChatMessage.MessageStatus.DELIVERED));
+        stats.put("read", chatMessageRepository.countByChatRoomIdAndSenderIdAndStatus(chatRoomId, userId, ChatMessage.MessageStatus.READ));
+        stats.put("failed", chatMessageRepository.countByChatRoomIdAndSenderIdAndStatus(chatRoomId, userId, ChatMessage.MessageStatus.FAILED));
+        
+        return stats;
     }
     
     /**
@@ -404,6 +570,147 @@ public class ChatService {
     }
 
     /**
+     * 检查用户是否在线
+     */
+    public boolean isUserOnline(Long userId) {
+        return webSocketMessageService.isUserOnline(userId);
+    }
+    
+    /**
+     * 置顶/取消置顶聊天室
+     */
+    public void toggleChatRoomPin(Long chatRoomId, Long userId) {
+        ChatRoom chatRoom = getChatRoomById(chatRoomId);
+        
+        // 验证权限
+        if (!chatRoom.isParticipant(userId)) {
+            throw new RuntimeException("无权限操作此聊天室");
+        }
+        
+        boolean currentPinned = chatRoom.isPinned(userId);
+        chatRoom.setPinned(userId, !currentPinned);
+        
+        chatRoomRepository.save(chatRoom);
+        
+        logger.info("切换聊天室置顶状态 - 聊天室ID: {}, 用户ID: {}, 置顶: {}", 
+                chatRoomId, userId, !currentPinned);
+    }
+    
+    /**
+     * 开启/关闭聊天室免打扰
+     */
+    public void toggleChatRoomMute(Long chatRoomId, Long userId) {
+        ChatRoom chatRoom = getChatRoomById(chatRoomId);
+        
+        // 验证权限
+        if (!chatRoom.isParticipant(userId)) {
+            throw new RuntimeException("无权限操作此聊天室");
+        }
+        
+        boolean currentMuted = chatRoom.isMuted(userId);
+        chatRoom.setMuted(userId, !currentMuted);
+        
+        chatRoomRepository.save(chatRoom);
+        
+        logger.info("切换聊天室免打扰状态 - 聊天室ID: {}, 用户ID: {}, 免打扰: {}", 
+                chatRoomId, userId, !currentMuted);
+    }
+    
+    /**
+     * 导出聊天记录
+     */
+    @Transactional(readOnly = true)
+    public Map<String, Object> exportChatHistory(Long chatRoomId, Long userId, 
+                                                LocalDateTime startTime, LocalDateTime endTime) {
+        // 验证权限
+        if (!canAccessChatRoom(chatRoomId, userId)) {
+            throw new RuntimeException("无权限访问此聊天室");
+        }
+        
+        ChatRoom chatRoom = getChatRoomById(chatRoomId);
+        List<ChatMessage> messages;
+        
+        if (startTime != null && endTime != null) {
+            messages = chatMessageRepository.findByTimeRange(chatRoomId, startTime, endTime);
+        } else {
+            messages = chatMessageRepository.findByChatRoomIdOrderBySentAtAsc(chatRoomId);
+        }
+        
+        // 获取聊天室参与者信息
+        User buyer = userRepository.findById(chatRoom.getBuyerId()).orElse(null);
+        User seller = userRepository.findById(chatRoom.getSellerId()).orElse(null);
+        
+        Map<String, Object> exportData = new HashMap<>();
+        exportData.put("chatRoomId", chatRoomId);
+        exportData.put("exportTime", LocalDateTime.now());
+        Map<String, Object> timeRange = new HashMap<>();
+        timeRange.put("start", startTime != null ? startTime : chatRoom.getCreatedAt());
+        timeRange.put("end", endTime != null ? endTime : LocalDateTime.now());
+        exportData.put("timeRange", timeRange);
+        Map<String, Object> participants = new HashMap<>();
+        if (buyer != null) {
+            Map<String, Object> buyerInfo = new HashMap<>();
+            buyerInfo.put("id", buyer.getId());
+            buyerInfo.put("username", buyer.getUsername());
+            participants.put("buyer", buyerInfo);
+        } else {
+            participants.put("buyer", null);
+        }
+        if (seller != null) {
+            Map<String, Object> sellerInfo = new HashMap<>();
+            sellerInfo.put("id", seller.getId());
+            sellerInfo.put("username", seller.getUsername());
+            participants.put("seller", sellerInfo);
+        } else {
+            participants.put("seller", null);
+        }
+        exportData.put("participants", participants);
+        exportData.put("totalMessages", messages.size());
+        
+        List<Map<String, Object>> messageList = messages.stream()
+                .map(msg -> {
+                    Map<String, Object> msgMap = new HashMap<>();
+                    msgMap.put("id", msg.getId());
+                    msgMap.put("senderId", msg.getSenderId());
+                    msgMap.put("type", msg.getMessageType().name());
+                    msgMap.put("content", msg.getDisplayContent());
+                    msgMap.put("sentAt", msg.getSentAt());
+                    msgMap.put("isRecalled", msg.getIsRecalled());
+                    return msgMap;
+                })
+                .collect(Collectors.toList());
+        
+        exportData.put("messages", messageList);
+        
+        logger.info("导出聊天记录 - 聊天室ID: {}, 用户ID: {}, 消息数: {}", 
+                chatRoomId, userId, messages.size());
+        
+        return exportData;
+    }
+    
+    /**
+     * 获取聊天室设置
+     */
+    @Transactional(readOnly = true)
+    public Map<String, Object> getChatRoomSettings(Long chatRoomId, Long userId) {
+        ChatRoom chatRoom = getChatRoomById(chatRoomId);
+        
+        // 验证权限
+        if (!chatRoom.isParticipant(userId)) {
+            throw new RuntimeException("无权限访问此聊天室");
+        }
+        
+        Map<String, Object> settings = new HashMap<>();
+        settings.put("chatRoomId", chatRoomId);
+        settings.put("isPinned", chatRoom.isPinned(userId));
+        settings.put("isMuted", chatRoom.isMuted(userId));
+        settings.put("unreadCount", chatRoom.getUnreadCount(userId));
+        settings.put("totalMessages", chatRoom.getTotalMessages());
+        
+        return settings;
+    }
+
+    /**
      * 将ChatMessage转换为ChatMessageResponse
      */
     private ChatMessageResponse convertToChatMessageResponse(ChatMessage message) {
@@ -431,6 +738,20 @@ public class ChatService {
                 Map<String, Object> systemDataMap = new HashMap<>();
                 systemDataMap.put("data", message.getSystemData());
                 response.setSystemData(systemDataMap);
+            }
+        } else if (message.getMessageType() == ChatMessage.MessageType.PRODUCT_CARD) {
+            // 处理商品卡片消息
+            if (message.getProductSnapshot() != null) {
+                try {
+                    com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
+                    Map<String, Object> productData = mapper.readValue(message.getProductSnapshot(), Map.class);
+                    response.setSystemData(productData);
+                } catch (Exception e) {
+                    // 处理JSON解析异常
+                    Map<String, Object> fallbackData = new HashMap<>();
+                    fallbackData.put("productId", message.getRelatedProductId());
+                    response.setSystemData(fallbackData);
+                }
             }
         }
         
