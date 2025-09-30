@@ -100,6 +100,21 @@ public class Transaction {
     @Column(name = "cancelled_at")
     private LocalDateTime cancelledAt;
     
+    @Column(name = "request_by")
+    private Long requestBy;
+    
+    @Column(name = "requested_at")
+    private LocalDateTime requestedAt;
+    
+    @Column(name = "responded_at")
+    private LocalDateTime respondedAt;
+    
+    @Column(name = "reject_reason", length = 500)
+    private String rejectReason;
+    
+    @Column(name = "code_refresh_count")
+    private Integer codeRefreshCount = 0;
+    
     @PrePersist
     protected void onCreate() {
         LocalDateTime now = LocalDateTime.now();
@@ -113,10 +128,13 @@ public class Transaction {
     }
     
     public enum TransactionStatus {
-        INQUIRY,      // 咨询中
-        AGREED,       // 已同意线下交易
+        INQUIRY,      // 咨询中（废弃，兼容旧数据）
+        PENDING,      // 待响应（已发起交易申请，等待对方同意/拒绝）
+        AGREED,       // 已同意（对方同意交易，已生成交易码）
         COMPLETED,    // 交易完成
-        CANCELLED     // 已取消
+        REJECTED,     // 已拒绝（对方拒绝了交易申请）
+        CANCELLED,    // 已取消
+        EXPIRED       // 已过期
     }
     
     public enum InquiryType {

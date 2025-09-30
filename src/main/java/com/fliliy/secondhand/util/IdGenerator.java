@@ -49,4 +49,11 @@ public class IdGenerator {
     public static String generateDeviceId() {
         return "device_" + System.currentTimeMillis() + "_" + random.nextInt(1000);
     }
+    
+    /**
+     * 生成通用ID（雪花算法）
+     */
+    public long generateId() {
+        return snowflake.nextId();
+    }
 }

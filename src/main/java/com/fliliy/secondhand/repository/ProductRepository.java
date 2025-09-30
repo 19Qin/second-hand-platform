@@ -209,4 +209,21 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
      * 查询用户发布的商品（支持自定义排序）
      */
     Page<Product> findBySellerIdAndDeletedAtIsNull(Long sellerId, Pageable pageable);
+    
+    /**
+     * 查询用户指定状态的商品（支持自定义排序）
+     */
+    Page<Product> findBySellerIdAndStatusAndDeletedAtIsNull(Long sellerId, Product.ProductStatus status, Pageable pageable);
+    
+    /**
+     * 统计用户发布的商品总数
+     */
+    @Query("SELECT COUNT(p) FROM Product p WHERE p.sellerId = :userId AND p.deletedAt IS NULL")
+    Long countByUserId(@Param("userId") Long userId);
+    
+    /**
+     * 统计用户指定状态的商品数量
+     */
+    @Query("SELECT COUNT(p) FROM Product p WHERE p.sellerId = :userId AND p.status = :status AND p.deletedAt IS NULL")
+    Long countByUserIdAndStatus(@Param("userId") Long userId, @Param("status") Product.ProductStatus status);
 }

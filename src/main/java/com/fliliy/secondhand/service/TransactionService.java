@@ -41,6 +41,9 @@ public class TransactionService {
     @Autowired
     private ProductRepository productRepository;
     
+    @Autowired
+    private ProductImageRepository productImageRepository;
+    
     /**
      * 发起咨询/交易意向
      */
@@ -56,12 +59,15 @@ public class TransactionService {
         }
         
         // 验证不能与自己交易
-        if (userId.equals(request.getSellerId())) {
-            throw new RuntimeException("不能与自己交易");
+        if (userId.equals(product.getSellerId())) {
+            throw new RuntimeException("不能购买自己发布的商品");
         }
         
+        // 从商品获取卖家ID
+        Long sellerId = product.getSellerId();
+        
         // 验证卖家存在
-        User seller = userRepository.findById(request.getSellerId())
+        User seller = userRepository.findById(sellerId)
             .orElseThrow(() -> new RuntimeException("卖家不存在"));
         
         // 检查是否已有交易记录
@@ -77,14 +83,14 @@ public class TransactionService {
         }
         
         // 创建或获取聊天室
-        ChatRoom chatRoom = chatService.createOrGetChatRoom(request.getProductId(), userId);
+        ChatRoom chatRoom = chatService.createOrGetChatRoom(userId, sellerId);
         Long chatRoomId = chatRoom.getId();
         
         // 创建交易记录
         Transaction transaction = new Transaction();
         transaction.setId(IdGenerator.generateProductId());
         transaction.setBuyerId(userId);
-        transaction.setSellerId(request.getSellerId());
+        transaction.setSellerId(sellerId);
         transaction.setProductId(request.getProductId());
         transaction.setChatRoomId(chatRoomId);
         transaction.setStatus(Transaction.TransactionStatus.INQUIRY);
@@ -288,6 +294,25 @@ public class TransactionService {
     }
     
     /**
+     * 获取单个交易详情
+     */
+    public TransactionResponse getTransactionDetail(Long userId, Long transactionId) {
+        logger.info("Getting transaction detail {} for user {}", transactionId, userId);
+        
+        // 获取交易记录
+        Transaction transaction = transactionRepository.findById(transactionId)
+            .orElseThrow(() -> new RuntimeException("交易不存在"));
+        
+        // 验证权限 - 只有交易参与双方可以查看
+        if (!userId.equals(transaction.getBuyerId()) && !userId.equals(transaction.getSellerId())) {
+            throw new RuntimeException("无权限查看此交易");
+        }
+        
+        // 转换为详细响应对象
+        return convertToDetailedTransactionResponse(transaction, userId);
+    }
+    
+    /**
      * 获取交易记录
      */
     public Page<TransactionResponse> getTransactions(Long userId, String type, String status, int page, int size) {
@@ -311,13 +336,13 @@ public class TransactionService {
         }
         
         // 转换为响应对象
-        return transactions.map(this::convertToTransactionResponse);
+        return transactions.map(transaction -> convertToTransactionResponse(transaction, userId));
     }
     
     /**
-     * 转换为TransactionResponse
+     * 转换为详细的TransactionResponse（用于单个交易详情）
      */
-    private TransactionResponse convertToTransactionResponse(Transaction transaction) {
+    private TransactionResponse convertToDetailedTransactionResponse(Transaction transaction, Long currentUserId) {
         TransactionResponse response = new TransactionResponse();
         response.setId("tx_" + transaction.getId());
         response.setStatus(transaction.getStatus().name());
@@ -326,8 +351,106 @@ public class TransactionService {
         response.setCanRate(transaction.getStatus() == Transaction.TransactionStatus.COMPLETED && transaction.getRating() == null);
         response.setRating(transaction.getRating());
         
-        // 设置交易类型（买入/卖出）
-        // 注意：这里需要根据当前用户ID来判断
+        // 设置交易类型（当前用户是买家还是卖家）
+        if (currentUserId.equals(transaction.getBuyerId())) {
+            response.setType("BUY");
+        } else {
+            response.setType("SELL");
+        }
+        
+        // 获取商品详细信息
+        try {
+            Optional<Product> productOpt = productRepository.findById(transaction.getProductId());
+            if (productOpt.isPresent()) {
+                Product product = productOpt.get();
+                TransactionResponse.ProductInfo productInfo = new TransactionResponse.ProductInfo();
+                productInfo.setId(String.valueOf(product.getId()));
+                productInfo.setTitle(product.getTitle());
+                productInfo.setPrice(product.getPrice());
+                productInfo.setMainImage(getMainImageUrl(product.getId()));
+                productInfo.setDescription(product.getDescription());
+                productInfo.setCondition(product.getProductCondition() != null ? product.getProductCondition().name() : null);
+                response.setProduct(productInfo);
+            }
+        } catch (Exception e) {
+            logger.warn("Failed to load product info: {}", e.getMessage());
+        }
+        
+        // 获取交易对方信息
+        try {
+            Long counterpartId = currentUserId.equals(transaction.getBuyerId()) ? 
+                transaction.getSellerId() : transaction.getBuyerId();
+            
+            Optional<User> userOpt = userRepository.findById(counterpartId);
+            if (userOpt.isPresent()) {
+                User counterpart = userOpt.get();
+                TransactionResponse.UserInfo counterpartInfo = new TransactionResponse.UserInfo();
+                counterpartInfo.setId(String.valueOf(counterpart.getId()));
+                counterpartInfo.setUsername(counterpart.getUsername());
+                counterpartInfo.setAvatar(counterpart.getAvatar());
+                response.setCounterpart(counterpartInfo);
+            }
+        } catch (Exception e) {
+            logger.warn("Failed to load counterpart info: {}", e.getMessage());
+        }
+        
+        // 设置详细的会面信息
+        if (transaction.getMeetingTime() != null) {
+            TransactionResponse.MeetingInfo meetingInfo = new TransactionResponse.MeetingInfo();
+            meetingInfo.setMeetingTime(transaction.getMeetingTime());
+            meetingInfo.setLocationName(transaction.getMeetingLocationName());
+            meetingInfo.setDetailAddress(transaction.getMeetingDetailAddress());
+            meetingInfo.setContactName(transaction.getContactName());
+            meetingInfo.setContactPhone(maskPhone(transaction.getContactPhone()));
+            meetingInfo.setNotes(transaction.getMeetingNotes());
+            response.setMeetingInfo(meetingInfo);
+        }
+        
+        // 设置交易码信息（仅对买家显示，买家需要将验证码提供给卖家）
+        if (currentUserId.equals(transaction.getBuyerId()) && 
+            transaction.getTransactionCode() != null &&
+            transaction.getStatus() == Transaction.TransactionStatus.AGREED) {
+            response.setTransactionCode(transaction.getTransactionCode());
+            response.setCodeExpiresAt(transaction.getCodeExpiresAt());
+        }
+        
+        // 设置交易时间信息
+        response.setCreatedAt(transaction.getCreatedAt());
+        response.setCompletedAt(transaction.getCompletedAt());
+        response.setCancelledAt(transaction.getCancelledAt());
+        
+        // 设置取消信息
+        if (transaction.getStatus() == Transaction.TransactionStatus.CANCELLED) {
+            response.setCancelReason(transaction.getCancelReason());
+            response.setCancelType(transaction.getCancelType() != null ? transaction.getCancelType().name() : null);
+        }
+        
+        // 设置评价信息
+        if (transaction.getRating() != null) {
+            response.setFeedback(transaction.getFeedback());
+        }
+        
+        return response;
+    }
+    
+    /**
+     * 转换为TransactionResponse（用于交易列表）
+     */
+    private TransactionResponse convertToTransactionResponse(Transaction transaction, Long currentUserId) {
+        TransactionResponse response = new TransactionResponse();
+        response.setId("tx_" + transaction.getId());
+        response.setStatus(transaction.getStatus().name());
+        response.setStatusText(getStatusText(transaction.getStatus()));
+        response.setTransactionTime(transaction.getCompletedAt() != null ? transaction.getCompletedAt() : transaction.getCreatedAt());
+        response.setCanRate(transaction.getStatus() == Transaction.TransactionStatus.COMPLETED && transaction.getRating() == null);
+        response.setRating(transaction.getRating());
+        
+        // 设置交易类型（当前用户是买家还是卖家）
+        if (currentUserId.equals(transaction.getBuyerId())) {
+            response.setType("BUY");
+        } else {
+            response.setType("SELL");
+        }
         
         // 获取商品信息
         try {
@@ -343,6 +466,24 @@ public class TransactionService {
             }
         } catch (Exception e) {
             logger.warn("Failed to load product info: {}", e.getMessage());
+        }
+        
+        // 获取交易对方信息
+        try {
+            Long counterpartId = currentUserId.equals(transaction.getBuyerId()) ? 
+                transaction.getSellerId() : transaction.getBuyerId();
+            
+            Optional<User> userOpt = userRepository.findById(counterpartId);
+            if (userOpt.isPresent()) {
+                User counterpart = userOpt.get();
+                TransactionResponse.UserInfo counterpartInfo = new TransactionResponse.UserInfo();
+                counterpartInfo.setId(String.valueOf(counterpart.getId()));
+                counterpartInfo.setUsername(counterpart.getUsername());
+                counterpartInfo.setAvatar(counterpart.getAvatar());
+                response.setCounterpart(counterpartInfo);
+            }
+        } catch (Exception e) {
+            logger.warn("Failed to load counterpart info: {}", e.getMessage());
         }
         
         // 设置见面信息
@@ -388,11 +529,212 @@ public class TransactionService {
     }
     
     /**
-     * 获取商品主图URL（简化实现）
+     * 获取商品主图URL
      */
     private String getMainImageUrl(Long productId) {
-        // 这里应该查询ProductImage表获取主图
-        // 简化实现，返回占位符
-        return "http://localhost:8080/api/v1/files/products/default.jpg";
+        try {
+            // 直接使用查询获取主图URL
+            Optional<String> mainImageUrl = productImageRepository.findMainImageUrl(productId);
+            
+            if (mainImageUrl.isPresent()) {
+                return mainImageUrl.get();
+            }
+            
+            // 如果没有主图，获取第一张图片
+            Optional<ProductImage> firstImage = productImageRepository
+                .findByProductIdAndSortOrder(productId, 0);
+            
+            if (firstImage.isPresent()) {
+                return firstImage.get().getImageUrl();
+            }
+            
+            // 如果没有图片，返回默认图片
+            return "http://localhost:8080/api/v1/files/products/default.jpg";
+            
+        } catch (Exception e) {
+            logger.warn("Failed to get main image for product {}: {}", productId, e.getMessage());
+            return "http://localhost:8080/api/v1/files/products/default.jpg";
+        }
+    }
+    
+    /**
+     * 发起交易申请（新方法）
+     */
+    public TransactionRequestResponse createTransactionRequest(Long userId, TransactionRequestRequest request) {
+        logger.info("User {} creating transaction request for product {} in chatRoom {}", 
+                userId, request.getProductId(), request.getChatRoomId());
+        
+        // 验证聊天室存在且有权限
+        if (!chatService.canAccessChatRoom(request.getChatRoomId(), userId)) {
+            throw new RuntimeException("无权限访问此聊天室");
+        }
+        
+        // 验证商品存在且可交易
+        Product product = productRepository.findById(request.getProductId())
+            .orElseThrow(() -> new RuntimeException("商品不存在"));
+        
+        if (!Product.ProductStatus.ACTIVE.equals(product.getStatus())) {
+            throw new RuntimeException("商品不可交易");
+        }
+        
+        // 验证不能与自己交易
+        if (userId.equals(product.getSellerId())) {
+            throw new RuntimeException("不能购买自己发布的商品");
+        }
+        
+        // 获取聊天室信息，确定对方ID
+        ChatRoom chatRoom = chatService.getChatRoomById(request.getChatRoomId());
+        Long otherUserId = chatRoom.getOtherParticipant(userId);
+        
+        // 检查是否已有进行中的交易记录
+        Optional<Transaction> existingTransaction = transactionRepository
+            .findByBuyerIdAndProductIdAndStatusNot(userId, request.getProductId(), Transaction.TransactionStatus.CANCELLED);
+        
+        if (existingTransaction.isPresent()) {
+            Transaction trans = existingTransaction.get();
+            if (trans.getStatus() == Transaction.TransactionStatus.PENDING ||
+                trans.getStatus() == Transaction.TransactionStatus.AGREED) {
+                throw new RuntimeException("已存在进行中的交易申请");
+            }
+        }
+        
+        // 创建交易记录
+        Transaction transaction = new Transaction();
+        transaction.setId(IdGenerator.generateProductId());
+        transaction.setBuyerId(userId);
+        transaction.setSellerId(product.getSellerId());
+        transaction.setProductId(request.getProductId());
+        transaction.setChatRoomId(request.getChatRoomId());
+        transaction.setStatus(Transaction.TransactionStatus.PENDING);
+        transaction.setInquiryType(Transaction.InquiryType.PURCHASE);
+        transaction.setTransactionPrice(product.getPrice());
+        transaction.setRequestBy(userId);
+        transaction.setRequestedAt(LocalDateTime.now());
+        
+        transactionRepository.save(transaction);
+        
+        // 在聊天室发送交易申请消息
+        try {
+            ChatMessage message = new ChatMessage();
+            message.setId(IdGenerator.generateProductId());
+            message.setChatRoomId(request.getChatRoomId());
+            message.setSenderId(userId);
+            message.setMessageType(ChatMessage.MessageType.TRANSACTION_REQUEST);
+            message.setContent(request.getMessage() != null ? request.getMessage() : "发起了交易申请");
+            message.setTransactionId(transaction.getId());
+            message.setInquiryType("PURCHASE");
+            message.setRelatedProductId(request.getProductId());
+            message.setSentAt(LocalDateTime.now());
+            
+            chatService.sendTransactionRequestMessage(message);
+        } catch (Exception e) {
+            logger.warn("Failed to send transaction request message: {}", e.getMessage());
+        }
+        
+        // 构建响应
+        TransactionRequestResponse response = new TransactionRequestResponse();
+        response.setTransactionId("tx_" + transaction.getId());
+        response.setStatus(transaction.getStatus().name());
+        response.setRequestedAt(transaction.getRequestedAt());
+        response.setMessage("交易申请已发送，等待对方响应");
+        
+        return response;
+    }
+    
+    /**
+     * 响应交易申请（新方法）
+     */
+    public TransactionRespondResponse respondToTransactionRequest(Long userId, Long transactionId, TransactionRespondRequest request) {
+        logger.info("User {} responding to transaction {} with action {}", 
+                userId, transactionId, request.getAction());
+        
+        // 获取交易记录
+        Transaction transaction = transactionRepository.findById(transactionId)
+            .orElseThrow(() -> new RuntimeException("交易不存在"));
+        
+        // 验证权限（只有对方可以响应）
+        if (!userId.equals(transaction.getSellerId()) && !userId.equals(transaction.getBuyerId())) {
+            throw new RuntimeException("无权限操作此交易");
+        }
+        
+        // 验证不能响应自己发起的申请
+        if (userId.equals(transaction.getRequestBy())) {
+            throw new RuntimeException("不能响应自己发起的交易申请");
+        }
+        
+        // 验证交易状态
+        if (!Transaction.TransactionStatus.PENDING.equals(transaction.getStatus())) {
+            throw new RuntimeException("交易状态不正确");
+        }
+        
+        TransactionRespondResponse response = new TransactionRespondResponse();
+        response.setTransactionId("tx_" + transaction.getId());
+        
+        if ("AGREE".equals(request.getAction())) {
+            // 同意交易
+            String transactionCode = generateTransactionCode();
+            LocalDateTime expiresAt = LocalDateTime.now().plusHours(24);
+            
+            transaction.setStatus(Transaction.TransactionStatus.AGREED);
+            transaction.setTransactionCode(transactionCode);
+            transaction.setCodeExpiresAt(expiresAt);
+            transaction.setRespondedAt(LocalDateTime.now());
+            transaction.setCodeRefreshCount(0);
+            
+            transactionRepository.save(transaction);
+            
+            // 发送系统消息
+            try {
+                ChatMessage message = new ChatMessage();
+                message.setId(IdGenerator.generateProductId());
+                message.setChatRoomId(transaction.getChatRoomId());
+                message.setSenderId(null);
+                message.setMessageType(ChatMessage.MessageType.SYSTEM);
+                message.setSystemType(ChatMessage.SystemMessageType.TRANSACTION_AGREED);
+                message.setContent("交易申请已同意，交易码已生成");
+                message.setTransactionId(transaction.getId());
+                message.setSentAt(LocalDateTime.now());
+                
+                chatService.sendTransactionResponseMessage(message);
+            } catch (Exception e) {
+                logger.warn("Failed to send transaction agreed message: {}", e.getMessage());
+            }
+            
+            response.setStatus("AGREED");
+            response.setTransactionCode(transactionCode);
+            response.setCodeExpiresAt(expiresAt);
+            response.setNote("请在线下交易时向卖家提供此交易码");
+            response.setMessage("交易申请已同意");
+            
+        } else if ("REJECT".equals(request.getAction())) {
+            // 拒绝交易
+            transaction.setStatus(Transaction.TransactionStatus.REJECTED);
+            transaction.setRejectReason(request.getReason());
+            transaction.setRespondedAt(LocalDateTime.now());
+            
+            transactionRepository.save(transaction);
+            
+            // 发送系统消息
+            try {
+                ChatMessage message = new ChatMessage();
+                message.setId(IdGenerator.generateProductId());
+                message.setChatRoomId(transaction.getChatRoomId());
+                message.setSenderId(null);
+                message.setMessageType(ChatMessage.MessageType.SYSTEM);
+                message.setSystemType(ChatMessage.SystemMessageType.TRANSACTION_REJECTED);
+                message.setContent("交易申请已被拒绝" + (request.getReason() != null ? "：" + request.getReason() : ""));
+                message.setTransactionId(transaction.getId());
+                message.setSentAt(LocalDateTime.now());
+                
+                chatService.sendTransactionResponseMessage(message);
+            } catch (Exception e) {
+                logger.warn("Failed to send transaction rejected message: {}", e.getMessage());
+            }
+            
+            response.setStatus("REJECTED");
+            response.setMessage("交易申请已拒绝");
+        }
+        
+        return response;
     }
 }

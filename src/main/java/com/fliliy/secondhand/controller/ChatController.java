@@ -5,11 +5,13 @@ import com.fliliy.secondhand.dto.request.SendMessageRequest;
 import com.fliliy.secondhand.dto.response.ChatMessageResponse;
 import com.fliliy.secondhand.dto.response.ChatRoomResponse;
 import com.fliliy.secondhand.dto.response.PagedResponse;
+import com.fliliy.secondhand.dto.response.UploadResponse;
 import com.fliliy.secondhand.entity.ChatMessage;
 import com.fliliy.secondhand.entity.ChatRoom;
 import com.fliliy.secondhand.entity.Product;
 import com.fliliy.secondhand.entity.User;
 import com.fliliy.secondhand.service.ChatService;
+import com.fliliy.secondhand.service.FileService;
 import com.fliliy.secondhand.service.ProductService;
 import com.fliliy.secondhand.service.UserService;
 import com.fliliy.secondhand.util.JwtUtil;
@@ -22,6 +24,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.ArrayList;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -45,6 +48,9 @@ public class ChatController {
     
     @Autowired
     private ProductService productService;
+    
+    @Autowired
+    private FileService fileService;
     
     @Autowired
     private JwtUtil jwtUtil;
@@ -257,6 +263,40 @@ public class ChatController {
             return ResponseEntity.ok(ApiResponse.success("标记已读成功"));
         } catch (Exception e) {
             logger.error("标记已读失败", e);
+            return ResponseEntity.ok(ApiResponse.error(e.getMessage()));
+        }
+    }
+    
+    /**
+     * 上传聊天文件（图片/语音）
+     */
+    @PostMapping("/upload")
+    public ResponseEntity<ApiResponse> uploadChatFile(@RequestParam("file") MultipartFile file,
+                                                     @RequestParam("type") String type,
+                                                     HttpServletRequest request) {
+        try {
+            // 验证用户认证（获取当前用户ID以验证认证状态）
+            Long userId = getCurrentUserId(request);
+            
+            // 验证参数
+            if (file.isEmpty()) {
+                return ResponseEntity.ok(ApiResponse.error("文件不能为空"));
+            }
+            
+            if (!"image".equals(type) && !"voice".equals(type)) {
+                return ResponseEntity.ok(ApiResponse.error("文件类型必须是 image 或 voice"));
+            }
+            
+            // 调用文件服务上传文件
+            UploadResponse uploadResponse = fileService.uploadChatFile(file, type);
+            
+            logger.info("聊天文件上传成功 - 用户ID: {}, 文件类型: {}, 文件名: {}", 
+                    userId, type, uploadResponse.getFilename());
+            
+            return ResponseEntity.ok(ApiResponse.success("上传成功", uploadResponse));
+            
+        } catch (Exception e) {
+            logger.error("聊天文件上传失败", e);
             return ResponseEntity.ok(ApiResponse.error(e.getMessage()));
         }
     }

@@ -92,9 +92,16 @@ public class ChatMessage {
     @JoinColumn(name = "sender_id", insertable = false, updatable = false)
     private User sender;
     
+    // 交易相关字段
+    @Column(name = "transaction_id")
+    private Long transactionId;
+    
+    @Column(name = "inquiry_type", length = 20)
+    private String inquiryType;
+    
     // 枚举定义
     public enum MessageType {
-        TEXT, IMAGE, VOICE, SYSTEM, PRODUCT_CARD
+        TEXT, IMAGE, VOICE, SYSTEM, PRODUCT_CARD, TRANSACTION_REQUEST, TRANSACTION_RESPONSE
     }
     
     public enum MessageStatus {
@@ -109,7 +116,9 @@ public class ChatMessage {
         TRANSACTION_AGREED,
         TRANSACTION_COMPLETED,
         TRANSACTION_CANCELLED,
-        PRODUCT_SOLD
+        PRODUCT_SOLD,
+        TRANSACTION_REQUESTED,
+        TRANSACTION_REJECTED
     }
     
     // 构造函数
@@ -408,5 +417,21 @@ public class ChatMessage {
     
     public void setProductSnapshot(String productSnapshot) {
         this.productSnapshot = productSnapshot;
+    }
+    
+    public Long getTransactionId() {
+        return transactionId;
+    }
+    
+    public void setTransactionId(Long transactionId) {
+        this.transactionId = transactionId;
+    }
+    
+    public String getInquiryType() {
+        return inquiryType;
+    }
+    
+    public void setInquiryType(String inquiryType) {
+        this.inquiryType = inquiryType;
     }
 }

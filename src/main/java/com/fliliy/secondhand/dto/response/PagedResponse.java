@@ -18,6 +18,20 @@ public class PagedResponse<T> {
     private PaginationInfo pagination;
     private Object filters; // 当前筛选条件汇总（可选）
     
+    // 简化构造函数
+    public PagedResponse(List<T> content, int page, int size, long total, int totalPages, boolean hasNext) {
+        this.content = content;
+        this.pagination = new PaginationInfo();
+        this.pagination.setPage(page);
+        this.pagination.setSize(size);
+        this.pagination.setTotal(total);
+        this.pagination.setTotalPages(totalPages);
+        this.pagination.setHasNext(hasNext);
+        this.pagination.setHasPrevious(page > 1);
+        this.pagination.setIsFirst(page == 1);
+        this.pagination.setIsLast(!hasNext);
+    }
+    
     @Data
     @Builder
     @NoArgsConstructor

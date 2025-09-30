@@ -13,9 +13,6 @@ public class InquiryRequest {
     @NotNull(message = "商品ID不能为空")
     private Long productId;
     
-    @NotNull(message = "卖家ID不能为空")
-    private Long sellerId;
-    
     @NotBlank(message = "咨询内容不能为空")
     @Size(max = 500, message = "咨询内容不能超过500个字符")
     private String message;

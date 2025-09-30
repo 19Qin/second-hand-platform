@@ -36,6 +36,7 @@ public class SecurityConfig {
                         .antMatchers("/products").permitAll() // 允许商品列表查询
                         .antMatchers("/products/*").permitAll() // 允许商品详情查询（只读）
                         .antMatchers("/files/**").permitAll() // 允许文件访问
+                        .antMatchers("/system/**").permitAll() // 允许系统配置访问
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

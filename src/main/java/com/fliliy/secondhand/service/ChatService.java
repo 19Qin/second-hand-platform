@@ -98,38 +98,6 @@ public class ChatService {
         return createOrGetChatRoom(buyerId, sellerId);
     }
     
-    /**
-     * 开始商品讨论 - 自动发送商品卡片
-     */
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public ChatMessageResponse startProductDiscussion(Long productId, Long buyerId) {
-        // 获取商品信息
-        Product product = productRepository.findById(productId)
-            .orElseThrow(() -> new RuntimeException("商品不存在"));
-        
-        Long sellerId = product.getSellerId();
-        
-        // 创建或获取聊天室
-        ChatRoom chatRoom = createOrGetChatRoom(buyerId, sellerId);
-        
-        // 检查是否已经讨论过这个商品
-        boolean hasDiscussed = chatMessageRepository.hasDiscussedProduct(chatRoom.getId(), productId);
-        
-        if (!hasDiscussed) {
-            // 自动发送商品卡片消息
-            String productSnapshot = createProductSnapshot(product);
-            ChatMessage productCard = ChatMessage.createProductCardMessage(
-                chatRoom.getId(), buyerId, productId, productSnapshot);
-            productCard.setId(IdGenerator.generateProductId());
-            
-            chatMessageRepository.save(productCard);
-            updateChatRoomLastMessage(chatRoom, productCard);
-            
-            return convertToChatMessageResponse(productCard);
-        }
-        
-        return null; // 已经讨论过，不重复发送商品卡片
-    }
     
     /**
      * 发送带商品关联的消息
@@ -744,6 +712,7 @@ public class ChatService {
             if (message.getProductSnapshot() != null) {
                 try {
                     com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
+                    @SuppressWarnings("unchecked")
                     Map<String, Object> productData = mapper.readValue(message.getProductSnapshot(), Map.class);
                     response.setSystemData(productData);
                 } catch (Exception e) {
@@ -756,5 +725,129 @@ public class ChatService {
         }
         
         return response;
+    }
+    
+    /**
+     * 开始商品讨论
+     * 验证商品ID有效性，创建聊天室，发送商品卡片消息
+     */
+    @Transactional
+    public ChatMessageResponse startProductDiscussion(Long productId, Long buyerId) {
+        logger.info("开始商品讨论 - 商品ID: {}, 买家ID: {}", productId, buyerId);
+        
+        // 1. 验证商品存在且有效
+        Optional<Product> productOpt = productRepository.findByIdAndNotDeleted(productId);
+        if (!productOpt.isPresent()) {
+            throw new RuntimeException("商品不存在或已删除");
+        }
+        
+        Product product = productOpt.get();
+        if (!Product.ProductStatus.ACTIVE.equals(product.getStatus())) {
+            throw new RuntimeException("商品不可讨论，当前状态: " + product.getStatus());
+        }
+        
+        // 2. 验证不能与自己讨论
+        if (buyerId.equals(product.getSellerId())) {
+            throw new RuntimeException("不能讨论自己发布的商品");
+        }
+        
+        // 3. 创建或获取聊天室
+        ChatRoom chatRoom = createOrGetChatRoom(buyerId, product.getSellerId());
+        
+        // 4. 创建商品卡片消息
+        ChatMessage productCard = new ChatMessage();
+        productCard.setId(IdGenerator.generateProductId());
+        productCard.setChatRoomId(chatRoom.getId());
+        productCard.setSenderId(null); // 系统消息
+        productCard.setMessageType(ChatMessage.MessageType.PRODUCT_CARD);
+        productCard.setRelatedProductId(productId);
+        productCard.setContent("分享了商品: " + product.getTitle());
+        
+        // 构建简单的商品快照信息
+        String productSnapshotJson = String.format(
+            "{\"id\":%d,\"title\":\"%s\",\"price\":%.2f,\"mainImage\":\"%s\",\"condition\":\"%s\",\"status\":\"%s\"}", 
+            product.getId(), 
+            product.getTitle().replace("\"", "\\\""), 
+            product.getPrice(), 
+            product.getMainImage() != null ? product.getMainImage() : "",
+            product.getProductCondition().name(),
+            product.getStatus().name()
+        );
+        
+        productCard.setProductSnapshot(productSnapshotJson);
+        productCard.setStatus(ChatMessage.MessageStatus.SENT);
+        productCard.setSentAt(LocalDateTime.now());
+        
+        // 5. 保存消息
+        productCard = chatMessageRepository.save(productCard);
+        
+        // 6. 更新聊天室最后消息信息
+        updateChatRoomLastMessage(chatRoom, productCard);
+        
+        // 7. 发送WebSocket通知
+        try {
+            ChatMessageResponse response = convertToChatMessageResponse(productCard);
+            webSocketMessageService.sendMessageToUser(product.getSellerId(), response);
+        } catch (Exception e) {
+            logger.warn("发送WebSocket通知失败: {}", e.getMessage());
+        }
+        
+        logger.info("商品讨论开始成功 - 商品ID: {}, 消息ID: {}", productId, productCard.getId());
+        
+        return convertToChatMessageResponse(productCard);
+    }
+    
+    /**
+     * 发送交易申请消息
+     */
+    @Transactional
+    public void sendTransactionRequestMessage(ChatMessage message) {
+        logger.info("发送交易申请消息 - 聊天室ID: {}, 交易ID: {}", message.getChatRoomId(), message.getTransactionId());
+        
+        // 保存消息
+        ChatMessage savedMessage = chatMessageRepository.save(message);
+        
+        // 更新聊天室最后消息信息
+        ChatRoom chatRoom = getChatRoomById(message.getChatRoomId());
+        updateChatRoomLastMessage(chatRoom, savedMessage);
+        
+        // WebSocket实时推送
+        try {
+            ChatMessageResponse response = convertToChatMessageResponse(savedMessage);
+            Long receiverId = chatRoom.getOtherParticipant(message.getSenderId());
+            webSocketMessageService.broadcastMessageToChatRoom(message.getChatRoomId(), response);
+            webSocketMessageService.sendMessageToUser(receiverId, response);
+        } catch (Exception e) {
+            logger.warn("发送WebSocket通知失败: {}", e.getMessage());
+        }
+    }
+    
+    /**
+     * 发送交易响应消息（同意/拒绝）
+     */
+    @Transactional
+    public void sendTransactionResponseMessage(ChatMessage message) {
+        logger.info("发送交易响应消息 - 聊天室ID: {}, 交易ID: {}", message.getChatRoomId(), message.getTransactionId());
+        
+        // 保存消息
+        ChatMessage savedMessage = chatMessageRepository.save(message);
+        
+        // 更新聊天室最后消息信息
+        ChatRoom chatRoom = getChatRoomById(message.getChatRoomId());
+        chatRoom.setLastMessageId(savedMessage.getId());
+        chatRoom.setLastMessageContent(savedMessage.getContent());
+        chatRoom.setLastMessageType(ChatRoom.MessageType.SYSTEM);
+        chatRoom.setLastMessageTime(LocalDateTime.now());
+        chatRoom.setLastMessageSenderId(null);
+        chatRoom.setTotalMessages(chatRoom.getTotalMessages() + 1);
+        chatRoomRepository.save(chatRoom);
+        
+        // WebSocket实时推送给双方
+        try {
+            ChatMessageResponse response = convertToChatMessageResponse(savedMessage);
+            webSocketMessageService.broadcastMessageToChatRoom(message.getChatRoomId(), response);
+        } catch (Exception e) {
+            logger.warn("发送WebSocket通知失败: {}", e.getMessage());
+        }
     }
 }

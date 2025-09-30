@@ -94,4 +94,19 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
      * 根据交易码查找交易
      */
     Optional<Transaction> findByTransactionCode(String transactionCode);
+    
+    /**
+     * 查找买家在某商品的非取消状态交易
+     */
+    @Query("SELECT t FROM Transaction t WHERE t.buyerId = :buyerId AND t.productId = :productId AND t.status != :cancelledStatus")
+    Optional<Transaction> findByBuyerIdAndProductIdAndStatusNot(@Param("buyerId") Long buyerId, 
+                                                                 @Param("productId") Long productId,
+                                                                 @Param("cancelledStatus") Transaction.TransactionStatus cancelledStatus);
+    
+    /**
+     * 查找所有状态为AGREED且交易码即将过期的交易（用于定时刷新）
+     */
+    @Query("SELECT t FROM Transaction t WHERE t.status = :status AND t.codeExpiresAt < :expireTime")
+    List<Transaction> findByStatusAndCodeExpiresAtBefore(@Param("status") Transaction.TransactionStatus status,
+                                                          @Param("expireTime") LocalDateTime expireTime);
 }

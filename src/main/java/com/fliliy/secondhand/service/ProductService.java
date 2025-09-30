@@ -505,6 +505,11 @@ public class ProductService {
         response.setPublishTime(product.getPublishedAt());
         response.setHasWarranty(product.getHasWarranty());
         
+        // 商品状态信息 - 商家管理必需字段
+        response.setStatus(product.getStatus().name());
+        response.setStatusText(product.getStatus().getDescription());
+        response.setSoldAt(product.getSoldAt());
+        
         // 构建位置信息
         if (product.getProvince() != null && product.getCity() != null) {
             String location = product.getProvince() + product.getCity();
@@ -538,11 +543,11 @@ public class ProductService {
             response.setSeller(sellerInfo);
         }
         
-        // 统计信息
+        // 统计信息 - 确保默认值
         ProductSummaryResponse.StatsInfo stats = new ProductSummaryResponse.StatsInfo();
-        stats.setViewCount(product.getViewCount());
-        stats.setFavoriteCount(product.getFavoriteCount());
-        stats.setChatCount(product.getChatCount());
+        stats.setViewCount(product.getViewCount() != null ? product.getViewCount() : 0);
+        stats.setFavoriteCount(product.getFavoriteCount() != null ? product.getFavoriteCount() : 0);
+        stats.setChatCount(product.getChatCount() != null ? product.getChatCount() : 0);
         stats.setIsOwn(currentUserId != null && currentUserId.equals(product.getSellerId()));
         stats.setIsFavorited(favoritedProductIds.contains(product.getId()));
         response.setStats(stats);
@@ -773,15 +778,23 @@ public class ProductService {
      * 获取用户发布的商品列表
      */
     public PagedResponse<ProductSummaryResponse> getUserProducts(ProductQueryRequest request, Long userId) {
-        log.info("Getting products for user: userId={}, page={}, size={}", 
-                userId, request.getPage(), request.getSize());
+        log.info("Getting products for user: userId={}, page={}, size={}, status={}", 
+                userId, request.getPage(), request.getSize(), request.getStatus());
         
         // 创建分页和排序
-        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt"); // 默认按创建时间倒序
+        Sort sort = buildSort(request.getSort()); // 使用buildSort方法处理排序
         Pageable pageable = PageRequest.of(request.getPage() - 1, request.getSize(), sort);
         
-        // 查询用户发布的商品
-        Page<Product> productPage = productRepository.findBySellerIdAndDeletedAtIsNull(userId, pageable);
+        // 根据状态筛选查询用户发布的商品
+        Page<Product> productPage;
+        if (request.getStatus() != null && !"ALL".equals(request.getStatus())) {
+            // 按状态筛选
+            Product.ProductStatus status = Product.ProductStatus.valueOf(request.getStatus());
+            productPage = productRepository.findBySellerIdAndStatusAndDeletedAtIsNull(userId, status, pageable);
+        } else {
+            // 查询所有状态的商品
+            productPage = productRepository.findBySellerIdAndDeletedAtIsNull(userId, pageable);
+        }
         
         // 转换为响应对象
         List<ProductSummaryResponse> products = convertToSummaryResponses(productPage.getContent(), userId);

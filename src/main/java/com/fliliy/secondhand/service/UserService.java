@@ -1,11 +1,15 @@
 package com.fliliy.secondhand.service;
 
 import com.fliliy.secondhand.dto.request.ProductQueryRequest;
+import com.fliliy.secondhand.dto.request.UpdateProfileRequest;
 import com.fliliy.secondhand.dto.response.PagedResponse;
 import com.fliliy.secondhand.dto.response.ProductSummaryResponse;
+import com.fliliy.secondhand.dto.response.UserProfileResponse;
+import com.fliliy.secondhand.entity.Product;
 import com.fliliy.secondhand.entity.ProductFavorite;
 import com.fliliy.secondhand.entity.User;
 import com.fliliy.secondhand.repository.ProductFavoriteRepository;
+import com.fliliy.secondhand.repository.ProductRepository;
 import com.fliliy.secondhand.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +18,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -27,6 +33,7 @@ public class UserService {
     private final ProductFavoriteRepository productFavoriteRepository;
     private final ProductService productService;
     private final UserRepository userRepository;
+    private final ProductRepository productRepository;
     
     /**
      * 获取用户收藏的商品列表
@@ -112,5 +119,133 @@ public class UserService {
     public User getUserById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("用户不存在"));
+    }
+    
+    /**
+     * 获取用户资料详情
+     */
+    public UserProfileResponse getUserProfile(Long userId) {
+        log.info("Getting user profile: userId={}", userId);
+        
+        User user = getUserById(userId);
+        
+        UserProfileResponse response = new UserProfileResponse();
+        response.setId(user.getId());
+        response.setUsername(user.getUsername());
+        response.setMobile(maskMobile(user.getMobile()));
+        response.setEmail(maskEmail(user.getEmail()));
+        response.setAvatar(user.getAvatar());
+        response.setGender(user.getGender());
+        response.setBirthday(user.getBirthday());
+        response.setLocation(user.getLocation());
+        response.setBio(user.getBio());
+        response.setVerified(user.getVerified());
+        response.setRegisteredAt(user.getCreatedAt());
+        response.setLastLoginAt(user.getLastLoginAt());
+        
+        // 设置用户统计数据
+        UserProfileResponse.UserStatsResponse stats = calculateUserStats(userId);
+        response.setStats(stats);
+        
+        // 设置用户偏好（暂时使用默认值）
+        UserProfileResponse.UserPreferencesResponse preferences = new UserProfileResponse.UserPreferencesResponse();
+        response.setPreferences(preferences);
+        
+        return response;
+    }
+    
+    /**
+     * 更新用户资料
+     */
+    public void updateUserProfile(Long userId, UpdateProfileRequest request) {
+        log.info("Updating user profile: userId={}", userId);
+        
+        User user = getUserById(userId);
+        
+        // 更新用户信息
+        if (request.getUsername() != null) {
+            user.setUsername(request.getUsername());
+        }
+        if (request.getAvatar() != null) {
+            user.setAvatar(request.getAvatar());
+        }
+        if (request.getGender() != null) {
+            user.setGender(request.getGender());
+        }
+        if (request.getBirthday() != null) {
+            user.setBirthday(request.getBirthday());
+        }
+        if (request.getLocation() != null) {
+            user.setLocation(request.getLocation());
+        }
+        if (request.getBio() != null) {
+            user.setBio(request.getBio());
+        }
+        if (request.getEmail() != null) {
+            user.setEmail(request.getEmail());
+        }
+        
+        userRepository.save(user);
+        log.info("User profile updated successfully: userId={}", userId);
+    }
+    
+    /**
+     * 手机号脱敏
+     */
+    private String maskMobile(String mobile) {
+        if (mobile == null || mobile.length() < 7) {
+            return mobile;
+        }
+        if (mobile.length() == 10) {
+            // 澳洲手机号 0435497013 -> 043****013
+            return mobile.substring(0, 3) + "****" + mobile.substring(7);
+        } else if (mobile.length() == 11) {
+            // 中国手机号 13800138000 -> 138****8000
+            return mobile.substring(0, 3) + "****" + mobile.substring(7);
+        }
+        return mobile;
+    }
+    
+    /**
+     * 邮箱脱敏
+     */
+    private String maskEmail(String email) {
+        if (email == null || !email.contains("@")) {
+            return email;
+        }
+        String[] parts = email.split("@");
+        if (parts[0].length() <= 3) {
+            return parts[0].substring(0, 1) + "***@" + parts[1];
+        }
+        return parts[0].substring(0, 3) + "***@" + parts[1];
+    }
+    
+    /**
+     * 计算用户统计数据
+     */
+    private UserProfileResponse.UserStatsResponse calculateUserStats(Long userId) {
+        UserProfileResponse.UserStatsResponse stats = new UserProfileResponse.UserStatsResponse();
+        
+        // 查询用户发布的商品总数
+        Long publishedCount = productRepository.countByUserId(userId);
+        stats.setPublishedCount(publishedCount);
+        
+        // 查询在售商品数
+        Long activeCount = productRepository.countByUserIdAndStatus(userId, Product.ProductStatus.ACTIVE);
+        stats.setActiveCount(activeCount);
+        
+        // 查询已售出商品数
+        Long soldCount = productRepository.countByUserIdAndStatus(userId, Product.ProductStatus.SOLD);
+        stats.setSoldCount(soldCount);
+        
+        // 查询收藏数量
+        Long favoriteCount = productFavoriteRepository.countByUserId(userId);
+        stats.setFavoriteCount(favoriteCount);
+        
+        // TODO: 后续添加购买数、聊天数等统计
+        stats.setBoughtCount(0L);
+        stats.setChatCount(0L);
+        
+        return stats;
     }
 }

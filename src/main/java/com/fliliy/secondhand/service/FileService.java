@@ -103,6 +103,43 @@ public class FileService {
     }
     
     /**
+     * 上传头像文件
+     */
+    public UploadResponse uploadAvatarFile(MultipartFile file) {
+        try {
+            // 1. 验证文件
+            validateImageFile(file);
+            
+            // 2. 生成文件名和路径
+            String originalFilename = file.getOriginalFilename();
+            String fileExtension = getFileExtension(originalFilename);
+            String filename = generateFilename(fileExtension);
+            
+            // 3. 创建上传目录
+            String relativePath = "avatar/" + filename;
+            Path uploadPath = Paths.get(uploadBasePath, relativePath);
+            Files.createDirectories(uploadPath.getParent());
+            
+            // 4. 保存头像（压缩到合适尺寸）
+            saveAvatarImage(file, uploadPath);
+            
+            // 5. 构建响应
+            UploadResponse response = new UploadResponse();
+            response.setUrl(serverBaseUrl + "/api/v1/files/" + relativePath);
+            response.setFilename(filename);
+            response.setSize(file.getSize());
+            response.setUploadTime(LocalDateTime.now());
+            
+            log.info("Avatar image uploaded successfully: {}", relativePath);
+            return response;
+            
+        } catch (IOException e) {
+            log.error("Failed to upload avatar image: {}", e.getMessage());
+            throw new RuntimeException("头像上传失败: " + e.getMessage());
+        }
+    }
+    
+    /**
      * 批量删除文件
      */
     public void deleteFiles(List<String> fileUrls) {
@@ -316,5 +353,54 @@ public class FileService {
         
         int index = fileUrl.indexOf("/api/v1/files/");
         return fileUrl.substring(index + "/api/v1/files/".length());
+    }
+    
+    /**
+     * 保存头像图片（压缩到200x200）
+     */
+    private void saveAvatarImage(MultipartFile file, Path uploadPath) throws IOException {
+        try {
+            BufferedImage originalImage = ImageIO.read(file.getInputStream());
+            if (originalImage == null) {
+                // 如果无法读取为图片，直接保存原文件
+                Files.copy(file.getInputStream(), uploadPath, StandardCopyOption.REPLACE_EXISTING);
+                return;
+            }
+            
+            // 头像固定尺寸 200x200
+            int avatarSize = 200;
+            BufferedImage avatarImage = new BufferedImage(avatarSize, avatarSize, BufferedImage.TYPE_INT_RGB);
+            Graphics2D g2d = avatarImage.createGraphics();
+            
+            // 设置抗锯齿
+            g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+            g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            
+            // 计算居中裁剪
+            int originalWidth = originalImage.getWidth();
+            int originalHeight = originalImage.getHeight();
+            int cropSize = Math.min(originalWidth, originalHeight);
+            int cropX = (originalWidth - cropSize) / 2;
+            int cropY = (originalHeight - cropSize) / 2;
+            
+            // 裁剪并缩放
+            g2d.drawImage(originalImage, 0, 0, avatarSize, avatarSize, 
+                         cropX, cropY, cropX + cropSize, cropY + cropSize, null);
+            g2d.dispose();
+            
+            // 保存头像
+            String formatName = getFileExtension(uploadPath.getFileName().toString());
+            if ("jpg".equalsIgnoreCase(formatName)) {
+                formatName = "jpeg";
+            }
+            
+            ImageIO.write(avatarImage, formatName, uploadPath.toFile());
+            
+        } catch (Exception e) {
+            log.warn("Failed to process avatar image, saving original: {}", e.getMessage());
+            // 如果处理失败，保存原文件
+            Files.copy(file.getInputStream(), uploadPath, StandardCopyOption.REPLACE_EXISTING);
+        }
     }
 }

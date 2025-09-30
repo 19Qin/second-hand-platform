@@ -86,7 +86,7 @@ public class ChatRoom {
     }
     
     public enum MessageType {
-        TEXT, IMAGE, VOICE, SYSTEM, PRODUCT_CARD
+        TEXT, IMAGE, VOICE, SYSTEM, PRODUCT_CARD, TRANSACTION_REQUEST, TRANSACTION_RESPONSE
     }
     
     // 构造函数

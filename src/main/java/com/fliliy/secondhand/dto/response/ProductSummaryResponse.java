@@ -23,6 +23,11 @@ public class ProductSummaryResponse {
     private Boolean hasWarranty;
     private String warrantyText; // 保修信息，如"保修10个月"
     
+    // 商品状态信息 - 商家管理必需字段
+    private String status; // 商品状态：ACTIVE/SOLD/INACTIVE/DRAFT
+    private String statusText; // 状态中文描述：在售中/已售出/已下架/草稿
+    private LocalDateTime soldAt; // 售出时间（仅已售商品有值）
+    
     // 卖家信息
     private SellerInfo seller;
     
