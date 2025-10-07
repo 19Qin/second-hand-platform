@@ -1,0 +1,43 @@
+import 'package:mobile/features/banner/domain/entities/banner.dart';
+
+final List<BannerEntity> mockBanners = <BannerEntity>[
+  const BannerEntity(
+    id: 1,
+    title: 'New Year Sale',
+    image: 'assets/images/promotion_banner.png',
+    link: '/promo/new-year',
+    linkType: 'category',
+    sortOrder: 1,
+    isActive: true,
+    startTime: '2025-01-01T00:00:00Z',
+    endTime: '2025-02-01T00:00:00Z',
+    clickCount: 1250,
+    createdAt: '2024-12-01T00:00:00Z',
+  ),
+  const BannerEntity(
+    id: 2,
+    title: 'Hot Products',
+    image: 'assets/images/promotion_banner.png',
+    link: '/products/hot',
+    linkType: 'category',
+    sortOrder: 2,
+    isActive: true,
+    startTime: '2025-01-01T00:00:00Z',
+    endTime: '2025-03-01T00:00:00Z',
+    clickCount: 980,
+    createdAt: '2024-12-01T00:00:00Z',
+  ),
+  const BannerEntity(
+    id: 3,
+    title: 'Limited Offer',
+    image: 'assets/images/promotion_banner.png',
+    link: '/promo/limited',
+    linkType: 'category',
+    sortOrder: 3,
+    isActive: true,
+    startTime: '2025-01-01T00:00:00Z',
+    endTime: '2025-04-01T00:00:00Z',
+    clickCount: 750,
+    createdAt: '2024-12-01T00:00:00Z',
+  ),
+];
