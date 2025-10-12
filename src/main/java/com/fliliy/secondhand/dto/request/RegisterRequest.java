@@ -1,5 +1,6 @@
 package com.fliliy.secondhand.dto.request;
 
+import com.fliliy.secondhand.validation.ValidPhoneNumber;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -8,13 +9,13 @@ import javax.validation.constraints.Size;
 
 @Data
 public class RegisterRequest {
-    
+
     @NotBlank(message = "用户昵称不能为空")
     @Size(min = 1, max = 50, message = "用户昵称长度应在1-50字符之间")
     private String username;
-    
+
     @NotBlank(message = "手机号不能为空")
-    @Pattern(regexp = "^(1[3-9]\\d{9}|0[4-5]\\d{8})$", message = "手机号格式错误")
+    @ValidPhoneNumber(message = "手机号格式不正确")
     private String mobile;
     
     @NotBlank(message = "密码不能为空")

@@ -1,0 +1,39 @@
+{
+  "code": 200,
+  "message": "success",
+  "data": {
+    "products": [
+      {
+        "id": 1968947273484341200,
+        "title": "完整测试商品 <em class=\"highlight\">MacBook</em> Pro",
+        "description": "用于测试聊天和交易功能的完整流程",
+        "price": 8999,
+        "province": "北京市",
+        "city": "北京市",
+        "status": "ACTIVE",
+        "mainImage": null,
+        "viewCount": 0,
+        "favoriteCount": 0,
+        "sellerNickname": "买家用户",
+        "sellerAvatar": "https://cdn.fliliy.com/avatar/default.png",
+        "categoryName": "游戏设备",
+        "publishedAt": "2025-09-19 15:56:26"
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "size": 10,
+      "total": 1,
+      "totalPages": 1,
+      "hasNext": false,
+      "hasPrevious": false,
+      "isFirst": true,
+      "isLast": true
+    },
+    "keyword": "MacBook",
+    "total": 1,
+    "hasMore": false,
+    "took": 23
+  },
+  "timestamp": 1760109253820
+}

@@ -60,10 +60,23 @@ public interface ProductImageRepository extends JpaRepository<ProductImage, Long
      */
     @Modifying
     @Query(value = "INSERT INTO product_images (product_id, image_url, thumbnail_url, sort_order, upload_time) " +
-                   "VALUES (:productId, :imageUrl, :thumbnailUrl, :sortOrder, NOW())", 
+                   "VALUES (:productId, :imageUrl, :thumbnailUrl, :sortOrder, NOW())",
            nativeQuery = true)
-    void batchInsert(@Param("productId") Long productId, 
-                    @Param("imageUrl") String imageUrl, 
-                    @Param("thumbnailUrl") String thumbnailUrl, 
+    void batchInsert(@Param("productId") Long productId,
+                    @Param("imageUrl") String imageUrl,
+                    @Param("thumbnailUrl") String thumbnailUrl,
                     @Param("sortOrder") Integer sortOrder);
+
+    /**
+     * 批量获取多个商品的主图 (优化N+1查询)
+     * 用于商品列表展示
+     */
+    @Query("SELECT pi FROM ProductImage pi WHERE pi.productId IN :productIds AND pi.sortOrder = 0")
+    List<ProductImage> findMainImagesByProductIds(@Param("productIds") List<Long> productIds);
+
+    /**
+     * 批量获取多个商品的所有图片 (优化N+1查询)
+     */
+    @Query("SELECT pi FROM ProductImage pi WHERE pi.productId IN :productIds ORDER BY pi.productId, pi.sortOrder")
+    List<ProductImage> findByProductIdIn(@Param("productIds") List<Long> productIds);
 }

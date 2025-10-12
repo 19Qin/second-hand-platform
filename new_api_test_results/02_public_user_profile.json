@@ -1,0 +1,30 @@
+{
+  "code": 200,
+  "message": "获取成功",
+  "data": {
+    "id": 1959106057909440500,
+    "username": "testuser1",
+    "mobile": null,
+    "email": null,
+    "avatar": "https://cdn.fliliy.com/avatar/default.png",
+    "gender": 0,
+    "birthday": null,
+    "location": null,
+    "bio": null,
+    "verified": false,
+    "registeredAt": "2025-08-23 20:10:57",
+    "lastLoginAt": null,
+    "stats": {
+      "publishedCount": 5,
+      "activeCount": 3,
+      "soldCount": 2,
+      "boughtCount": null,
+      "favoriteCount": null,
+      "chatCount": null,
+      "points": 0,
+      "credits": 100
+    },
+    "preferences": null
+  },
+  "timestamp": 1760112047446
+}

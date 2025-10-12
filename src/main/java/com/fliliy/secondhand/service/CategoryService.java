@@ -20,8 +20,9 @@ public class CategoryService {
     
     /**
      * 获取分类树结构
+     * 暂时禁用缓存,避免Redis序列化问题
      */
-    @Cacheable(value = "categories", key = "'tree'")
+    // @Cacheable(value = "categories", key = "'tree'")
     public List<Category> getCategoryTree() {
         List<Category> allCategories = categoryRepository.findAllActiveCategories();
         return buildCategoryTree(allCategories);

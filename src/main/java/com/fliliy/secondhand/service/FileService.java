@@ -1,6 +1,8 @@
 package com.fliliy.secondhand.service;
 
 import com.fliliy.secondhand.dto.response.UploadResponse;
+import com.fliliy.secondhand.exception.BusinessException;
+import com.fliliy.secondhand.exception.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -80,7 +82,7 @@ public class FileService {
             
         } catch (IOException e) {
             log.error("Failed to upload product image: {}", e.getMessage());
-            throw new RuntimeException("文件上传失败: " + e.getMessage());
+            throw new BusinessException(ErrorCode.FILE_UPLOAD_FAILED, e.getMessage());
         }
     }
     
@@ -94,11 +96,13 @@ public class FileService {
             } else if ("voice".equals(type)) {
                 return uploadChatVoice(file);
             } else {
-                throw new RuntimeException("不支持的文件类型: " + type);
+                throw new BusinessException(ErrorCode.FILE_TYPE_UNSUPPORTED);
             }
+        } catch (BusinessException e) {
+            throw e;
         } catch (Exception e) {
             log.error("Failed to upload chat file: {}", e.getMessage());
-            throw new RuntimeException("文件上传失败: " + e.getMessage());
+            throw new BusinessException(ErrorCode.FILE_UPLOAD_FAILED, e.getMessage());
         }
     }
     
@@ -135,7 +139,7 @@ public class FileService {
             
         } catch (IOException e) {
             log.error("Failed to upload avatar image: {}", e.getMessage());
-            throw new RuntimeException("头像上传失败: " + e.getMessage());
+            throw new BusinessException(ErrorCode.FILE_UPLOAD_FAILED, "头像上传失败");
         }
     }
     
@@ -172,7 +176,7 @@ public class FileService {
             }
         } catch (IOException e) {
             log.error("Failed to delete file: {}", e.getMessage());
-            throw new RuntimeException("文件删除失败: " + e.getMessage());
+            throw new BusinessException(ErrorCode.FILE_DELETE_FAILED);
         }
     }
     
@@ -180,32 +184,32 @@ public class FileService {
     
     private void validateImageFile(MultipartFile file) {
         if (file.isEmpty()) {
-            throw new RuntimeException("文件不能为空");
+            throw new BusinessException(ErrorCode.FILE_EMPTY);
         }
-        
+
         if (file.getSize() > maxFileSize) {
-            throw new RuntimeException("文件大小不能超过10MB");
+            throw new BusinessException(ErrorCode.FILE_SIZE_EXCEEDED);
         }
-        
+
         String contentType = file.getContentType();
         if (!SUPPORTED_IMAGE_TYPES.contains(contentType)) {
-            throw new RuntimeException("只支持 JPG, PNG, WebP 格式的图片");
+            throw new BusinessException(ErrorCode.FILE_TYPE_UNSUPPORTED);
         }
     }
     
     private void validateVoiceFile(MultipartFile file) {
         if (file.isEmpty()) {
-            throw new RuntimeException("文件不能为空");
+            throw new BusinessException(ErrorCode.FILE_EMPTY);
         }
-        
+
         if (file.getSize() > maxFileSize) {
-            throw new RuntimeException("文件大小不能超过10MB");
+            throw new BusinessException(ErrorCode.FILE_SIZE_EXCEEDED);
         }
-        
+
         String contentType = file.getContentType();
         List<String> supportedVoiceTypes = Arrays.asList("audio/aac", "audio/mp3", "audio/wav", "audio/mpeg");
         if (!supportedVoiceTypes.contains(contentType)) {
-            throw new RuntimeException("只支持 AAC, MP3, WAV 格式的音频文件");
+            throw new BusinessException(ErrorCode.FILE_TYPE_UNSUPPORTED);
         }
     }
     

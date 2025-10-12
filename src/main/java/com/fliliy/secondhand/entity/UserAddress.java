@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 public class UserAddress {
     
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     @Column(name = "user_id", nullable = false)
@@ -37,10 +38,10 @@ public class UserAddress {
     @Column(name = "detail_address", nullable = false, length = 500)
     private String detailAddress;
     
-    @Column(name = "longitude", precision = 10, scale = 8)
+    @Column(name = "longitude", precision = 11, scale = 8)
     private BigDecimal longitude;
-    
-    @Column(name = "latitude", precision = 10, scale = 8)
+
+    @Column(name = "latitude", precision = 11, scale = 8)
     private BigDecimal latitude;
     
     @Column(name = "address_tag", length = 20)

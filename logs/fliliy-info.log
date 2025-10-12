@@ -1,0 +1,55 @@
+2025-10-13 00:05:47.216  INFO [MessageBroker-3] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 4, active threads = 1, queued tasks = 1, completed tasks = 10]
+2025-10-13 00:52:01.226  INFO [MessageBroker-3] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 4, active threads = 1, queued tasks = 1, completed tasks = 11]
+2025-10-13 01:22:01.260  INFO [MessageBroker-3] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 4, active threads = 1, queued tasks = 1, completed tasks = 12]
+2025-10-13 01:39:13.385  INFO [MessageBroker-4] c.f.s.task.TransactionCodeRefreshTask    : 开始执行交易码刷新任务
+2025-10-13 01:39:13.469  INFO [MessageBroker-4] i.StatisticalLoggingSessionEventListener : Session Metrics {
+    2871536 nanoseconds spent acquiring 1 JDBC connections;
+    0 nanoseconds spent releasing 0 JDBC connections;
+    3912125 nanoseconds spent preparing 1 JDBC statements;
+    12525506 nanoseconds spent executing 1 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC batches;
+    0 nanoseconds spent performing 0 L2C puts;
+    0 nanoseconds spent performing 0 L2C hits;
+    0 nanoseconds spent performing 0 L2C misses;
+    0 nanoseconds spent executing 0 flushes (flushing a total of 0 entities and 0 collections);
+    0 nanoseconds spent executing 0 partial-flushes (flushing a total of 0 entities and 0 collections)
+}
+2025-10-13 01:39:13.474  INFO [MessageBroker-4] c.f.s.task.TransactionCodeRefreshTask    : 找到3个需要刷新交易码的交易
+2025-10-13 01:39:13.513  INFO [MessageBroker-4] i.StatisticalLoggingSessionEventListener : Session Metrics {
+    42198 nanoseconds spent acquiring 1 JDBC connections;
+    0 nanoseconds spent releasing 0 JDBC connections;
+    876472 nanoseconds spent preparing 2 JDBC statements;
+    856607 nanoseconds spent executing 1 JDBC statements;
+    2355313 nanoseconds spent executing 1 JDBC batches;
+    0 nanoseconds spent performing 0 L2C puts;
+    0 nanoseconds spent performing 0 L2C hits;
+    0 nanoseconds spent performing 0 L2C misses;
+    11279055 nanoseconds spent executing 1 flushes (flushing a total of 1 entities and 0 collections);
+    0 nanoseconds spent executing 0 partial-flushes (flushing a total of 0 entities and 0 collections)
+}
+2025-10-13 01:39:13.525  INFO [MessageBroker-4] i.StatisticalLoggingSessionEventListener : Session Metrics {
+    30935 nanoseconds spent acquiring 1 JDBC connections;
+    0 nanoseconds spent releasing 0 JDBC connections;
+    974739 nanoseconds spent preparing 2 JDBC statements;
+    677191 nanoseconds spent executing 1 JDBC statements;
+    1421486 nanoseconds spent executing 1 JDBC batches;
+    0 nanoseconds spent performing 0 L2C puts;
+    0 nanoseconds spent performing 0 L2C hits;
+    0 nanoseconds spent performing 0 L2C misses;
+    4472422 nanoseconds spent executing 1 flushes (flushing a total of 1 entities and 0 collections);
+    0 nanoseconds spent executing 0 partial-flushes (flushing a total of 0 entities and 0 collections)
+}
+2025-10-13 01:39:13.535  INFO [MessageBroker-4] i.StatisticalLoggingSessionEventListener : Session Metrics {
+    27529 nanoseconds spent acquiring 1 JDBC connections;
+    0 nanoseconds spent releasing 0 JDBC connections;
+    739200 nanoseconds spent preparing 2 JDBC statements;
+    617649 nanoseconds spent executing 1 JDBC statements;
+    1411034 nanoseconds spent executing 1 JDBC batches;
+    0 nanoseconds spent performing 0 L2C puts;
+    0 nanoseconds spent performing 0 L2C hits;
+    0 nanoseconds spent performing 0 L2C misses;
+    4449860 nanoseconds spent executing 1 flushes (flushing a total of 1 entities and 0 collections);
+    0 nanoseconds spent executing 0 partial-flushes (flushing a total of 0 entities and 0 collections)
+}
+2025-10-13 01:39:13.535  INFO [MessageBroker-4] c.f.s.task.TransactionCodeRefreshTask    : 交易码刷新任务完成，成功刷新3个交易
+2025-10-13 01:52:01.288  INFO [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 4, active threads = 1, queued tasks = 1, completed tasks = 14]

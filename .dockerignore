@@ -1,0 +1,80 @@
+# ============================================
+# Docker镜像构建忽略文件
+# ============================================
+
+# Maven构建产物
+target/
+!target/*.jar
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# IDE配置文件
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+.settings/
+.project
+.classpath
+.factorypath
+
+# 操作系统文件
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# 日志文件
+logs/
+*.log
+
+# 上传文件
+uploads/
+static/uploads/
+
+# 临时文件
+tmp/
+temp/
+*.tmp
+*.bak
+*.cache
+
+# Git相关
+.git/
+.gitignore
+.gitattributes
+
+# Docker相关
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# 文档文件
+*.md
+docs/
+README.md
+
+# 测试文件
+src/test/
+
+# 配置文件（敏感信息）
+*.env
+*.properties.local
+application-local.yml
+
+# Node模块（如果有前端）
+node_modules/
+
+# 其他
+*.class
+*.jar
+!target/*.jar

@@ -7,6 +7,7 @@ import com.fliliy.secondhand.dto.response.PagedResponse;
 import com.fliliy.secondhand.dto.response.ProductSummaryResponse;
 import com.fliliy.secondhand.dto.response.UploadResponse;
 import com.fliliy.secondhand.dto.response.UserProfileResponse;
+import com.fliliy.secondhand.service.CacheService;
 import com.fliliy.secondhand.service.FileService;
 import com.fliliy.secondhand.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -27,17 +28,19 @@ public class UserController {
     
     private final UserService userService;
     private final FileService fileService;
-    
+    private final CacheService cacheService;
+
     /**
-     * 获取用户资料详情
+     * 获取用户资料详情 (带缓存)
      */
     @GetMapping("/profile")
     @PreAuthorize("hasRole('USER')")
     public ApiResponse<UserProfileResponse> getUserProfile(@AuthenticationPrincipal UserDetails userDetails) {
         try {
             Long userId = Long.valueOf(userDetails.getUsername());
-            UserProfileResponse response = userService.getUserProfile(userId);
-            
+            // 使用缓存服务获取用户资料
+            UserProfileResponse response = cacheService.getUserProfileCached(userId);
+
             return ApiResponse.success("获取成功", response);
         } catch (Exception e) {
             log.error("Get user profile failed", e);
@@ -56,7 +59,10 @@ public class UserController {
         try {
             Long userId = Long.valueOf(userDetails.getUsername());
             userService.updateUserProfile(userId, request);
-            
+
+            // 清除用户缓存
+            cacheService.evictUserCache(userId);
+
             return new ApiResponse<>(200, "更新成功", null);
         } catch (Exception e) {
             log.error("Update user profile failed", e);
@@ -74,15 +80,18 @@ public class UserController {
             @AuthenticationPrincipal UserDetails userDetails) {
         try {
             Long userId = Long.valueOf(userDetails.getUsername());
-            
+
             // 上传文件
             UploadResponse uploadResponse = fileService.uploadAvatarFile(file);
-            
+
             // 更新用户头像
             UpdateProfileRequest updateRequest = new UpdateProfileRequest();
             updateRequest.setAvatar(uploadResponse.getUrl());
             userService.updateUserProfile(userId, updateRequest);
-            
+
+            // 清除用户缓存
+            cacheService.evictUserCache(userId);
+
             return ApiResponse.success("头像上传成功", uploadResponse);
         } catch (Exception e) {
             log.error("Upload avatar failed", e);
@@ -120,11 +129,42 @@ public class UserController {
         try {
             Long userId = Long.valueOf(userDetails.getUsername());
             PagedResponse<ProductSummaryResponse> response = userService.getUserProducts(request, userId);
-            
+
             return ApiResponse.success("获取成功", response);
         } catch (Exception e) {
             log.error("Get user products failed", e);
             return ApiResponse.error("获取用户商品失败: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 获取其他用户的公开资料
+     */
+    @GetMapping("/{userId}/profile")
+    public ApiResponse<UserProfileResponse> getPublicUserProfile(@PathVariable Long userId) {
+        try {
+            UserProfileResponse response = userService.getPublicUserProfile(userId);
+            return ApiResponse.success("获取成功", response);
+        } catch (Exception e) {
+            log.error("Get public user profile failed: userId={}", userId, e);
+            return ApiResponse.error("获取用户资料失败: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 获取用户的评价列表
+     */
+    @GetMapping("/{userId}/ratings")
+    public ApiResponse<PagedResponse> getUserRatings(
+            @PathVariable Long userId,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        try {
+            PagedResponse response = userService.getUserRatings(userId, page, size);
+            return ApiResponse.success("获取成功", response);
+        } catch (Exception e) {
+            log.error("Get user ratings failed: userId={}", userId, e);
+            return ApiResponse.error("获取用户评价失败: " + e.getMessage());
         }
     }
 }

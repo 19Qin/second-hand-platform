@@ -6,6 +6,12 @@ import com.fliliy.secondhand.dto.response.PagedResponse;
 import com.fliliy.secondhand.dto.response.ProductDetailResponse;
 import com.fliliy.secondhand.dto.response.ProductSummaryResponse;
 import com.fliliy.secondhand.entity.*;
+import com.fliliy.secondhand.exception.BusinessException;
+import com.fliliy.secondhand.exception.ErrorCode;
+import com.fliliy.secondhand.message.event.ProductDeletedEvent;
+import com.fliliy.secondhand.message.event.ProductPublishedEvent;
+import com.fliliy.secondhand.message.event.ProductUpdatedEvent;
+import com.fliliy.secondhand.message.producer.MessageProducer;
 import com.fliliy.secondhand.repository.*;
 import com.fliliy.secondhand.util.IdGenerator;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +37,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class ProductService {
-    
+
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     private final ProductImageRepository productImageRepository;
@@ -39,26 +45,33 @@ public class ProductService {
     private final ProductFavoriteRepository productFavoriteRepository;
     private final UserRepository userRepository;
     private final CategoryService categoryService;
+    private final MessageProducer messageProducer;
     
     /**
      * 发布商品
      */
     @Transactional
     public Long publishProduct(PublishProductRequest request, Long sellerId) {
+        log.info("[商品发布] 开始发布商品 - 卖家ID: {}, 标题: {}, 价格: {}, 分类: {}",
+                sellerId, request.getTitle(), request.getPrice(), request.getCategoryId());
+
         // 1. 验证分类是否存在
         if (!categoryService.isCategoryValid(request.getCategoryId())) {
-            throw new RuntimeException("商品分类不存在或已禁用");
+            log.warn("[商品发布] 分类无效 - 卖家ID: {}, 分类ID: {}", sellerId, request.getCategoryId());
+            throw new BusinessException(ErrorCode.PRODUCT_CATEGORY_INVALID);
         }
-        
+
         // 2. 验证图片
         if (request.getImages() == null || request.getImages().isEmpty()) {
-            throw new RuntimeException("至少需要上传一张商品图片");
+            log.warn("[商品发布] 未上传图片 - 卖家ID: {}", sellerId);
+            throw new BusinessException(ErrorCode.PRODUCT_IMAGE_REQUIRED);
         }
-        
+
         if (request.getImages().size() > 20) {
-            throw new RuntimeException("商品图片最多20张");
+            log.warn("[商品发布] 图片数量超限 - 卖家ID: {}, 图片数: {}", sellerId, request.getImages().size());
+            throw new BusinessException(ErrorCode.PRODUCT_IMAGE_LIMIT);
         }
-        
+
         // 3. 创建商品
         Product product = new Product();
         product.setId(IdGenerator.generateProductId());
@@ -69,7 +82,7 @@ public class ProductService {
         product.setPrice(request.getPrice());
         product.setOriginalPrice(request.getOriginalPrice());
         product.setProductCondition(Product.ConditionType.valueOf(request.getCondition()));
-        
+
         // 设置使用信息
         if (request.getUsageInfo() != null) {
             product.setUsageType(Product.UsageType.valueOf(request.getUsageInfo().getType()));
@@ -78,7 +91,7 @@ public class ProductService {
                 product.setUsageUnit(Product.UsageUnit.valueOf(request.getUsageInfo().getUnit()));
             }
         }
-        
+
         // 设置保修信息
         if (request.getWarranty() != null) {
             product.setHasWarranty(request.getWarranty().getHasWarranty());
@@ -86,7 +99,7 @@ public class ProductService {
             product.setWarrantyMonths(request.getWarranty().getRemainingMonths());
             product.setWarrantyDescription(request.getWarranty().getDescription());
         }
-        
+
         // 设置位置信息
         if (request.getLocation() != null) {
             product.setProvince(request.getLocation().getProvince());
@@ -96,26 +109,55 @@ public class ProductService {
             product.setLongitude(request.getLocation().getLongitude());
             product.setLatitude(request.getLocation().getLatitude());
         }
-        
+
         product.setPublishedAt(LocalDateTime.now());
-        
+
         // 保存商品
         Product savedProduct = productRepository.save(product);
-        
+
         // 4. 保存商品图片
         saveProductImages(savedProduct.getId(), request.getImages());
-        
+
         // 5. 保存商品标签
         if (request.getTags() != null && !request.getTags().isEmpty()) {
             saveProductTags(savedProduct.getId(), request.getTags());
         }
-        
+
         // 6. 更新分类商品数量
         categoryService.updateCategoryProductCount(request.getCategoryId());
-        
-        log.info("Product published successfully: id={}, title={}, seller={}", 
-                savedProduct.getId(), savedProduct.getTitle(), sellerId);
-        
+
+        log.info("[商品发布] 发布成功 - 商品ID: {}, 标题: {}, 卖家ID: {}, 价格: {}, 图片数: {}",
+                savedProduct.getId(), savedProduct.getTitle(), sellerId, savedProduct.getPrice(),
+                request.getImages().size());
+
+        // 7. 异步发送商品发布消息 - 同步到ES和发送通知
+        try {
+            User seller = userRepository.findById(sellerId).orElse(null);
+            String sellerName = seller != null ? seller.getUsername() : "未知用户";
+
+            ProductPublishedEvent event = new ProductPublishedEvent(
+                    savedProduct.getId(),
+                    savedProduct.getTitle(),
+                    sellerId,
+                    sellerName,
+                    savedProduct.getPublishedAt()
+            );
+            messageProducer.sendProductPublished(event);
+
+            // 发送通知
+            messageProducer.sendProductPublishedNotification(
+                    sellerId,
+                    savedProduct.getId(),
+                    savedProduct.getTitle()
+            );
+
+            log.info("[商品发布] 异步消息已发送 - 商品ID: {}", savedProduct.getId());
+        } catch (Exception e) {
+            log.error("[商品发布] 发送异步消息失败 - 商品ID: {}, 错误: {}",
+                    savedProduct.getId(), e.getMessage(), e);
+            // 不影响主流程，仅记录日志
+        }
+
         return savedProduct.getId();
     }
     
@@ -150,18 +192,18 @@ public class ProductService {
     public ProductDetailResponse getProductDetail(Long productId, Long currentUserId) {
         // 查找商品
         Product product = productRepository.findByIdAndNotDeleted(productId)
-                .orElseThrow(() -> new RuntimeException("商品不存在"));
-        
+                .orElseThrow(() -> new BusinessException(ErrorCode.PRODUCT_NOT_FOUND));
+
         // 增加浏览次数（异步处理避免影响响应速度）
         productRepository.incrementViewCount(productId);
-        
+
         // 获取相关数据
         List<ProductImage> images = productImageRepository.findByProductIdOrderBySortOrder(productId);
         List<String> tags = productTagRepository.findTagNamesByProductId(productId);
-        
+
         // 获取卖家信息
         User seller = userRepository.findById(product.getSellerId())
-                .orElseThrow(() -> new RuntimeException("卖家信息不存在"));
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
         
         // 获取分类信息
         Category category = categoryRepository.findById(product.getCategoryId())
@@ -189,7 +231,7 @@ public class ProductService {
     public Map<String, Object> toggleFavorite(Long productId, Long userId) {
         // 检查商品是否存在
         Product product = productRepository.findByIdAndNotDeleted(productId)
-                .orElseThrow(() -> new RuntimeException("商品不存在"));
+                .orElseThrow(() -> new BusinessException(ErrorCode.PRODUCT_NOT_FOUND));
         
         // 检查是否已收藏
         Optional<ProductFavorite> existingFavorite = 
@@ -217,10 +259,17 @@ public class ProductService {
         Map<String, Object> result = new HashMap<>();
         result.put("isFavorited", isFavorited);
         result.put("favoriteCount", favoriteCount);
-        
+
         return result;
     }
-    
+
+    /**
+     * 查询商品是否已收藏
+     */
+    public boolean isFavorited(Long productId, Long userId) {
+        return productFavoriteRepository.existsByUserIdAndProductId(userId, productId);
+    }
+
     /**
      * 编辑商品
      */
@@ -228,15 +277,15 @@ public class ProductService {
     public void updateProduct(Long productId, PublishProductRequest request, Long sellerId) {
         // 查找商品并验证权限
         Product product = productRepository.findByIdAndNotDeleted(productId)
-                .orElseThrow(() -> new RuntimeException("商品不存在"));
-        
+                .orElseThrow(() -> new BusinessException(ErrorCode.PRODUCT_NOT_FOUND));
+
         if (!product.getSellerId().equals(sellerId)) {
-            throw new RuntimeException("无权限编辑此商品");
+            throw new BusinessException(ErrorCode.PRODUCT_NOT_OWNER);
         }
-        
+
         // 验证分类
         if (!categoryService.isCategoryValid(request.getCategoryId())) {
-            throw new RuntimeException("商品分类不存在或已禁用");
+            throw new BusinessException(ErrorCode.PRODUCT_CATEGORY_INVALID);
         }
         
         // 更新商品信息
@@ -258,7 +307,7 @@ public class ProductService {
         if (request.getTags() != null && !request.getTags().isEmpty()) {
             saveProductTags(productId, request.getTags());
         }
-        
+
         log.info("Product updated: id={}, seller={}", productId, sellerId);
     }
     
@@ -269,18 +318,18 @@ public class ProductService {
     public void deleteProduct(Long productId, Long sellerId) {
         // 查找商品并验证权限
         Product product = productRepository.findByIdAndNotDeleted(productId)
-                .orElseThrow(() -> new RuntimeException("商品不存在"));
-        
+                .orElseThrow(() -> new BusinessException(ErrorCode.PRODUCT_NOT_FOUND));
+
         if (!product.getSellerId().equals(sellerId)) {
-            throw new RuntimeException("无权限删除此商品");
+            throw new BusinessException(ErrorCode.PRODUCT_NOT_OWNER);
         }
         
         // 软删除商品
         productRepository.softDeleteById(productId);
-        
+
         // 更新分类商品数量
         categoryService.updateCategoryProductCount(product.getCategoryId());
-        
+
         log.info("Product deleted: id={}, seller={}", productId, sellerId);
     }
     
@@ -290,7 +339,7 @@ public class ProductService {
     @Transactional(readOnly = true)
     public Product getProductById(Long productId) {
         return productRepository.findByIdAndNotDeleted(productId)
-                .orElseThrow(() -> new RuntimeException("商品不存在"));
+                .orElseThrow(() -> new BusinessException(ErrorCode.PRODUCT_NOT_FOUND));
     }
     
     // 私有方法
@@ -687,13 +736,22 @@ public class ProductService {
     }
     
     // 辅助方法
+    /**
+     * 批量获取商品主图 (优化N+1查询)
+     * 优化前: N次查询 (每个商品1次)
+     * 优化后: 1次批量查询
+     */
     private Map<Long, String> getMainImages(List<Long> productIds) {
-        Map<Long, String> mainImages = new HashMap<>();
-        for (Long productId : productIds) {
-            productImageRepository.findMainImageUrl(productId)
-                    .ifPresent(url -> mainImages.put(productId, url));
+        if (productIds.isEmpty()) {
+            return new HashMap<>();
         }
-        return mainImages;
+
+        // 批量查询所有商品的主图
+        List<ProductImage> mainImages = productImageRepository.findMainImagesByProductIds(productIds);
+
+        // 转换为Map
+        return mainImages.stream()
+                .collect(Collectors.toMap(ProductImage::getProductId, ProductImage::getImageUrl));
     }
     
     private Map<Long, User> getSellers(List<Long> sellerIds) {
@@ -701,13 +759,25 @@ public class ProductService {
                 .collect(Collectors.toMap(User::getId, user -> user));
     }
     
+    /**
+     * 批量获取商品标签 (优化N+1查询)
+     * 优化前: N次查询 (每个商品1次)
+     * 优化后: 1次批量查询
+     */
     private Map<Long, List<String>> getProductTags(List<Long> productIds) {
-        Map<Long, List<String>> productTags = new HashMap<>();
-        for (Long productId : productIds) {
-            List<String> tags = productTagRepository.findTagNamesByProductId(productId);
-            productTags.put(productId, tags);
+        if (productIds.isEmpty()) {
+            return new HashMap<>();
         }
-        return productTags;
+
+        // 批量查询所有商品的标签
+        List<ProductTag> allTags = productTagRepository.findByProductIdIn(productIds);
+
+        // 按商品ID分组
+        return allTags.stream()
+                .collect(Collectors.groupingBy(
+                        ProductTag::getProductId,
+                        Collectors.mapping(ProductTag::getTagName, Collectors.toList())
+                ));
     }
     
     private Set<Long> getCurrentUserFavorites(Long currentUserId, List<Long> productIds) {
@@ -813,5 +883,54 @@ public class ProductService {
                         .isLast(productPage.isLast())
                         .build())
                 .build();
+    }
+
+    /**
+     * 获取相似商品推荐
+     * 基于分类和价格区间推荐相似商品
+     */
+    public List<ProductSummaryResponse> getSimilarProducts(Long productId, int limit, Long currentUserId) {
+        // 获取原商品信息
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.PRODUCT_NOT_FOUND));
+
+        // 查询相似商品的条件：
+        // 1. 同一分类
+        // 2. 价格在±30%范围内
+        // 3. 在售状态
+        // 4. 排除当前商品
+        BigDecimal minPrice = product.getPrice().multiply(new BigDecimal("0.7"));
+        BigDecimal maxPrice = product.getPrice().multiply(new BigDecimal("1.3"));
+
+        List<Product> similarProducts = productRepository.findAll((root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            // 同一分类
+            predicates.add(cb.equal(root.get("categoryId"), product.getCategoryId()));
+
+            // 价格区间
+            predicates.add(cb.between(root.get("price"), minPrice, maxPrice));
+
+            // 在售状态
+            predicates.add(cb.equal(root.get("status"), Product.ProductStatus.ACTIVE));
+
+            // 未删除
+            predicates.add(cb.isNull(root.get("deletedAt")));
+
+            // 排除当前商品
+            predicates.add(cb.notEqual(root.get("id"), productId));
+
+            // 按创建时间倒序
+            query.orderBy(cb.desc(root.get("createdAt")));
+
+            return cb.and(predicates.toArray(new Predicate[0]));
+        });
+
+        // 限制返回数量
+        List<Product> limitedProducts = similarProducts.stream()
+                .limit(limit)
+                .collect(Collectors.toList());
+
+        return convertToSummaryResponses(limitedProducts, currentUserId);
     }
 }

@@ -8,6 +8,8 @@ import com.fliliy.secondhand.dto.response.UserProfileResponse;
 import com.fliliy.secondhand.entity.Product;
 import com.fliliy.secondhand.entity.ProductFavorite;
 import com.fliliy.secondhand.entity.User;
+import com.fliliy.secondhand.exception.BusinessException;
+import com.fliliy.secondhand.exception.ErrorCode;
 import com.fliliy.secondhand.repository.ProductFavoriteRepository;
 import com.fliliy.secondhand.repository.ProductRepository;
 import com.fliliy.secondhand.repository.UserRepository;
@@ -118,7 +120,7 @@ public class UserService {
      */
     public User getUserById(Long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("用户不存在"));
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
     }
     
     /**
@@ -184,8 +186,9 @@ public class UserService {
         if (request.getEmail() != null) {
             user.setEmail(request.getEmail());
         }
-        
+
         userRepository.save(user);
+
         log.info("User profile updated successfully: userId={}", userId);
     }
     
@@ -245,7 +248,81 @@ public class UserService {
         // TODO: 后续添加购买数、聊天数等统计
         stats.setBoughtCount(0L);
         stats.setChatCount(0L);
-        
+
         return stats;
+    }
+
+    /**
+     * 获取其他用户的公开资料
+     * 与getUserProfile相比，隐藏了敏感信息
+     */
+    public UserProfileResponse getPublicUserProfile(Long userId) {
+        log.info("Getting public user profile: userId={}", userId);
+
+        User user = getUserById(userId);
+
+        UserProfileResponse response = new UserProfileResponse();
+        response.setId(user.getId());
+        response.setUsername(user.getUsername());
+        // 不显示手机号和邮箱
+        response.setMobile(null);
+        response.setEmail(null);
+        response.setAvatar(user.getAvatar());
+        response.setGender(user.getGender());
+        // 不显示生日
+        response.setBirthday(null);
+        response.setLocation(user.getLocation());
+        response.setBio(user.getBio());
+        response.setVerified(user.getVerified());
+        response.setRegisteredAt(user.getCreatedAt());
+        // 不显示最后登录时间
+        response.setLastLoginAt(null);
+
+        // 设置用户统计数据（只显示公开数据）
+        UserProfileResponse.UserStatsResponse stats = new UserProfileResponse.UserStatsResponse();
+        stats.setPublishedCount(productRepository.countByUserId(userId));
+        stats.setActiveCount(productRepository.countByUserIdAndStatus(
+                userId, Product.ProductStatus.ACTIVE));
+        stats.setSoldCount(productRepository.countByUserIdAndStatus(
+                userId, Product.ProductStatus.SOLD));
+        // 不显示收藏数等私密信息
+        stats.setBoughtCount(null);
+        stats.setFavoriteCount(null);
+        stats.setChatCount(null);
+        stats.setPoints(0);
+        stats.setCredits(100);
+        response.setStats(stats);
+
+        // 不返回用户偏好设置
+        response.setPreferences(null);
+
+        return response;
+    }
+
+    /**
+     * 获取用户评价列表
+     */
+    public PagedResponse getUserRatings(Long userId, int page, int size) {
+        log.info("Getting user ratings: userId={}, page={}, size={}", userId, page, size);
+
+        // 验证用户是否存在
+        getUserById(userId);
+
+        // 由于还没有实现评价功能的数据库表，这里返回空列表
+        // TODO: 后续实现完整的评价功能后，从 user_ratings 表查询数据
+
+        return PagedResponse.builder()
+                .content(java.util.Collections.emptyList())
+                .pagination(PagedResponse.PaginationInfo.builder()
+                        .page(page)
+                        .size(size)
+                        .total(0L)
+                        .totalPages(0)
+                        .hasNext(false)
+                        .hasPrevious(page > 1)
+                        .isFirst(page == 1)
+                        .isLast(true)
+                        .build())
+                .build();
     }
 }

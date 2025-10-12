@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- 引入Spring Boot默认配置 -->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+    <!-- 定义日志文件存储路径 -->
+    <property name="LOG_HOME" value="${LOG_HOME:-logs}"/>
+    <property name="APP_NAME" value="fliliy"/>
+
+    <!-- 彩色日志格式 (控制台) -->
+    <property name="CONSOLE_LOG_PATTERN"
+              value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+
+    <!-- 文件日志格式 -->
+    <property name="FILE_LOG_PATTERN"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} ${LOG_LEVEL_PATTERN:-%5p} [%t] %-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+
+    <!-- ==================== 控制台输出配置 ==================== -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- ==================== INFO级别日志文件 ==================== -->
+    <appender name="INFO_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 当前日志文件 -->
+        <file>${LOG_HOME}/${APP_NAME}-info.log</file>
+
+        <!-- 日志过滤器: 只记录INFO级别 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+
+        <!-- 日志格式 -->
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+
+        <!-- 滚动策略: 按天滚动,保留30天 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 日志文件名格式 -->
+            <fileNamePattern>${LOG_HOME}/history/${APP_NAME}-info-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <!-- 单个文件最大大小 -->
+            <maxFileSize>100MB</maxFileSize>
+            <!-- 保留天数 -->
+            <maxHistory>30</maxHistory>
+            <!-- 所有日志文件总大小 -->
+            <totalSizeCap>10GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <!-- ==================== WARN级别日志文件 ==================== -->
+    <appender name="WARN_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/${APP_NAME}-warn.log</file>
+
+        <!-- 日志过滤器: 只记录WARN级别 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>WARN</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}/history/${APP_NAME}-warn-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <maxFileSize>100MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>5GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <!-- ==================== ERROR级别日志文件 ==================== -->
+    <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/${APP_NAME}-error.log</file>
+
+        <!-- 日志过滤器: 只记录ERROR级别 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}/history/${APP_NAME}-error-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <maxFileSize>100MB</maxFileSize>
+            <!-- ERROR日志保留90天 -->
+            <maxHistory>90</maxHistory>
+            <totalSizeCap>5GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <!-- ==================== 所有日志文件 (DEBUG及以上) ==================== -->
+    <appender name="ALL_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/${APP_NAME}.log</file>
+
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}/history/${APP_NAME}-%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <maxFileSize>200MB</maxFileSize>
+            <maxHistory>7</maxHistory>
+            <totalSizeCap>5GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <!-- ==================== SQL日志输出 ==================== -->
+    <!-- MyBatis SQL日志 -->
+    <logger name="com.fliliy.secondhand.repository" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="ALL_FILE"/>
+    </logger>
+
+    <!-- Hibernate SQL日志 -->
+    <logger name="org.hibernate.SQL" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
+    <!-- Hibernate参数绑定日志 -->
+    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
+    <!-- HikariCP连接池日志 -->
+    <logger name="com.zaxxer.hikari" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="ALL_FILE"/>
+    </logger>
+
+    <!-- Spring框架日志 -->
+    <logger name="org.springframework" level="INFO"/>
+    <logger name="org.springframework.web" level="INFO"/>
+    <logger name="org.springframework.security" level="INFO"/>
+    <logger name="org.springframework.cache" level="DEBUG"/>
+
+    <!-- Redis日志 -->
+    <logger name="org.springframework.data.redis" level="DEBUG"/>
+
+    <!-- WebSocket日志 -->
+    <logger name="org.springframework.web.socket" level="DEBUG"/>
+    <logger name="org.springframework.messaging" level="DEBUG"/>
+
+    <!-- ==================== 环境配置 ==================== -->
+    <!-- 开发环境 -->
+    <springProfile name="dev">
+        <root level="DEBUG">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="ALL_FILE"/>
+            <appender-ref ref="INFO_FILE"/>
+            <appender-ref ref="WARN_FILE"/>
+            <appender-ref ref="ERROR_FILE"/>
+        </root>
+
+        <!-- 应用日志 -->
+        <logger name="com.fliliy.secondhand" level="DEBUG"/>
+    </springProfile>
+
+    <!-- 测试环境 -->
+    <springProfile name="test">
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="ALL_FILE"/>
+            <appender-ref ref="INFO_FILE"/>
+            <appender-ref ref="WARN_FILE"/>
+            <appender-ref ref="ERROR_FILE"/>
+        </root>
+
+        <logger name="com.fliliy.secondhand" level="INFO"/>
+    </springProfile>
+
+    <!-- 生产环境 -->
+    <springProfile name="prod">
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="ALL_FILE"/>
+            <appender-ref ref="INFO_FILE"/>
+            <appender-ref ref="WARN_FILE"/>
+            <appender-ref ref="ERROR_FILE"/>
+        </root>
+
+        <logger name="com.fliliy.secondhand" level="INFO"/>
+
+        <!-- 生产环境关闭SQL日志 -->
+        <logger name="org.hibernate.SQL" level="INFO"/>
+        <logger name="com.fliliy.secondhand.repository" level="INFO"/>
+    </springProfile>
+
+    <!-- 默认配置 (无profile) -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="ALL_FILE"/>
+        <appender-ref ref="INFO_FILE"/>
+        <appender-ref ref="WARN_FILE"/>
+        <appender-ref ref="ERROR_FILE"/>
+    </root>
+
+    <!-- 应用日志默认级别 -->
+    <logger name="com.fliliy.secondhand" level="DEBUG"/>
+</configuration>

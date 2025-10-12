@@ -1,5 +1,6 @@
 package com.fliliy.secondhand.controller;
 
+import com.fliliy.secondhand.annotation.RateLimit;
 import com.fliliy.secondhand.common.ApiResponse;
 import com.fliliy.secondhand.dto.request.LoginRequest;
 import com.fliliy.secondhand.dto.request.RegisterRequest;
@@ -9,6 +10,7 @@ import com.fliliy.secondhand.dto.response.SmsResponse;
 import com.fliliy.secondhand.entity.VerificationCode;
 import com.fliliy.secondhand.service.AuthService;
 import com.fliliy.secondhand.service.SmsService;
+import com.fliliy.secondhand.util.RateLimiter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -31,6 +33,7 @@ public class AuthController {
      * 发送短信验证码
      */
     @PostMapping("/sms/send")
+    @RateLimit(key = "sendSms", limitType = RateLimiter.LimitType.IP, maxCount = 1, period = 60, message = "验证码发送过于频繁，请1分钟后再试")
     public ApiResponse<SmsResponse> sendSms(@Valid @RequestBody SendSmsRequest request) {
         try {
             VerificationCode.CodeType type = VerificationCode.CodeType.valueOf(request.getType().toUpperCase());
@@ -51,7 +54,8 @@ public class AuthController {
      * 用户注册
      */
     @PostMapping("/register")
-    public ApiResponse<AuthResponse> register(@Valid @RequestBody RegisterRequest request, 
+    @RateLimit(key = "register", limitType = RateLimiter.LimitType.IP, maxCount = 3, period = 300, message = "注册过于频繁，请稍后再试")
+    public ApiResponse<AuthResponse> register(@Valid @RequestBody RegisterRequest request,
                                               HttpServletRequest httpRequest) {
         try {
             AuthResponse response = authService.register(request, httpRequest);
@@ -66,6 +70,7 @@ public class AuthController {
      * 密码登录
      */
     @PostMapping("/login/password")
+    @RateLimit(key = "loginPassword", limitType = RateLimiter.LimitType.IP, maxCount = 5, period = 60, message = "登录尝试过于频繁，请1分钟后再试")
     public ApiResponse<AuthResponse> loginWithPassword(@Valid @RequestBody LoginRequest request,
                                                       HttpServletRequest httpRequest) {
         try {
@@ -85,6 +90,7 @@ public class AuthController {
      * 验证码登录
      */
     @PostMapping("/login/sms")
+    @RateLimit(key = "loginSms", limitType = RateLimiter.LimitType.IP, maxCount = 10, period = 60, message = "登录尝试过于频繁，请1分钟后再试")
     public ApiResponse<AuthResponse> loginWithSms(@Valid @RequestBody LoginRequest request,
                                                  HttpServletRequest httpRequest) {
         try {

@@ -1,0 +1,7 @@
+2025-10-12 16:31:21.082  WARN [main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 49a89d18-d83b-4322-ab13-04dd4334d145
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2025-10-12 16:31:23.096  WARN [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'; nested exception is org.springframework.boot.web.server.PortInUseException: Port 8080 is already in use

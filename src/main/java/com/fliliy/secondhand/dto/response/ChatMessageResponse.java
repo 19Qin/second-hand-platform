@@ -11,9 +11,14 @@ public class ChatMessageResponse {
     private String senderName;
     private String type;
     private String content;
-    
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime sentAt;
+
+    // 交易相关字段
+    private Long transactionId;
+    private Long relatedProductId;
+    private String inquiryType;
     
     private Boolean isFromMe;
     private String status;
@@ -27,6 +32,7 @@ public class ChatMessageResponse {
     private String waveform;
     
     // 系统消息相关字段
+    private String systemType;
     private Map<String, Object> systemData;
     
     // 撤回相关字段
@@ -169,6 +175,14 @@ public class ChatMessageResponse {
     public void setSystemData(Map<String, Object> systemData) {
         this.systemData = systemData;
     }
+
+    public String getSystemType() {
+        return systemType;
+    }
+
+    public void setSystemType(String systemType) {
+        this.systemType = systemType;
+    }
     
     public Boolean getIsRecalled() {
         return isRecalled;
@@ -207,5 +221,30 @@ public class ChatMessageResponse {
     
     public Integer getImageHeight() {
         return this.imageSize != null ? this.imageSize.getHeight() : null;
+    }
+
+    // 交易相关字段的getter和setter
+    public Long getTransactionId() {
+        return transactionId;
+    }
+
+    public void setTransactionId(Long transactionId) {
+        this.transactionId = transactionId;
+    }
+
+    public Long getRelatedProductId() {
+        return relatedProductId;
+    }
+
+    public void setRelatedProductId(Long relatedProductId) {
+        this.relatedProductId = relatedProductId;
+    }
+
+    public String getInquiryType() {
+        return inquiryType;
+    }
+
+    public void setInquiryType(String inquiryType) {
+        this.inquiryType = inquiryType;
     }
 }

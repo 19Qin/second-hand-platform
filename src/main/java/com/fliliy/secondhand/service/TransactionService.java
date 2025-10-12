@@ -3,6 +3,8 @@ package com.fliliy.secondhand.service;
 import com.fliliy.secondhand.dto.request.*;
 import com.fliliy.secondhand.dto.response.*;
 import com.fliliy.secondhand.entity.*;
+import com.fliliy.secondhand.exception.BusinessException;
+import com.fliliy.secondhand.exception.ErrorCode;
 import com.fliliy.secondhand.repository.*;
 import com.fliliy.secondhand.util.IdGenerator;
 import org.slf4j.Logger;
@@ -48,37 +50,38 @@ public class TransactionService {
      * 发起咨询/交易意向
      */
     public InquiryResponse createInquiry(Long userId, InquiryRequest request) {
-        logger.info("User {} creating inquiry for product {}", userId, request.getProductId());
+        logger.info("[交易咨询] 发起咨询 - 买家ID: {}, 商品ID: {}, 咨询类型: {}",
+                userId, request.getProductId(), request.getInquiryType());
         
         // 验证商品存在且可交易
         Product product = productRepository.findById(request.getProductId())
-            .orElseThrow(() -> new RuntimeException("商品不存在"));
-        
+            .orElseThrow(() -> new BusinessException(ErrorCode.PRODUCT_NOT_FOUND));
+
         if (!Product.ProductStatus.ACTIVE.equals(product.getStatus())) {
-            throw new RuntimeException("商品不可交易");
+            throw new BusinessException(ErrorCode.PRODUCT_STATUS_INVALID);
         }
-        
+
         // 验证不能与自己交易
         if (userId.equals(product.getSellerId())) {
-            throw new RuntimeException("不能购买自己发布的商品");
+            throw new BusinessException(ErrorCode.PRODUCT_CANNOT_BUY_OWN);
         }
-        
+
         // 从商品获取卖家ID
         Long sellerId = product.getSellerId();
-        
+
         // 验证卖家存在
         User seller = userRepository.findById(sellerId)
-            .orElseThrow(() -> new RuntimeException("卖家不存在"));
-        
+            .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+
         // 检查是否已有交易记录
         Optional<Transaction> existingTransaction = transactionRepository
             .findByBuyerIdAndProductId(userId, request.getProductId());
-        
+
         if (existingTransaction.isPresent()) {
             Transaction transaction = existingTransaction.get();
             // 如果已取消，可以重新发起
             if (!Transaction.TransactionStatus.CANCELLED.equals(transaction.getStatus())) {
-                throw new RuntimeException("已存在交易记录");
+                throw new BusinessException(ErrorCode.TRANSACTION_ALREADY_EXISTS);
             }
         }
         
@@ -98,25 +101,28 @@ public class TransactionService {
         transaction.setTransactionPrice(product.getPrice());
         
         transactionRepository.save(transaction);
-        
+
+        logger.info("[交易咨询] 咨询创建成功 - 交易ID: {}, 买家ID: {}, 卖家ID: {}, 商品ID: {}, 聊天室ID: {}",
+                transaction.getId(), userId, sellerId, request.getProductId(), chatRoomId);
+
         // 发送咨询消息 - 使用独立事务避免回滚
         SendMessageRequest messageRequest = new SendMessageRequest();
         messageRequest.setType("TEXT");
         messageRequest.setContent(request.getMessage());
-        
+
         try {
             chatService.sendMessage(chatRoomId, userId, messageRequest);
         } catch (Exception e) {
-            logger.warn("Failed to send inquiry message: {}", e.getMessage());
+            logger.warn("[交易咨询] 发送咨询消息失败 - 交易ID: {}, 原因: {}", transaction.getId(), e.getMessage());
             // 不抛出异常，避免影响主事务
         }
-        
+
         // 构建响应
         InquiryResponse response = new InquiryResponse();
         response.setTransactionId("tx_" + transaction.getId());
         response.setChatRoomId(chatRoomId);
         response.setStatus(transaction.getStatus().name());
-        
+
         return response;
     }
     
@@ -124,20 +130,21 @@ public class TransactionService {
      * 同意线下交易
      */
     public AgreeOfflineResponse agreeOfflineTransaction(Long userId, Long transactionId, AgreeOfflineRequest request) {
-        logger.info("User {} agreeing offline transaction {}", userId, transactionId);
+        logger.info("[同意交易] 卖家同意线下交易 - 卖家ID: {}, 交易ID: {}, 约定时间: {}",
+                userId, transactionId, request.getMeetingTime());
         
         // 获取交易记录
         Transaction transaction = transactionRepository.findById(transactionId)
-            .orElseThrow(() -> new RuntimeException("交易不存在"));
-        
+            .orElseThrow(() -> new BusinessException(ErrorCode.TRANSACTION_NOT_FOUND));
+
         // 验证权限（只有卖家可以同意）
         if (!userId.equals(transaction.getSellerId())) {
-            throw new RuntimeException("无权限操作此交易");
+            throw new BusinessException(ErrorCode.TRANSACTION_NOT_PARTICIPANT);
         }
-        
+
         // 验证交易状态
         if (!Transaction.TransactionStatus.INQUIRY.equals(transaction.getStatus())) {
-            throw new RuntimeException("交易状态不正确");
+            throw new BusinessException(ErrorCode.TRANSACTION_STATUS_ERROR);
         }
         
         // 生成4位交易验证码
@@ -158,18 +165,25 @@ public class TransactionService {
         transaction.setMeetingNotes(request.getNotes());
         
         transactionRepository.save(transaction);
-        
+
+        logger.info("[同意交易] 交易码已生成 - 交易ID: {}, 交易码: {}, 有效期至: {}",
+                transactionId, transactionCode, expiresAt);
+
         // 发送系统消息到聊天室
         try {
-            SendMessageRequest systemMessage = new SendMessageRequest();
-            systemMessage.setType("SYSTEM");
-            systemMessage.setContent("双方已同意线下交易，交易码：" + transactionCode);
-            
-            chatService.sendMessage(userId, transaction.getChatRoomId(), systemMessage);
+            ChatMessage systemMessage = ChatMessage.createSystemMessage(
+                transaction.getChatRoomId(),
+                ChatMessage.SystemMessageType.TRANSACTION_AGREED,
+                "交易申请已同意，交易码已生成",
+                null
+            );
+            systemMessage.setId(com.fliliy.secondhand.util.IdGenerator.generateProductId());
+            systemMessage.setTransactionId(transactionId);
+            chatService.sendTransactionResponseMessage(systemMessage);
         } catch (Exception e) {
-            logger.warn("Failed to send system message: {}", e.getMessage());
+            logger.warn("[同意交易] 发送系统消息失败 - 交易ID: {}, 原因: {}", transactionId, e.getMessage());
         }
-        
+
         // 构建响应
         AgreeOfflineResponse response = new AgreeOfflineResponse();
         response.setTransactionCode(transactionCode);
@@ -191,30 +205,31 @@ public class TransactionService {
      * 确认交易完成
      */
     public CompleteTransactionResponse completeTransaction(Long userId, Long transactionId, CompleteTransactionRequest request) {
-        logger.info("User {} completing transaction {}", userId, transactionId);
+        logger.info("[完成交易] 开始完成交易 - 用户ID: {}, 交易ID: {}, 交易码: {}",
+                userId, transactionId, request.getTransactionCode());
         
         // 获取交易记录
         Transaction transaction = transactionRepository.findById(transactionId)
-            .orElseThrow(() -> new RuntimeException("交易不存在"));
-        
+            .orElseThrow(() -> new BusinessException(ErrorCode.TRANSACTION_NOT_FOUND));
+
         // 验证权限（只有卖家可以确认完成）
         if (!userId.equals(transaction.getSellerId())) {
-            throw new RuntimeException("无权限操作此交易");
+            throw new BusinessException(ErrorCode.TRANSACTION_NOT_PARTICIPANT);
         }
-        
+
         // 验证交易状态
         if (!Transaction.TransactionStatus.AGREED.equals(transaction.getStatus())) {
-            throw new RuntimeException("交易状态不正确");
+            throw new BusinessException(ErrorCode.TRANSACTION_STATUS_ERROR);
         }
-        
+
         // 验证交易码
         if (!request.getTransactionCode().equals(transaction.getTransactionCode())) {
-            throw new RuntimeException("交易验证码错误");
+            throw new BusinessException(ErrorCode.TRANSACTION_CODE_ERROR);
         }
-        
+
         // 验证交易码是否过期
         if (LocalDateTime.now().isAfter(transaction.getCodeExpiresAt())) {
-            throw new RuntimeException("交易验证码已过期");
+            throw new BusinessException(ErrorCode.TRANSACTION_CODE_EXPIRED);
         }
         
         // 更新交易记录
@@ -227,17 +242,21 @@ public class TransactionService {
         
         // 更新商品状态为已售出
         Product product = productRepository.findById(transaction.getProductId())
-            .orElseThrow(() -> new RuntimeException("商品不存在"));
+            .orElseThrow(() -> new BusinessException(ErrorCode.PRODUCT_NOT_FOUND));
         product.setStatus(Product.ProductStatus.SOLD);
         productRepository.save(product);
         
         // 发送交易完成消息
         try {
-            SendMessageRequest systemMessage = new SendMessageRequest();
-            systemMessage.setType("SYSTEM");
-            systemMessage.setContent("交易已完成！感谢使用Fliliy二手交易平台");
-            
-            chatService.sendMessage(userId, transaction.getChatRoomId(), systemMessage);
+            ChatMessage systemMessage = ChatMessage.createSystemMessage(
+                transaction.getChatRoomId(),
+                ChatMessage.SystemMessageType.TRANSACTION_COMPLETED,
+                "交易已完成！感谢使用Fliliy二手交易平台",
+                null
+            );
+            systemMessage.setId(com.fliliy.secondhand.util.IdGenerator.generateProductId());
+            systemMessage.setTransactionId(transactionId);
+            chatService.sendTransactionResponseMessage(systemMessage);
         } catch (Exception e) {
             logger.warn("Failed to send completion message: {}", e.getMessage());
         }
@@ -260,17 +279,19 @@ public class TransactionService {
         
         // 获取交易记录
         Transaction transaction = transactionRepository.findById(transactionId)
-            .orElseThrow(() -> new RuntimeException("交易不存在"));
-        
+            .orElseThrow(() -> new BusinessException(ErrorCode.TRANSACTION_NOT_FOUND));
+
         // 验证权限
         if (!userId.equals(transaction.getBuyerId()) && !userId.equals(transaction.getSellerId())) {
-            throw new RuntimeException("无权限操作此交易");
+            throw new BusinessException(ErrorCode.TRANSACTION_NOT_PARTICIPANT);
         }
-        
+
         // 验证交易状态
-        if (Transaction.TransactionStatus.COMPLETED.equals(transaction.getStatus()) ||
-            Transaction.TransactionStatus.CANCELLED.equals(transaction.getStatus())) {
-            throw new RuntimeException("交易已完成或已取消");
+        if (Transaction.TransactionStatus.COMPLETED.equals(transaction.getStatus())) {
+            throw new BusinessException(ErrorCode.TRANSACTION_ALREADY_COMPLETED);
+        }
+        if (Transaction.TransactionStatus.CANCELLED.equals(transaction.getStatus())) {
+            throw new BusinessException(ErrorCode.TRANSACTION_ALREADY_CANCELLED);
         }
         
         // 更新交易记录
@@ -283,11 +304,15 @@ public class TransactionService {
         
         // 发送取消消息
         try {
-            SendMessageRequest systemMessage = new SendMessageRequest();
-            systemMessage.setType("SYSTEM");
-            systemMessage.setContent("交易已取消：" + request.getReason());
-            
-            chatService.sendMessage(userId, transaction.getChatRoomId(), systemMessage);
+            ChatMessage systemMessage = ChatMessage.createSystemMessage(
+                transaction.getChatRoomId(),
+                ChatMessage.SystemMessageType.TRANSACTION_CANCELLED,
+                "交易已取消：" + request.getReason(),
+                null
+            );
+            systemMessage.setId(com.fliliy.secondhand.util.IdGenerator.generateProductId());
+            systemMessage.setTransactionId(transactionId);
+            chatService.sendTransactionResponseMessage(systemMessage);
         } catch (Exception e) {
             logger.warn("Failed to send cancellation message: {}", e.getMessage());
         }
@@ -301,11 +326,11 @@ public class TransactionService {
         
         // 获取交易记录
         Transaction transaction = transactionRepository.findById(transactionId)
-            .orElseThrow(() -> new RuntimeException("交易不存在"));
-        
+            .orElseThrow(() -> new BusinessException(ErrorCode.TRANSACTION_NOT_FOUND));
+
         // 验证权限 - 只有交易参与双方可以查看
         if (!userId.equals(transaction.getBuyerId()) && !userId.equals(transaction.getSellerId())) {
-            throw new RuntimeException("无权限查看此交易");
+            throw new BusinessException(ErrorCode.TRANSACTION_NOT_PARTICIPANT);
         }
         
         // 转换为详细响应对象
@@ -566,20 +591,20 @@ public class TransactionService {
         
         // 验证聊天室存在且有权限
         if (!chatService.canAccessChatRoom(request.getChatRoomId(), userId)) {
-            throw new RuntimeException("无权限访问此聊天室");
+            throw new BusinessException(ErrorCode.CHAT_ROOM_ACCESS_DENIED);
         }
-        
+
         // 验证商品存在且可交易
         Product product = productRepository.findById(request.getProductId())
-            .orElseThrow(() -> new RuntimeException("商品不存在"));
-        
+            .orElseThrow(() -> new BusinessException(ErrorCode.PRODUCT_NOT_FOUND));
+
         if (!Product.ProductStatus.ACTIVE.equals(product.getStatus())) {
-            throw new RuntimeException("商品不可交易");
+            throw new BusinessException(ErrorCode.PRODUCT_STATUS_INVALID);
         }
-        
+
         // 验证不能与自己交易
         if (userId.equals(product.getSellerId())) {
-            throw new RuntimeException("不能购买自己发布的商品");
+            throw new BusinessException(ErrorCode.PRODUCT_CANNOT_BUY_OWN);
         }
         
         // 获取聊天室信息，确定对方ID
@@ -594,7 +619,7 @@ public class TransactionService {
             Transaction trans = existingTransaction.get();
             if (trans.getStatus() == Transaction.TransactionStatus.PENDING ||
                 trans.getStatus() == Transaction.TransactionStatus.AGREED) {
-                throw new RuntimeException("已存在进行中的交易申请");
+                throw new BusinessException(ErrorCode.TRANSACTION_ALREADY_EXISTS);
             }
         }
         
@@ -650,21 +675,21 @@ public class TransactionService {
         
         // 获取交易记录
         Transaction transaction = transactionRepository.findById(transactionId)
-            .orElseThrow(() -> new RuntimeException("交易不存在"));
-        
+            .orElseThrow(() -> new BusinessException(ErrorCode.TRANSACTION_NOT_FOUND));
+
         // 验证权限（只有对方可以响应）
         if (!userId.equals(transaction.getSellerId()) && !userId.equals(transaction.getBuyerId())) {
-            throw new RuntimeException("无权限操作此交易");
+            throw new BusinessException(ErrorCode.TRANSACTION_NOT_PARTICIPANT);
         }
-        
+
         // 验证不能响应自己发起的申请
         if (userId.equals(transaction.getRequestBy())) {
-            throw new RuntimeException("不能响应自己发起的交易申请");
+            throw new BusinessException(ErrorCode.TRANSACTION_NOT_PARTICIPANT);
         }
-        
+
         // 验证交易状态
         if (!Transaction.TransactionStatus.PENDING.equals(transaction.getStatus())) {
-            throw new RuntimeException("交易状态不正确");
+            throw new BusinessException(ErrorCode.TRANSACTION_STATUS_ERROR);
         }
         
         TransactionRespondResponse response = new TransactionRespondResponse();

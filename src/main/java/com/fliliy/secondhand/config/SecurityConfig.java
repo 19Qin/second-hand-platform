@@ -35,8 +35,13 @@ public class SecurityConfig {
                         .antMatchers("/categories/**").permitAll()
                         .antMatchers("/products").permitAll() // 允许商品列表查询
                         .antMatchers("/products/*").permitAll() // 允许商品详情查询（只读）
+                        .antMatchers("/products/search").permitAll() // 允许商品搜索
+                        .antMatchers("/products/search/**").permitAll() // 允许搜索建议
+                        .antMatchers("/admin/elasticsearch/**").permitAll() // 临时允许ES管理接口用于测试
                         .antMatchers("/files/**").permitAll() // 允许文件访问
                         .antMatchers("/system/**").permitAll() // 允许系统配置访问
+                        .antMatchers("/user/*/profile").permitAll() // 允许查看公开用户资料
+                        .antMatchers("/user/*/ratings").permitAll() // 允许查看用户评价
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

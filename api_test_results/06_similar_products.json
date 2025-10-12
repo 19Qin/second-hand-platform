@@ -1,0 +1,6 @@
+{
+  "timestamp": "2025-10-10 23:14:13",
+  "status": 404,
+  "error": "Not Found",
+  "path": "/api/v1/products/1968947273484341248/similar"
+}

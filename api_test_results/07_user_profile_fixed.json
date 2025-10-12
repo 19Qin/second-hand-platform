@@ -1,0 +1,36 @@
+测试用户资料接口...
+{
+  "code": 200,
+  "message": "获取成功",
+  "data": {
+    "id": 1959106057909440500,
+    "username": "testuser1",
+    "mobile": "138****8000",
+    "email": null,
+    "avatar": "https://cdn.fliliy.com/avatar/default.png",
+    "gender": 0,
+    "birthday": null,
+    "location": null,
+    "bio": null,
+    "verified": false,
+    "registeredAt": "2025-08-23 20:10:57",
+    "lastLoginAt": "2025-10-10 23:25:45",
+    "stats": {
+      "publishedCount": 5,
+      "activeCount": 3,
+      "soldCount": 2,
+      "boughtCount": 0,
+      "favoriteCount": 1,
+      "chatCount": 0,
+      "points": 0,
+      "credits": 100
+    },
+    "preferences": {
+      "pushNotification": true,
+      "emailNotification": false,
+      "showMobile": false,
+      "showLocation": true
+    }
+  },
+  "timestamp": 1760110081602
+}

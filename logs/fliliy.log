@@ -1,0 +1,776 @@
+2025-10-13 00:00:13.174 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:00:13.192 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:00:13.192 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:00:35.535 DEBUG [FliliyHikariPool connection closer] com.zaxxer.hikari.pool.PoolBase          : FliliyHikariPool - Closing connection com.mysql.cj.jdbc.ConnectionImpl@320597b6: (connection has passed maxLifetime)
+2025-10-13 00:00:35.540 DEBUG [FliliyHikariPool connection adder] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@79e71e61
+2025-10-13 00:00:43.197 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:00:43.197 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:00:43.197 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:00:52.556 DEBUG [FliliyHikariPool connection closer] com.zaxxer.hikari.pool.PoolBase          : FliliyHikariPool - Closing connection com.mysql.cj.jdbc.ConnectionImpl@2f0e96a9: (connection has passed maxLifetime)
+2025-10-13 00:00:52.561 DEBUG [FliliyHikariPool connection adder] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@4d489e3e
+2025-10-13 00:00:59.639 DEBUG [FliliyHikariPool connection closer] com.zaxxer.hikari.pool.PoolBase          : FliliyHikariPool - Closing connection com.mysql.cj.jdbc.ConnectionImpl@4019a757: (connection has passed maxLifetime)
+2025-10-13 00:00:59.642 DEBUG [FliliyHikariPool connection adder] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@8c484c2
+2025-10-13 00:01:02.088 DEBUG [FliliyHikariPool connection closer] com.zaxxer.hikari.pool.PoolBase          : FliliyHikariPool - Closing connection com.mysql.cj.jdbc.ConnectionImpl@1049be7b: (connection has passed maxLifetime)
+2025-10-13 00:01:02.091 DEBUG [FliliyHikariPool connection adder] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@49f98ef9
+2025-10-13 00:01:13.202 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:01:13.202 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:01:13.202 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:01:29.372 DEBUG [FliliyHikariPool connection closer] com.zaxxer.hikari.pool.PoolBase          : FliliyHikariPool - Closing connection com.mysql.cj.jdbc.ConnectionImpl@59c32881: (connection has passed maxLifetime)
+2025-10-13 00:01:29.377 DEBUG [FliliyHikariPool connection adder] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@3d60064
+2025-10-13 00:01:32.409 DEBUG [FliliyHikariPool connection closer] com.zaxxer.hikari.pool.PoolBase          : FliliyHikariPool - Closing connection com.mysql.cj.jdbc.ConnectionImpl@39ecd7ce: (connection has passed maxLifetime)
+2025-10-13 00:01:32.412 DEBUG [FliliyHikariPool connection adder] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@42eb0a5f
+2025-10-13 00:01:34.612 DEBUG [FliliyHikariPool connection closer] com.zaxxer.hikari.pool.PoolBase          : FliliyHikariPool - Closing connection com.mysql.cj.jdbc.ConnectionImpl@78d1ddf5: (connection has passed maxLifetime)
+2025-10-13 00:01:34.615 DEBUG [FliliyHikariPool connection adder] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@73e3ccbf
+2025-10-13 00:01:40.110 DEBUG [FliliyHikariPool connection closer] com.zaxxer.hikari.pool.PoolBase          : FliliyHikariPool - Closing connection com.mysql.cj.jdbc.ConnectionImpl@89f6dfb: (connection has passed maxLifetime)
+2025-10-13 00:01:40.114 DEBUG [FliliyHikariPool connection adder] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@6cd5b1e7
+2025-10-13 00:01:43.206 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:01:43.206 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:01:43.207 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:02:13.211 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:02:13.212 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:02:13.212 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:02:43.214 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:02:43.214 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:02:43.214 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:03:13.219 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:03:13.228 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:03:13.228 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:03:43.229 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:03:43.231 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:03:43.231 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:04:13.237 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:04:13.237 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:04:13.237 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:04:43.242 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:04:43.243 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:04:43.243 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:05:13.248 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:05:13.248 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:05:13.248 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:05:43.252 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:05:43.252 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:05:43.252 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:05:47.216  INFO [MessageBroker-3] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 4, active threads = 1, queued tasks = 1, completed tasks = 10]
+2025-10-13 00:06:13.267 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:06:13.290 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:06:13.290 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:06:43.293 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:06:43.299 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:06:43.299 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:07:13.303 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:07:13.307 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:07:13.307 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:07:43.313 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:07:43.315 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:07:43.316 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:08:13.318 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:08:13.318 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:08:13.318 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:08:43.321 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:08:43.321 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:08:43.321 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:09:13.322 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:09:13.323 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:09:13.323 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:09:43.326 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:09:43.327 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:09:43.327 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:10:13.332 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:10:13.332 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:10:13.332 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:10:43.337 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:10:43.337 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:10:43.337 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:11:13.343 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:11:13.343 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:11:13.343 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:11:43.347 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:11:43.347 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:11:43.348 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:12:13.352 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:12:13.353 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:12:13.353 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:12:43.358 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:12:43.364 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:12:43.364 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:13:13.365 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:13:13.365 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:13:13.365 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:13:43.370 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:13:43.370 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:13:43.370 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:14:13.377 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:14:13.378 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:14:13.378 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:14:43.383 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:14:43.383 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:14:43.383 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:15:13.387 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:15:13.389 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:15:13.389 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:15:43.391 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:15:43.392 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:15:43.392 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:16:13.394 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:16:13.400 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:16:13.401 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:16:43.404 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:16:43.406 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:16:43.406 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:17:13.410 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:17:13.410 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:17:13.410 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:17:43.531 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:17:43.531 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:17:43.531 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:18:13.537 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:18:13.537 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:18:13.537 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:18:43.542 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:18:43.547 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:18:43.548 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:19:13.553 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:19:13.553 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:19:13.553 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:19:43.558 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:19:43.559 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:19:43.559 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:20:13.564 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:20:13.565 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:20:13.565 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:20:43.570 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:20:43.570 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:20:43.571 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:21:13.574 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:21:13.580 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:21:13.580 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:21:43.581 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:21:43.587 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:21:43.587 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:22:13.591 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:22:13.597 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:22:13.597 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:22:43.601 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:22:43.601 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:22:43.601 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:23:13.607 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:23:13.607 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:23:13.607 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:23:43.609 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:23:43.610 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:23:43.610 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:24:13.615 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:24:13.616 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:24:13.616 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:24:43.620 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:24:43.621 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:24:43.621 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:25:13.624 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:25:13.624 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:25:13.624 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:25:43.627 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:25:43.628 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:25:43.628 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:26:13.628 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:26:13.629 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:26:13.629 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:26:43.634 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:26:43.643 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:26:43.643 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:27:13.648 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:27:13.648 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:27:13.649 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:27:43.651 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:27:43.652 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:27:43.652 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:44:27.643  WARN [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Thread starvation or clock leap detected (housekeeper delta=16m43s992ms).
+2025-10-13 00:44:27.644 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:44:27.644 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:44:27.644 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:44:57.647 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:44:57.654 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:44:57.654 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:45:07.513 DEBUG [FliliyHikariPool connection closer] com.zaxxer.hikari.pool.PoolBase          : FliliyHikariPool - Closing connection com.mysql.cj.jdbc.ConnectionImpl@267727a2: (connection has passed maxLifetime)
+2025-10-13 00:45:07.525 DEBUG [FliliyHikariPool connection adder] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@7a452312
+2025-10-13 00:45:18.003 DEBUG [FliliyHikariPool connection closer] com.zaxxer.hikari.pool.PoolBase          : FliliyHikariPool - Closing connection com.mysql.cj.jdbc.ConnectionImpl@4e0a82d6: (connection has passed maxLifetime)
+2025-10-13 00:45:18.009 DEBUG [FliliyHikariPool connection adder] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@ae3f87b
+2025-10-13 00:45:27.655 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:45:27.655 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:45:27.655 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:45:57.659 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:45:57.660 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:45:57.660 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:46:26.443 DEBUG [FliliyHikariPool connection adder] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@46ae7d08
+2025-10-13 00:46:26.438 DEBUG [FliliyHikariPool connection closer] com.zaxxer.hikari.pool.PoolBase          : FliliyHikariPool - Closing connection com.mysql.cj.jdbc.ConnectionImpl@79e71e61: (connection has passed maxLifetime)
+2025-10-13 00:46:26.444 DEBUG [FliliyHikariPool connection closer] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:46:27.664 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:46:27.664 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:46:27.665 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:46:42.287 DEBUG [FliliyHikariPool connection closer] com.zaxxer.hikari.pool.PoolBase          : FliliyHikariPool - Closing connection com.mysql.cj.jdbc.ConnectionImpl@4d489e3e: (connection has passed maxLifetime)
+2025-10-13 00:46:42.289 DEBUG [FliliyHikariPool connection adder] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@422dd343
+2025-10-13 00:46:45.518 DEBUG [FliliyHikariPool connection closer] com.zaxxer.hikari.pool.PoolBase          : FliliyHikariPool - Closing connection com.mysql.cj.jdbc.ConnectionImpl@8c484c2: (connection has passed maxLifetime)
+2025-10-13 00:46:45.521 DEBUG [FliliyHikariPool connection adder] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@310d978
+2025-10-13 00:46:57.670 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:46:57.670 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:46:57.671 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:47:06.518 DEBUG [FliliyHikariPool connection closer] com.zaxxer.hikari.pool.PoolBase          : FliliyHikariPool - Closing connection com.mysql.cj.jdbc.ConnectionImpl@49f98ef9: (connection has passed maxLifetime)
+2025-10-13 00:47:06.522 DEBUG [FliliyHikariPool connection adder] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@487dd646
+2025-10-13 00:47:24.945 DEBUG [FliliyHikariPool connection closer] com.zaxxer.hikari.pool.PoolBase          : FliliyHikariPool - Closing connection com.mysql.cj.jdbc.ConnectionImpl@42eb0a5f: (connection has passed maxLifetime)
+2025-10-13 00:47:24.949 DEBUG [FliliyHikariPool connection adder] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@157f9648
+2025-10-13 00:47:27.043 DEBUG [FliliyHikariPool connection closer] com.zaxxer.hikari.pool.PoolBase          : FliliyHikariPool - Closing connection com.mysql.cj.jdbc.ConnectionImpl@73e3ccbf: (connection has passed maxLifetime)
+2025-10-13 00:47:27.047 DEBUG [FliliyHikariPool connection adder] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@54429c73
+2025-10-13 00:47:27.065 DEBUG [FliliyHikariPool connection closer] com.zaxxer.hikari.pool.PoolBase          : FliliyHikariPool - Closing connection com.mysql.cj.jdbc.ConnectionImpl@3d60064: (connection has passed maxLifetime)
+2025-10-13 00:47:27.069 DEBUG [FliliyHikariPool connection adder] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@655ceda6
+2025-10-13 00:47:27.676 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:47:27.677 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:47:27.677 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:47:47.293 DEBUG [FliliyHikariPool connection closer] com.zaxxer.hikari.pool.PoolBase          : FliliyHikariPool - Closing connection com.mysql.cj.jdbc.ConnectionImpl@6cd5b1e7: (connection has passed maxLifetime)
+2025-10-13 00:47:47.298 DEBUG [FliliyHikariPool connection adder] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@39969d94
+2025-10-13 00:47:57.682 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:47:57.683 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:47:57.683 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:48:27.687 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:48:27.687 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:48:27.687 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:48:57.690 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:48:57.690 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:48:57.690 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:49:27.692 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:49:27.692 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:49:27.692 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:49:57.694 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:49:57.694 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:49:57.694 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:50:27.699 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:50:27.699 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:50:27.699 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:50:57.701 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:50:57.701 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:50:57.701 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:51:27.703 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:51:27.703 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:51:27.703 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:51:57.705 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:51:57.705 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:51:57.705 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:52:01.226  INFO [MessageBroker-3] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 4, active threads = 1, queued tasks = 1, completed tasks = 11]
+2025-10-13 00:52:27.711 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:52:27.711 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:52:27.711 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:52:57.717 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:52:57.717 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:52:57.717 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:53:27.722 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:53:27.722 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:53:27.722 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:53:57.724 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:53:57.725 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:53:57.725 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:54:27.726 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:54:27.726 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:54:27.726 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:54:57.727 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:54:57.727 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:54:57.727 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:55:27.731 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:55:27.732 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:55:27.732 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:55:57.735 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:55:57.735 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:55:57.735 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:56:27.737 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:56:27.737 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:56:27.737 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:56:57.739 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:56:57.740 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:56:57.740 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:57:27.744 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:57:27.745 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:57:27.745 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:57:57.748 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:57:57.748 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:57:57.749 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:58:27.752 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:58:27.753 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:58:27.753 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:58:57.754 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:58:57.755 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:58:57.755 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:59:27.757 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:59:27.757 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:59:27.757 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 00:59:57.758 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:59:57.758 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 00:59:57.758 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:00:27.763 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:00:27.763 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:00:27.763 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:00:57.764 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:00:57.769 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:00:57.770 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:01:27.773 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:01:27.773 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:01:27.773 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:01:57.776 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:01:57.776 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:01:57.776 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:02:27.777 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:02:27.777 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:02:27.777 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:02:57.782 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:02:57.782 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:02:57.782 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:03:27.783 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:03:27.783 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:03:27.783 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:03:57.784 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:03:57.784 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:03:57.784 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:04:27.790 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:04:27.790 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:04:27.790 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:04:57.792 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:04:57.797 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:04:57.798 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:05:27.802 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:05:27.802 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:05:27.802 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:05:57.806 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:05:57.806 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:05:57.806 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:06:27.808 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:06:27.809 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:06:27.809 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:06:57.812 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:06:57.812 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:06:57.812 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:07:27.814 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:07:27.814 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:07:27.814 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:07:57.817 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:07:57.817 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:07:57.817 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:08:27.818 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:08:27.818 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:08:27.818 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:08:57.821 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:08:57.821 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:08:57.822 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:09:27.826 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:09:27.827 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:09:27.827 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:09:57.831 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:09:57.831 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:09:57.831 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:10:27.832 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:10:27.833 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:10:27.833 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:10:57.836 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:10:57.836 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:10:57.836 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:11:27.837 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:11:27.840 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:11:27.840 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:11:57.845 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:11:57.846 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:11:57.846 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:12:27.847 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:12:27.847 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:12:27.847 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:12:57.849 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:12:57.849 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:12:57.850 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:13:27.851 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:13:27.851 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:13:27.851 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:13:57.854 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:13:57.854 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:13:57.855 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:14:27.860 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:14:27.860 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:14:27.860 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:14:33.793 DEBUG [FliliyHikariPool connection closer] com.zaxxer.hikari.pool.PoolBase          : FliliyHikariPool - Closing connection com.mysql.cj.jdbc.ConnectionImpl@7a452312: (connection has passed maxLifetime)
+2025-10-13 01:14:33.798 DEBUG [FliliyHikariPool connection adder] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@4142ae24
+2025-10-13 01:14:46.752 DEBUG [FliliyHikariPool connection closer] com.zaxxer.hikari.pool.PoolBase          : FliliyHikariPool - Closing connection com.mysql.cj.jdbc.ConnectionImpl@ae3f87b: (connection has passed maxLifetime)
+2025-10-13 01:14:46.755 DEBUG [FliliyHikariPool connection adder] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@40bd8375
+2025-10-13 01:14:57.863 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:14:57.864 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:14:57.864 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:15:27.865 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:15:27.866 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:15:27.866 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:15:57.870 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:15:57.870 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:15:57.871 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:16:18.849 DEBUG [FliliyHikariPool connection closer] com.zaxxer.hikari.pool.PoolBase          : FliliyHikariPool - Closing connection com.mysql.cj.jdbc.ConnectionImpl@46ae7d08: (connection has passed maxLifetime)
+2025-10-13 01:16:18.853 DEBUG [FliliyHikariPool connection adder] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@3cc255a
+2025-10-13 01:16:20.446 DEBUG [FliliyHikariPool connection closer] com.zaxxer.hikari.pool.PoolBase          : FliliyHikariPool - Closing connection com.mysql.cj.jdbc.ConnectionImpl@310d978: (connection has passed maxLifetime)
+2025-10-13 01:16:20.450 DEBUG [FliliyHikariPool connection adder] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@42f12f61
+2025-10-13 01:16:24.101 DEBUG [FliliyHikariPool connection closer] com.zaxxer.hikari.pool.PoolBase          : FliliyHikariPool - Closing connection com.mysql.cj.jdbc.ConnectionImpl@422dd343: (connection has passed maxLifetime)
+2025-10-13 01:16:24.106 DEBUG [FliliyHikariPool connection adder] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@699f705b
+2025-10-13 01:16:27.875 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:16:27.875 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:16:27.875 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:16:32.563 DEBUG [FliliyHikariPool connection closer] com.zaxxer.hikari.pool.PoolBase          : FliliyHikariPool - Closing connection com.mysql.cj.jdbc.ConnectionImpl@487dd646: (connection has passed maxLifetime)
+2025-10-13 01:16:32.568 DEBUG [FliliyHikariPool connection adder] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@2a70698d
+2025-10-13 01:16:42.286 DEBUG [FliliyHikariPool connection closer] com.zaxxer.hikari.pool.PoolBase          : FliliyHikariPool - Closing connection com.mysql.cj.jdbc.ConnectionImpl@157f9648: (connection has passed maxLifetime)
+2025-10-13 01:16:42.292 DEBUG [FliliyHikariPool connection adder] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@3449a41a
+2025-10-13 01:16:57.878 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:16:57.878 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:16:57.878 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:17:06.042 DEBUG [FliliyHikariPool connection closer] com.zaxxer.hikari.pool.PoolBase          : FliliyHikariPool - Closing connection com.mysql.cj.jdbc.ConnectionImpl@39969d94: (connection has passed maxLifetime)
+2025-10-13 01:17:06.051 DEBUG [FliliyHikariPool connection adder] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@6d31d21a
+2025-10-13 01:17:26.514 DEBUG [FliliyHikariPool connection closer] com.zaxxer.hikari.pool.PoolBase          : FliliyHikariPool - Closing connection com.mysql.cj.jdbc.ConnectionImpl@54429c73: (connection has passed maxLifetime)
+2025-10-13 01:17:26.530 DEBUG [FliliyHikariPool connection adder] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@8b67092
+2025-10-13 01:17:26.859 DEBUG [FliliyHikariPool connection closer] com.zaxxer.hikari.pool.PoolBase          : FliliyHikariPool - Closing connection com.mysql.cj.jdbc.ConnectionImpl@655ceda6: (connection has passed maxLifetime)
+2025-10-13 01:17:26.864 DEBUG [FliliyHikariPool connection adder] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@498b7aa9
+2025-10-13 01:17:27.880 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:17:27.880 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:17:27.880 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:17:57.882 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:17:57.882 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:17:57.882 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:18:27.884 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:18:27.884 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:18:27.884 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:18:57.887 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:18:57.888 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:18:57.888 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:19:27.889 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:19:27.889 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:19:27.889 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:19:57.892 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:19:57.892 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:19:57.893 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:20:27.897 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:20:27.897 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:20:27.897 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:20:57.898 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:20:57.898 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:20:57.898 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:21:27.903 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:21:27.903 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:21:27.904 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:21:57.909 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:21:57.909 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:21:57.909 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:22:01.260  INFO [MessageBroker-3] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 4, active threads = 1, queued tasks = 1, completed tasks = 12]
+2025-10-13 01:22:27.913 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:22:27.913 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:22:27.913 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:22:57.919 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:22:57.919 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:22:57.919 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:23:27.925 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:23:27.925 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:23:27.925 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:23:57.929 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:23:57.929 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:23:57.930 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:24:27.930 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:24:27.931 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:24:27.931 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:24:57.936 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:24:57.936 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:24:57.936 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:25:27.941 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:25:27.941 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:25:27.941 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:25:57.947 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:25:57.947 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:25:57.947 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:26:27.950 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:26:27.950 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:26:27.950 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:26:57.951 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:26:57.952 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:26:57.952 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:27:27.956 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:27:27.956 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:27:27.956 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:27:57.961 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:27:57.962 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:27:57.962 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:28:27.966 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:28:27.966 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:28:27.966 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:28:57.972 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:28:57.972 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:28:57.972 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:29:27.975 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:29:27.975 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:29:27.975 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:29:57.980 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:29:57.981 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:29:57.981 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:30:27.984 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:30:27.984 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:30:27.984 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:30:57.988 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:30:57.989 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:30:57.989 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:31:27.993 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:31:27.993 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:31:27.994 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:31:58.000 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:31:58.000 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:31:58.000 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:32:28.006 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:32:28.012 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:32:28.012 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:32:58.016 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:32:58.016 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:32:58.016 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:33:28.018 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:33:28.018 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:33:28.018 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:33:58.023 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:33:58.023 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:33:58.023 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:34:28.025 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:34:28.026 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:34:28.026 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:34:58.030 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:34:58.031 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:34:58.031 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:35:28.032 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:35:28.033 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:35:28.033 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:35:58.036 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:35:58.036 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:35:58.036 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:36:28.039 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:36:28.040 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:36:28.040 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:36:58.041 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:36:58.041 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:36:58.041 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:37:28.045 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:37:28.045 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:37:28.045 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:37:58.046 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:37:58.046 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:37:58.046 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:38:28.048 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:38:28.049 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:38:28.049 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:38:58.050 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:38:58.050 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:38:58.050 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:39:13.385  INFO [MessageBroker-4] c.f.s.task.TransactionCodeRefreshTask    : 开始执行交易码刷新任务
+2025-10-13 01:39:13.469 DEBUG [MessageBroker-4] o.h.stat.internal.StatisticsImpl         : HHH000117: HQL: SELECT t FROM Transaction t WHERE t.status = :status AND t.codeExpiresAt < :expireTime, time: 24ms, rows: 3
+2025-10-13 01:39:13.469  INFO [MessageBroker-4] i.StatisticalLoggingSessionEventListener : Session Metrics {
+    2871536 nanoseconds spent acquiring 1 JDBC connections;
+    0 nanoseconds spent releasing 0 JDBC connections;
+    3912125 nanoseconds spent preparing 1 JDBC statements;
+    12525506 nanoseconds spent executing 1 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC batches;
+    0 nanoseconds spent performing 0 L2C puts;
+    0 nanoseconds spent performing 0 L2C hits;
+    0 nanoseconds spent performing 0 L2C misses;
+    0 nanoseconds spent executing 0 flushes (flushing a total of 0 entities and 0 collections);
+    0 nanoseconds spent executing 0 partial-flushes (flushing a total of 0 entities and 0 collections)
+}
+2025-10-13 01:39:13.474  INFO [MessageBroker-4] c.f.s.task.TransactionCodeRefreshTask    : 找到3个需要刷新交易码的交易
+2025-10-13 01:39:13.513  INFO [MessageBroker-4] i.StatisticalLoggingSessionEventListener : Session Metrics {
+    42198 nanoseconds spent acquiring 1 JDBC connections;
+    0 nanoseconds spent releasing 0 JDBC connections;
+    876472 nanoseconds spent preparing 2 JDBC statements;
+    856607 nanoseconds spent executing 1 JDBC statements;
+    2355313 nanoseconds spent executing 1 JDBC batches;
+    0 nanoseconds spent performing 0 L2C puts;
+    0 nanoseconds spent performing 0 L2C hits;
+    0 nanoseconds spent performing 0 L2C misses;
+    11279055 nanoseconds spent executing 1 flushes (flushing a total of 1 entities and 0 collections);
+    0 nanoseconds spent executing 0 partial-flushes (flushing a total of 0 entities and 0 collections)
+}
+2025-10-13 01:39:13.515 DEBUG [MessageBroker-4] c.f.s.task.TransactionCodeRefreshTask    : 交易ID: 1976597649247309824 的交易码已刷新为: 4038
+2025-10-13 01:39:13.525  INFO [MessageBroker-4] i.StatisticalLoggingSessionEventListener : Session Metrics {
+    30935 nanoseconds spent acquiring 1 JDBC connections;
+    0 nanoseconds spent releasing 0 JDBC connections;
+    974739 nanoseconds spent preparing 2 JDBC statements;
+    677191 nanoseconds spent executing 1 JDBC statements;
+    1421486 nanoseconds spent executing 1 JDBC batches;
+    0 nanoseconds spent performing 0 L2C puts;
+    0 nanoseconds spent performing 0 L2C hits;
+    0 nanoseconds spent performing 0 L2C misses;
+    4472422 nanoseconds spent executing 1 flushes (flushing a total of 1 entities and 0 collections);
+    0 nanoseconds spent executing 0 partial-flushes (flushing a total of 0 entities and 0 collections)
+}
+2025-10-13 01:39:13.525 DEBUG [MessageBroker-4] c.f.s.task.TransactionCodeRefreshTask    : 交易ID: 1977295839055450112 的交易码已刷新为: 0292
+2025-10-13 01:39:13.535  INFO [MessageBroker-4] i.StatisticalLoggingSessionEventListener : Session Metrics {
+    27529 nanoseconds spent acquiring 1 JDBC connections;
+    0 nanoseconds spent releasing 0 JDBC connections;
+    739200 nanoseconds spent preparing 2 JDBC statements;
+    617649 nanoseconds spent executing 1 JDBC statements;
+    1411034 nanoseconds spent executing 1 JDBC batches;
+    0 nanoseconds spent performing 0 L2C puts;
+    0 nanoseconds spent performing 0 L2C hits;
+    0 nanoseconds spent performing 0 L2C misses;
+    4449860 nanoseconds spent executing 1 flushes (flushing a total of 1 entities and 0 collections);
+    0 nanoseconds spent executing 0 partial-flushes (flushing a total of 0 entities and 0 collections)
+}
+2025-10-13 01:39:13.535 DEBUG [MessageBroker-4] c.f.s.task.TransactionCodeRefreshTask    : 交易ID: 1977302925936037888 的交易码已刷新为: 6433
+2025-10-13 01:39:13.535  INFO [MessageBroker-4] c.f.s.task.TransactionCodeRefreshTask    : 交易码刷新任务完成，成功刷新3个交易
+2025-10-13 01:39:28.053 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:39:28.053 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:39:28.053 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:39:58.056 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:39:58.056 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:39:58.056 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:40:28.059 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:40:28.059 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:40:28.060 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:40:58.064 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:40:58.064 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:40:58.064 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:41:28.065 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:41:28.065 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:41:28.066 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:41:58.071 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:41:58.071 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:41:58.071 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:42:28.072 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:42:28.073 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:42:28.073 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:42:58.074 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:42:58.074 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:42:58.074 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:43:28.077 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:43:28.078 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:43:28.078 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:43:58.084 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:43:58.084 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:43:58.085 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:44:10.896 DEBUG [FliliyHikariPool connection closer] com.zaxxer.hikari.pool.PoolBase          : FliliyHikariPool - Closing connection com.mysql.cj.jdbc.ConnectionImpl@4142ae24: (connection has passed maxLifetime)
+2025-10-13 01:44:10.900 DEBUG [FliliyHikariPool connection adder] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@486167c6
+2025-10-13 01:44:28.090 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:44:28.091 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:44:28.091 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:44:35.743 DEBUG [FliliyHikariPool connection closer] com.zaxxer.hikari.pool.PoolBase          : FliliyHikariPool - Closing connection com.mysql.cj.jdbc.ConnectionImpl@40bd8375: (connection has passed maxLifetime)
+2025-10-13 01:44:35.746 DEBUG [FliliyHikariPool connection adder] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@1243a9c9
+2025-10-13 01:44:58.096 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:44:58.103 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:44:58.103 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:45:28.105 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:45:28.106 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:45:28.106 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:45:50.053 DEBUG [FliliyHikariPool connection closer] com.zaxxer.hikari.pool.PoolBase          : FliliyHikariPool - Closing connection com.mysql.cj.jdbc.ConnectionImpl@699f705b: (connection has passed maxLifetime)
+2025-10-13 01:45:50.057 DEBUG [FliliyHikariPool connection adder] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@16bef098
+2025-10-13 01:45:58.110 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:45:58.111 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:45:58.111 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:46:14.599 DEBUG [FliliyHikariPool connection closer] com.zaxxer.hikari.pool.PoolBase          : FliliyHikariPool - Closing connection com.mysql.cj.jdbc.ConnectionImpl@42f12f61: (connection has passed maxLifetime)
+2025-10-13 01:46:14.602 DEBUG [FliliyHikariPool connection adder] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@36df5a7c
+2025-10-13 01:46:17.629 DEBUG [FliliyHikariPool connection closer] com.zaxxer.hikari.pool.PoolBase          : FliliyHikariPool - Closing connection com.mysql.cj.jdbc.ConnectionImpl@3cc255a: (connection has passed maxLifetime)
+2025-10-13 01:46:17.632 DEBUG [FliliyHikariPool connection adder] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@77e25047
+2025-10-13 01:46:28.116 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:46:28.116 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:46:28.116 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:46:28.199 DEBUG [FliliyHikariPool connection closer] com.zaxxer.hikari.pool.PoolBase          : FliliyHikariPool - Closing connection com.mysql.cj.jdbc.ConnectionImpl@3449a41a: (connection has passed maxLifetime)
+2025-10-13 01:46:28.205 DEBUG [FliliyHikariPool connection adder] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@760893ee
+2025-10-13 01:46:32.564 DEBUG [FliliyHikariPool connection closer] com.zaxxer.hikari.pool.PoolBase          : FliliyHikariPool - Closing connection com.mysql.cj.jdbc.ConnectionImpl@2a70698d: (connection has passed maxLifetime)
+2025-10-13 01:46:32.568 DEBUG [FliliyHikariPool connection adder] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@373599d5
+2025-10-13 01:46:36.274 DEBUG [FliliyHikariPool connection closer] com.zaxxer.hikari.pool.PoolBase          : FliliyHikariPool - Closing connection com.mysql.cj.jdbc.ConnectionImpl@6d31d21a: (connection has passed maxLifetime)
+2025-10-13 01:46:36.276 DEBUG [FliliyHikariPool connection adder] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@6c86c7e
+2025-10-13 01:46:58.119 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:46:58.120 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:46:58.120 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:47:00.352 DEBUG [FliliyHikariPool connection closer] com.zaxxer.hikari.pool.PoolBase          : FliliyHikariPool - Closing connection com.mysql.cj.jdbc.ConnectionImpl@498b7aa9: (connection has passed maxLifetime)
+2025-10-13 01:47:00.356 DEBUG [FliliyHikariPool connection adder] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@2595873
+2025-10-13 01:47:08.263 DEBUG [FliliyHikariPool connection closer] com.zaxxer.hikari.pool.PoolBase          : FliliyHikariPool - Closing connection com.mysql.cj.jdbc.ConnectionImpl@8b67092: (connection has passed maxLifetime)
+2025-10-13 01:47:08.266 DEBUG [FliliyHikariPool connection adder] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Added connection com.mysql.cj.jdbc.ConnectionImpl@68c67e2
+2025-10-13 01:47:28.121 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:47:28.121 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:47:28.121 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:47:58.124 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:47:58.124 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:47:58.124 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:48:28.128 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:48:28.130 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:48:28.130 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:48:58.132 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:48:58.132 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:48:58.132 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:49:28.134 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:49:28.135 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:49:28.135 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:49:58.138 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:49:58.139 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:49:58.140 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:50:28.142 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:50:28.145 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:50:28.145 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:50:58.147 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:50:58.147 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:50:58.147 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:51:28.149 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:51:28.149 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:51:28.149 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:51:58.150 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:51:58.150 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:51:58.151 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:52:01.288  INFO [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 4, active threads = 1, queued tasks = 1, completed tasks = 14]
+2025-10-13 01:52:28.155 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:52:28.155 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:52:28.155 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:52:58.160 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:52:58.161 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:52:58.161 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:53:28.162 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:53:28.162 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:53:28.162 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:53:58.166 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:53:58.167 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:53:58.167 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:54:28.170 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:54:28.170 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:54:28.170 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:54:58.172 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:54:58.172 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:54:58.172 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:55:28.174 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:55:28.174 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:55:28.175 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:55:58.177 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:55:58.178 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:55:58.178 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:56:28.179 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:56:28.179 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:56:28.179 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:56:58.182 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:56:58.188 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:56:58.188 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:57:28.193 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:57:28.194 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:57:28.194 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:57:58.197 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:57:58.197 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:57:58.197 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:58:28.200 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:58:28.200 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:58:28.200 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:58:58.204 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:58:58.205 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:58:58.205 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:59:28.208 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:59:28.209 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:59:28.209 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 01:59:58.214 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:59:58.214 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 01:59:58.214 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 02:00:28.216 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 02:00:28.218 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 02:00:28.220 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 02:00:58.227 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 02:00:58.233 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 02:00:58.233 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 02:01:28.235 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 02:01:28.237 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 02:01:28.237 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 02:01:58.238 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 02:01:58.238 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 02:01:58.238 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.
+2025-10-13 02:02:28.240 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Before cleanup stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 02:02:28.241 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - After cleanup  stats (total=10, active=0, idle=10, waiting=0)
+2025-10-13 02:02:28.241 DEBUG [FliliyHikariPool housekeeper] com.zaxxer.hikari.pool.HikariPool        : FliliyHikariPool - Fill pool skipped, pool is at sufficient level.

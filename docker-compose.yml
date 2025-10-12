@@ -1,0 +1,191 @@
+# ============================================
+# Fliliy二手平台 - 完整服务编排配置
+# ============================================
+version: '3.8'
+
+services:
+  # ==================== MySQL数据库 ====================
+  mysql:
+    image: mysql:8.0
+    container_name: fliliy-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: fliliy_db
+      MYSQL_USER: fliliy
+      MYSQL_PASSWORD: fliliy123
+      TZ: Asia/Shanghai
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --default-authentication-plugin=mysql_native_password
+      - --max_connections=500
+      - --innodb_buffer_pool_size=512M
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./docs/database:/docker-entrypoint-initdb.d:ro
+    networks:
+      - fliliy-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot123"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ==================== Redis缓存 ====================
+  redis:
+    image: redis:7-alpine
+    container_name: fliliy-redis
+    restart: always
+    command: redis-server --appendonly yes --requirepass redis123
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - fliliy-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "redis123", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ==================== Elasticsearch搜索引擎 ====================
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.10
+    container_name: fliliy-es
+    restart: always
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=false
+      - bootstrap.memory_lock=true
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - es-data:/usr/share/elasticsearch/data
+    networks:
+      - fliliy-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # ==================== Kibana可视化 ====================
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.17.10
+    container_name: fliliy-kibana
+    restart: always
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - I18N_LOCALE=zh-CN
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+    networks:
+      - fliliy-network
+
+  # ==================== RabbitMQ消息队列 ====================
+  rabbitmq:
+    image: rabbitmq:3.12-management-alpine
+    container_name: fliliy-rabbitmq
+    restart: always
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin123
+      RABBITMQ_DEFAULT_VHOST: /
+    ports:
+      - "5672:5672"   # AMQP协议端口
+      - "15672:15672" # 管理界面端口
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - fliliy-network
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # ==================== Spring Boot应用 ====================
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: fliliy/second-hand-platform:3.0
+    container_name: fliliy-app
+    restart: always
+    environment:
+      # Spring配置
+      SPRING_PROFILES_ACTIVE: prod
+      TZ: Asia/Shanghai
+
+      # 数据库配置
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/fliliy_db?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: fliliy
+      SPRING_DATASOURCE_PASSWORD: fliliy123
+
+      # Redis配置
+      SPRING_REDIS_HOST: redis
+      SPRING_REDIS_PORT: 6379
+      SPRING_REDIS_PASSWORD: redis123
+
+      # Elasticsearch配置
+      SPRING_ELASTICSEARCH_URIS: http://elasticsearch:9200
+
+      # RabbitMQ配置
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: admin
+      SPRING_RABBITMQ_PASSWORD: admin123
+
+      # JVM参数
+      JAVA_OPTS: -Xms512m -Xmx1024m -XX:+UseG1GC
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./logs:/app/logs
+      - ./uploads:/app/uploads
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - fliliy-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+# ==================== 数据卷 ====================
+volumes:
+  mysql-data:
+    name: fliliy-mysql-data
+  redis-data:
+    name: fliliy-redis-data
+  es-data:
+    name: fliliy-es-data
+  rabbitmq-data:
+    name: fliliy-rabbitmq-data
+
+# ==================== 网络 ====================
+networks:
+  fliliy-network:
+    name: fliliy-network
+    driver: bridge

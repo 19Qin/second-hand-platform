@@ -196,6 +196,18 @@ public class TransactionController {
             return ApiResponse.error(e.getMessage());
         }
     }
+
+    /**
+     * 发起交易（别名接口，兼容旧API）
+     */
+    @PostMapping("/initiate")
+    @PreAuthorize("hasRole('USER')")
+    public ApiResponse<TransactionRequestResponse> initiateTransaction(
+            @Valid @RequestBody TransactionRequestRequest request,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        // 直接调用 createTransactionRequest
+        return createTransactionRequest(request, userDetails);
+    }
     
     /**
      * 响应交易申请（新接口）

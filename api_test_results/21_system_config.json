@@ -1,0 +1,39 @@
+{
+  "code": 200,
+  "message": "获取成功",
+  "data": {
+    "version": "v2.0",
+    "upload": {
+      "maxImageCount": 20,
+      "maxImageSize": "10MB",
+      "maxVoiceDuration": 60,
+      "supportedImageFormats": [
+        "jpg",
+        "jpeg",
+        "png",
+        "webp"
+      ],
+      "supportedVoiceFormats": [
+        "aac",
+        "mp3",
+        "wav"
+      ]
+    },
+    "sms": {
+      "codeLength": 4,
+      "expireMinutes": 5,
+      "dailyLimit": 10
+    },
+    "transaction": {
+      "codeLength": 4,
+      "expireHours": 24
+    },
+    "features": {
+      "locationService": false,
+      "aiEvaluation": false,
+      "onlinePayment": false,
+      "pushNotification": true
+    }
+  },
+  "timestamp": 1760109254522
+}

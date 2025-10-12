@@ -1,0 +1,9 @@
+{
+  "code": 200,
+  "message": "获取成功",
+  "data": {
+    "productId": "1969761981678358528",
+    "isFavorited": false
+  },
+  "timestamp": 1760112047848
+}

@@ -1,0 +1,6 @@
+{
+  "code": 500,
+  "message": "获取用户资料失败: class java.util.LinkedHashMap cannot be cast to class com.fliliy.secondhand.dto.response.UserProfileResponse (java.util.LinkedHashMap is in module java.base of loader 'bootstrap'; com.fliliy.secondhand.dto.response.UserProfileResponse is in unnamed module of loader 'app')",
+  "data": null,
+  "timestamp": 1760109253875
+}

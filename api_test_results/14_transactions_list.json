@@ -1,0 +1,263 @@
+{
+  "code": 200,
+  "message": "获取成功",
+  "data": {
+    "pagination": {
+      "total": 8,
+      "size": 10,
+      "hasNext": false,
+      "page": 1
+    },
+    "transactions": [
+      {
+        "id": "tx_1976621912847159296",
+        "type": "BUY",
+        "status": "PENDING",
+        "statusText": null,
+        "product": {
+          "id": "1968947273484341248",
+          "title": "完整测试商品 MacBook Pro",
+          "price": 8999,
+          "mainImage": "http://localhost:8080/api/v1/files/products/macbook.jpg",
+          "description": null,
+          "condition": null
+        },
+        "counterpart": {
+          "id": "1968926156120002560",
+          "username": "买家用户",
+          "avatar": "https://cdn.fliliy.com/avatar/default.png"
+        },
+        "transactionTime": "2025-10-10 20:12:43",
+        "meetingInfo": null,
+        "canRate": false,
+        "rating": null,
+        "transactionCode": null,
+        "codeExpiresAt": null,
+        "createdAt": null,
+        "completedAt": null,
+        "cancelledAt": null,
+        "cancelReason": null,
+        "cancelType": null,
+        "feedback": null
+      },
+      {
+        "id": "tx_1976597649247309824",
+        "type": "SELL",
+        "status": "AGREED",
+        "statusText": "已同意",
+        "product": {
+          "id": "1969760518407327744",
+          "title": "测试商品 - 前端调试用",
+          "price": 100,
+          "mainImage": "https://example.com/test.jpg",
+          "description": null,
+          "condition": null
+        },
+        "counterpart": {
+          "id": "1962950810434408448",
+          "username": "API测试买家",
+          "avatar": "http://localhost:8080/api/v1/files/avatar/1758887892111_b410451f.png"
+        },
+        "transactionTime": "2025-10-10 18:36:18",
+        "meetingInfo": null,
+        "canRate": false,
+        "rating": null,
+        "transactionCode": null,
+        "codeExpiresAt": null,
+        "createdAt": null,
+        "completedAt": null,
+        "cancelledAt": null,
+        "cancelReason": null,
+        "cancelType": null,
+        "feedback": null
+      },
+      {
+        "id": "tx_1976596589673844736",
+        "type": "SELL",
+        "status": "COMPLETED",
+        "statusText": "交易完成",
+        "product": {
+          "id": "1969757702427119616",
+          "title": "小米13 Ultra 12GB+256GB 黑色",
+          "price": 3299,
+          "mainImage": "https://example.com/images/mi13ultra_1.jpg",
+          "description": null,
+          "condition": null
+        },
+        "counterpart": {
+          "id": "1962950810434408448",
+          "username": "API测试买家",
+          "avatar": "http://localhost:8080/api/v1/files/avatar/1758887892111_b410451f.png"
+        },
+        "transactionTime": "2025-10-10 18:32:49",
+        "meetingInfo": null,
+        "canRate": false,
+        "rating": 5,
+        "transactionCode": null,
+        "codeExpiresAt": null,
+        "createdAt": null,
+        "completedAt": null,
+        "cancelledAt": null,
+        "cancelReason": null,
+        "cancelType": null,
+        "feedback": null
+      },
+      {
+        "id": "tx_1973060727640035328",
+        "type": "SELL",
+        "status": "REJECTED",
+        "statusText": null,
+        "product": {
+          "id": "1969760518407327744",
+          "title": "测试商品 - 前端调试用",
+          "price": 100,
+          "mainImage": "https://example.com/test.jpg",
+          "description": null,
+          "condition": null
+        },
+        "counterpart": {
+          "id": "1962950810434408448",
+          "username": "API测试买家",
+          "avatar": "http://localhost:8080/api/v1/files/avatar/1758887892111_b410451f.png"
+        },
+        "transactionTime": "2025-10-01 00:21:50",
+        "meetingInfo": null,
+        "canRate": false,
+        "rating": null,
+        "transactionCode": null,
+        "codeExpiresAt": null,
+        "createdAt": null,
+        "completedAt": null,
+        "cancelledAt": null,
+        "cancelReason": null,
+        "cancelType": null,
+        "feedback": null
+      },
+      {
+        "id": "tx_1973060570131337216",
+        "type": "SELL",
+        "status": "REJECTED",
+        "statusText": null,
+        "product": {
+          "id": "1969757702427119616",
+          "title": "小米13 Ultra 12GB+256GB 黑色",
+          "price": 3299,
+          "mainImage": "https://example.com/images/mi13ultra_1.jpg",
+          "description": null,
+          "condition": null
+        },
+        "counterpart": {
+          "id": "1962950810434408448",
+          "username": "API测试买家",
+          "avatar": "http://localhost:8080/api/v1/files/avatar/1758887892111_b410451f.png"
+        },
+        "transactionTime": "2025-10-01 00:21:12",
+        "meetingInfo": null,
+        "canRate": false,
+        "rating": null,
+        "transactionCode": null,
+        "codeExpiresAt": null,
+        "createdAt": null,
+        "completedAt": null,
+        "cancelledAt": null,
+        "cancelReason": null,
+        "cancelType": null,
+        "feedback": null
+      },
+      {
+        "id": "tx_1973059915022995456",
+        "type": "SELL",
+        "status": "COMPLETED",
+        "statusText": "交易完成",
+        "product": {
+          "id": "1969757587893260288",
+          "title": "iPhone 15 Pro Max 256GB 钛金色",
+          "price": 7999,
+          "mainImage": "https://example.com/images/iphone15_1.jpg",
+          "description": null,
+          "condition": null
+        },
+        "counterpart": {
+          "id": "1962950810434408448",
+          "username": "API测试买家",
+          "avatar": "http://localhost:8080/api/v1/files/avatar/1758887892111_b410451f.png"
+        },
+        "transactionTime": "2025-10-01 00:20:31",
+        "meetingInfo": null,
+        "canRate": false,
+        "rating": 5,
+        "transactionCode": null,
+        "codeExpiresAt": null,
+        "createdAt": null,
+        "completedAt": null,
+        "cancelledAt": null,
+        "cancelReason": null,
+        "cancelType": null,
+        "feedback": null
+      },
+      {
+        "id": "tx_1971548762774048768",
+        "type": "SELL",
+        "status": "CANCELLED",
+        "statusText": "已取消",
+        "product": {
+          "id": "1969757702427119616",
+          "title": "小米13 Ultra 12GB+256GB 黑色",
+          "price": 3299,
+          "mainImage": "https://example.com/images/mi13ultra_1.jpg",
+          "description": null,
+          "condition": null
+        },
+        "counterpart": {
+          "id": "1962950810434408448",
+          "username": "API测试买家",
+          "avatar": "http://localhost:8080/api/v1/files/avatar/1758887892111_b410451f.png"
+        },
+        "transactionTime": "2025-09-26 20:13:49",
+        "meetingInfo": null,
+        "canRate": false,
+        "rating": null,
+        "transactionCode": null,
+        "codeExpiresAt": null,
+        "createdAt": null,
+        "completedAt": null,
+        "cancelledAt": null,
+        "cancelReason": null,
+        "cancelType": null,
+        "feedback": null
+      },
+      {
+        "id": "tx_1971547214497058816",
+        "type": "SELL",
+        "status": "PENDING",
+        "statusText": null,
+        "product": {
+          "id": "1969761981678358528",
+          "title": "测试不传warranty字段",
+          "price": 100,
+          "mainImage": "https://example.com/test.jpg",
+          "description": null,
+          "condition": null
+        },
+        "counterpart": {
+          "id": "1962950810434408448",
+          "username": "API测试买家",
+          "avatar": "http://localhost:8080/api/v1/files/avatar/1758887892111_b410451f.png"
+        },
+        "transactionTime": "2025-09-26 20:07:40",
+        "meetingInfo": null,
+        "canRate": false,
+        "rating": null,
+        "transactionCode": null,
+        "codeExpiresAt": null,
+        "createdAt": null,
+        "completedAt": null,
+        "cancelledAt": null,
+        "cancelReason": null,
+        "cancelType": null,
+        "feedback": null
+      }
+    ]
+  },
+  "timestamp": 1760109254173
+}

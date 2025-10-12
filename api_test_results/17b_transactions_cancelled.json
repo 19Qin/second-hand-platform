@@ -1,0 +1,46 @@
+{
+  "code": 200,
+  "message": "获取成功",
+  "data": {
+    "pagination": {
+      "total": 1,
+      "size": 10,
+      "hasNext": false,
+      "page": 1
+    },
+    "transactions": [
+      {
+        "id": "tx_1971548762774048768",
+        "type": "SELL",
+        "status": "CANCELLED",
+        "statusText": "已取消",
+        "product": {
+          "id": "1969757702427119616",
+          "title": "小米13 Ultra 12GB+256GB 黑色",
+          "price": 3299,
+          "mainImage": "https://example.com/images/mi13ultra_1.jpg",
+          "description": null,
+          "condition": null
+        },
+        "counterpart": {
+          "id": "1962950810434408448",
+          "username": "API测试买家",
+          "avatar": "http://localhost:8080/api/v1/files/avatar/1758887892111_b410451f.png"
+        },
+        "transactionTime": "2025-09-26 20:13:49",
+        "meetingInfo": null,
+        "canRate": false,
+        "rating": null,
+        "transactionCode": null,
+        "codeExpiresAt": null,
+        "createdAt": null,
+        "completedAt": null,
+        "cancelledAt": null,
+        "cancelReason": null,
+        "cancelType": null,
+        "feedback": null
+      }
+    ]
+  },
+  "timestamp": 1760109254401
+}

@@ -3,6 +3,8 @@ package com.fliliy.secondhand.service;
 import com.fliliy.secondhand.dto.request.AddAddressRequest;
 import com.fliliy.secondhand.dto.response.AddressResponse;
 import com.fliliy.secondhand.entity.UserAddress;
+import com.fliliy.secondhand.exception.BusinessException;
+import com.fliliy.secondhand.exception.ErrorCode;
 import com.fliliy.secondhand.repository.UserAddressRepository;
 import com.fliliy.secondhand.util.IdGenerator;
 import lombok.RequiredArgsConstructor;
@@ -66,10 +68,10 @@ public class AddressService {
     public void setDefaultAddress(Long userId, Long addressId) {
         // 验证地址是否属于当前用户
         UserAddress address = userAddressRepository.findById(addressId)
-                .orElseThrow(() -> new RuntimeException("地址不存在"));
-        
+                .orElseThrow(() -> new BusinessException(ErrorCode.ADDRESS_NOT_FOUND));
+
         if (!address.getUserId().equals(userId)) {
-            throw new RuntimeException("无权限操作此地址");
+            throw new BusinessException(ErrorCode.ADDRESS_NOT_OWNER);
         }
         
         // 清除其他默认地址
@@ -86,10 +88,10 @@ public class AddressService {
     @Transactional
     public AddressResponse updateAddress(Long userId, Long addressId, AddAddressRequest request) {
         UserAddress address = userAddressRepository.findById(addressId)
-                .orElseThrow(() -> new RuntimeException("地址不存在"));
-        
+                .orElseThrow(() -> new BusinessException(ErrorCode.ADDRESS_NOT_FOUND));
+
         if (!address.getUserId().equals(userId)) {
-            throw new RuntimeException("无权限操作此地址");
+            throw new BusinessException(ErrorCode.ADDRESS_NOT_OWNER);
         }
         
         // 如果设置为默认地址，先清除其他默认地址
@@ -117,14 +119,14 @@ public class AddressService {
     @Transactional
     public void deleteAddress(Long userId, Long addressId) {
         UserAddress address = userAddressRepository.findById(addressId)
-                .orElseThrow(() -> new RuntimeException("地址不存在"));
-        
+                .orElseThrow(() -> new BusinessException(ErrorCode.ADDRESS_NOT_FOUND));
+
         if (!address.getUserId().equals(userId)) {
-            throw new RuntimeException("无权限操作此地址");
+            throw new BusinessException(ErrorCode.ADDRESS_NOT_OWNER);
         }
-        
+
         if (Boolean.TRUE.equals(address.getIsDefault())) {
-            throw new RuntimeException("默认地址不能删除，请先设置其他地址为默认地址");
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "默认地址不能删除，请先设置其他地址为默认地址");
         }
         
         userAddressRepository.delete(address);

@@ -1,0 +1,8 @@
+{
+  "code": 200,
+  "message": "success",
+  "data": {
+    "unreadCount": 10
+  },
+  "timestamp": 1760109254112
+}

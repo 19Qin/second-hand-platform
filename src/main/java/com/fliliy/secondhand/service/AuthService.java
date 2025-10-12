@@ -36,40 +36,51 @@ public class AuthService {
      */
     @Transactional
     public AuthResponse register(RegisterRequest request, HttpServletRequest httpRequest) {
+        String mobile = request.getMobile();
+        String clientIp = getClientIpAddress(httpRequest);
+
+        log.info("[用户注册] 开始注册流程 - 手机号: {}, IP: {}", mobile, clientIp);
+
         // 验证参数
         validateRegisterRequest(request);
-        
+        log.debug("[用户注册] 参数验证通过 - 手机号: {}", mobile);
+
         // 验证短信验证码
         boolean isCodeValid = smsService.verifySmsCode(
-                request.getMobile(), 
-                request.getSmsCode(), 
-                request.getSmsId(), 
+                request.getMobile(),
+                request.getSmsCode(),
+                request.getSmsId(),
                 VerificationCode.CodeType.REGISTER
         );
-        
+
         if (!isCodeValid) {
+            log.warn("[用户注册] 验证码错误 - 手机号: {}, IP: {}", mobile, clientIp);
             throw new RuntimeException(ErrorCode.SMS_CODE_ERROR.getMessage());
         }
-        
+        log.debug("[用户注册] 验证码验证通过 - 手机号: {}", mobile);
+
         // 检查用户是否已存在
         if (userRepository.existsByMobile(request.getMobile())) {
+            log.warn("[用户注册] 用户已存在 - 手机号: {}, IP: {}", mobile, clientIp);
             throw new RuntimeException(ErrorCode.USER_ALREADY_EXISTS.getMessage());
         }
-        
+
         // 创建用户
         User user = new User();
         user.setId(IdGenerator.generateUserId());
         user.setUsername(request.getUsername());
         user.setMobile(request.getMobile());
-        
+
         // 加密密码
         String salt = PasswordUtil.generateSalt();
         String passwordHash = PasswordUtil.encode(request.getPassword(), salt);
         user.setSalt(salt);
         user.setPasswordHash(passwordHash);
-        
+
         userRepository.save(user);
-        
+        log.info("[用户注册] 注册成功 - 用户ID: {}, 手机号: {}, 用户名: {}, IP: {}",
+                user.getId(), mobile, request.getUsername(), clientIp);
+
         // 生成令牌
         return generateAuthResponse(user, httpRequest);
     }
@@ -79,26 +90,36 @@ public class AuthService {
      */
     @Transactional
     public AuthResponse loginWithPassword(LoginRequest request, HttpServletRequest httpRequest) {
+        String mobile = request.getMobile();
+        String clientIp = getClientIpAddress(httpRequest);
+
+        log.info("[密码登录] 登录请求 - 手机号: {}, IP: {}", mobile, clientIp);
+
         // 查找用户
         Optional<User> optionalUser = userRepository.findByMobile(request.getMobile());
         if (!optionalUser.isPresent()) {
+            log.warn("[密码登录] 用户不存在 - 手机号: {}, IP: {}", mobile, clientIp);
             throw new RuntimeException(ErrorCode.USER_NOT_EXISTS.getMessage());
         }
-        
+
         User user = optionalUser.get();
-        
+
         // 检查账号状态
         checkAccountStatus(user);
-        
+
         // 验证密码
         if (!PasswordUtil.matches(request.getPassword(), user.getSalt(), user.getPasswordHash())) {
+            log.warn("[密码登录] 密码错误 - 用户ID: {}, 手机号: {}, 失败次数: {}, IP: {}",
+                    user.getId(), mobile, user.getLoginAttempts() + 1, clientIp);
             handleLoginFailure(user);
             throw new RuntimeException(ErrorCode.PASSWORD_INCORRECT.getMessage());
         }
-        
+
         // 登录成功，重置失败次数
         handleLoginSuccess(user, httpRequest);
-        
+        log.info("[密码登录] 登录成功 - 用户ID: {}, 手机号: {}, 用户名: {}, IP: {}",
+                user.getId(), mobile, user.getUsername(), clientIp);
+
         return generateAuthResponse(user, httpRequest);
     }
     
@@ -177,15 +198,17 @@ public class AuthService {
     public void logout(String refreshToken) {
         if (refreshToken != null && !refreshToken.isEmpty()) {
             userTokenRepository.revokeByRefreshToken(refreshToken);
+            log.info("[退出登录] 用户退出登录 - RefreshToken已撤销");
         }
     }
-    
+
     /**
      * 退出所有设备
      */
     @Transactional
     public void logoutAll(Long userId) {
         userTokenRepository.revokeAllByUserId(userId);
+        log.info("[退出所有设备] 用户退出所有设备 - 用户ID: {}", userId);
     }
     
     private void validateRegisterRequest(RegisterRequest request) {
@@ -215,11 +238,13 @@ public class AuthService {
     private void handleLoginFailure(User user) {
         int attempts = user.getLoginAttempts() + 1;
         userRepository.updateLoginAttempts(user.getId(), attempts);
-        
+
         if (attempts >= 5) {
             // 锁定账号
             user.setStatus(2);
             userRepository.save(user);
+            log.warn("[账号安全] 账号已锁定 - 用户ID: {}, 手机号: {}, 原因: 登录失败次数过多({}次)",
+                    user.getId(), user.getMobile(), attempts);
             throw new RuntimeException(ErrorCode.LOGIN_ATTEMPTS_EXCEEDED.getMessage());
         }
     }

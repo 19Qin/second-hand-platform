@@ -1,0 +1,11 @@
+{
+  "code": 200,
+  "message": "Service is running",
+  "data": {
+    "service": "fliliy-second-hand",
+    "version": "1.0.0",
+    "status": "UP",
+    "timestamp": "2025-10-10 23:14:13"
+  },
+  "timestamp": 1760109253657
+}

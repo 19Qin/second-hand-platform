@@ -1,8 +1,9 @@
 package com.fliliy.secondhand.service;
 
-import com.fliliy.secondhand.common.ErrorCode;
 import com.fliliy.secondhand.entity.VerificationCode;
 import com.fliliy.secondhand.entity.SmsRecord;
+import com.fliliy.secondhand.exception.BusinessException;
+import com.fliliy.secondhand.exception.ErrorCode;
 import com.fliliy.secondhand.repository.VerificationCodeRepository;
 import com.fliliy.secondhand.repository.SmsRecordRepository;
 import com.fliliy.secondhand.util.IdGenerator;
@@ -125,7 +126,7 @@ public class SmsService {
     private void checkRateLimit(String mobile) {
         String key = RATE_LIMIT_PREFIX + mobile;
         if (Boolean.TRUE.equals(redisTemplate.hasKey(key))) {
-            throw new RuntimeException("短信发送过于频繁，请稍后再试");
+            throw new BusinessException(ErrorCode.SMS_SEND_TOO_FREQUENT);
         }
     }
     
@@ -137,9 +138,9 @@ public class SmsService {
     private void checkDailyLimit(String mobile, VerificationCode.CodeType type) {
         LocalDateTime todayStart = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
         long todayCount = verificationCodeRepository.countByMobileAndTypeAndCreatedAtAfter(mobile, type, todayStart);
-        
+
         if (todayCount >= DAILY_LIMIT) {
-            throw new RuntimeException("今日短信发送次数已达上限");
+            throw new BusinessException(ErrorCode.SMS_DAILY_LIMIT_EXCEEDED);
         }
     }
     

@@ -1,0 +1,43 @@
+2025-10-12 16:44:17.494  WARN [http-nio-8080-exec-1] com.fliliy.secondhand.util.JwtUtil       : JWT validation failed: JWT signature does not match locally computed signature. JWT validity cannot be asserted and should not be trusted.
+2025-10-12 16:44:46.444  WARN [http-nio-8080-exec-2] o.s.b.a.w.s.WelcomePageHandlerMapping    : Received invalid Accept header. Assuming all media types are accepted
+2025-10-12 16:46:06.014  WARN [http-nio-8080-exec-4] c.f.s.exception.GlobalExceptionHandler   : Validation failed at /api/v1/auth/sms/send: type: 验证码类型错误
+2025-10-12 16:47:32.743  WARN [http-nio-8080-exec-6] o.s.b.a.w.s.WelcomePageHandlerMapping    : Received invalid Accept header. Assuming all media types are accepted
+2025-10-12 16:49:25.867  WARN [http-nio-8080-exec-9] o.s.b.a.w.s.WelcomePageHandlerMapping    : Received invalid Accept header. Assuming all media types are accepted
+2025-10-12 16:54:04.505  WARN [http-nio-8080-exec-4] o.s.b.a.w.s.WelcomePageHandlerMapping    : Received invalid Accept header. Assuming all media types are accepted
+2025-10-12 17:03:44.206  WARN [http-nio-8080-exec-6] c.f.s.exception.GlobalExceptionHandler   : Validation failed at /api/v1/transactions/1977295839055450112/agree-offline: message: 回复消息不能为空
+2025-10-12 17:04:54.884  WARN [http-nio-8080-exec-7] c.f.s.service.TransactionService         : [同意交易] 发送系统消息失败 - 交易ID: 1977295839055450112, 原因: 不支持的文件类型
+2025-10-12 17:10:59.267  WARN [main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 0c30ba8f-6b10-4f0f-a816-141ddf9ab179
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2025-10-12 17:17:10.120  WARN [http-nio-8080-exec-4] c.f.secondhand.aspect.AuditLogAspect     : [审计日志-登录失败] 操作: 验证码登录, 时间: 2025-10-12T17:17:10.120680, IP: 127.0.0.1, UserAgent: curl&#x2F;7.54.0, 失败原因: 验证码错误
+2025-10-12 17:29:00.952  WARN [http-nio-8080-exec-1] o.s.b.a.w.s.WelcomePageHandlerMapping    : Received invalid Accept header. Assuming all media types are accepted
+2025-10-12 17:29:28.701  WARN [http-nio-8080-exec-2] o.s.b.a.w.s.WelcomePageHandlerMapping    : Received invalid Accept header. Assuming all media types are accepted
+2025-10-12 17:31:05.320  WARN [http-nio-8080-exec-3] o.s.b.a.w.s.WelcomePageHandlerMapping    : Received invalid Accept header. Assuming all media types are accepted
+2025-10-12 17:31:51.174  WARN [http-nio-8080-exec-5] o.s.b.a.w.s.WelcomePageHandlerMapping    : Received invalid Accept header. Assuming all media types are accepted
+2025-10-12 17:32:04.222  WARN [http-nio-8080-exec-6] o.s.b.a.w.s.WelcomePageHandlerMapping    : Received invalid Accept header. Assuming all media types are accepted
+2025-10-12 17:32:17.160  WARN [http-nio-8080-exec-8] o.s.b.a.w.s.WelcomePageHandlerMapping    : Received invalid Accept header. Assuming all media types are accepted
+2025-10-12 17:48:58.213  WARN [main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: ad3da775-9e32-4126-b128-197ecacaee84
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2025-10-12 17:50:39.243  WARN [http-nio-8080-exec-3] com.fliliy.secondhand.util.JwtUtil       : JWT validation failed: JWT signature does not match locally computed signature. JWT validity cannot be asserted and should not be trusted.
+2025-10-12 18:09:35.065  WARN [main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: b1431943-84ba-4117-a9b6-501673cf94c5
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2025-10-12 18:24:59.017  WARN [http-nio-8080-exec-4] c.f.s.exception.GlobalExceptionHandler   : Validation failed at /api/v1/products: location: 位置信息不能为空; condition: 商品状况值不正确
+2025-10-12 18:26:09.651  WARN [http-nio-8080-exec-5] c.f.s.exception.GlobalExceptionHandler   : Validation failed at /api/v1/products: condition: 商品状况值不正确
+2025-10-12 18:28:30.797  WARN [http-nio-8080-exec-9] o.s.b.a.w.s.WelcomePageHandlerMapping    : Received invalid Accept header. Assuming all media types are accepted
+2025-10-12 18:41:48.126  WARN [main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 375c2b97-b9db-4775-8b39-76e68441585c
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+

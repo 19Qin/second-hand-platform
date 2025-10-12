@@ -2,33 +2,140 @@ package com.fliliy.secondhand.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class ChatRoomResponse {
-    
+
     private Long chatRoomId;
+
+    @Deprecated // 保留用于向后兼容，推荐使用 activeTransactions
     private Long transactionId;
-    
+
+    // 进行中的交易列表（PENDING或AGREED状态）
+    private List<ActiveTransactionInfo> activeTransactions;
+
     // 商品信息
     private ProductInfo product;
-    
+
     // 聊天对象信息
     private ParticipantInfo participant;
-    
+
     // 最后消息信息
     private LastMessageInfo lastMessage;
-    
+
     private Integer unreadCount;
     private Integer totalMessages;
-    
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
-    
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updatedAt;
-    
+
+    @Deprecated // 保留用于向后兼容，推荐使用 activeTransactions
     private String transactionStatus;
-    
+
     public ChatRoomResponse() {}
+
+    // 进行中的交易信息
+    public static class ActiveTransactionInfo {
+        private String transactionId;  // 格式：tx_{id}
+        private Long productId;
+        private String productTitle;
+        private String productImage;
+        private Double productPrice;
+        private String status;  // PENDING 或 AGREED
+        private String role;  // BUYER 或 SELLER
+        private String transactionCode;  // 只有AGREED状态且是买家时才返回
+
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        private LocalDateTime codeExpiresAt;  // 交易码过期时间
+
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        private LocalDateTime requestedAt;  // 交易发起时间
+
+        public ActiveTransactionInfo() {}
+
+        public String getTransactionId() {
+            return transactionId;
+        }
+
+        public void setTransactionId(String transactionId) {
+            this.transactionId = transactionId;
+        }
+
+        public Long getProductId() {
+            return productId;
+        }
+
+        public void setProductId(Long productId) {
+            this.productId = productId;
+        }
+
+        public String getProductTitle() {
+            return productTitle;
+        }
+
+        public void setProductTitle(String productTitle) {
+            this.productTitle = productTitle;
+        }
+
+        public String getProductImage() {
+            return productImage;
+        }
+
+        public void setProductImage(String productImage) {
+            this.productImage = productImage;
+        }
+
+        public Double getProductPrice() {
+            return productPrice;
+        }
+
+        public void setProductPrice(Double productPrice) {
+            this.productPrice = productPrice;
+        }
+
+        public String getStatus() {
+            return status;
+        }
+
+        public void setStatus(String status) {
+            this.status = status;
+        }
+
+        public String getRole() {
+            return role;
+        }
+
+        public void setRole(String role) {
+            this.role = role;
+        }
+
+        public String getTransactionCode() {
+            return transactionCode;
+        }
+
+        public void setTransactionCode(String transactionCode) {
+            this.transactionCode = transactionCode;
+        }
+
+        public LocalDateTime getCodeExpiresAt() {
+            return codeExpiresAt;
+        }
+
+        public void setCodeExpiresAt(LocalDateTime codeExpiresAt) {
+            this.codeExpiresAt = codeExpiresAt;
+        }
+
+        public LocalDateTime getRequestedAt() {
+            return requestedAt;
+        }
+
+        public void setRequestedAt(LocalDateTime requestedAt) {
+            this.requestedAt = requestedAt;
+        }
+    }
     
     // 内部类
     public static class ProductInfo {
@@ -199,17 +306,27 @@ public class ChatRoomResponse {
     public Long getChatRoomId() {
         return chatRoomId;
     }
-    
+
     public void setChatRoomId(Long chatRoomId) {
         this.chatRoomId = chatRoomId;
     }
-    
+
+    @Deprecated
     public Long getTransactionId() {
         return transactionId;
     }
-    
+
+    @Deprecated
     public void setTransactionId(Long transactionId) {
         this.transactionId = transactionId;
+    }
+
+    public List<ActiveTransactionInfo> getActiveTransactions() {
+        return activeTransactions;
+    }
+
+    public void setActiveTransactions(List<ActiveTransactionInfo> activeTransactions) {
+        this.activeTransactions = activeTransactions;
     }
     
     public ProductInfo getProduct() {

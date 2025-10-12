@@ -1,0 +1,36 @@
+{
+  "code": 200,
+  "message": "获取成功",
+  "data": {
+    "id": "tx_1971547214497058816",
+    "type": "SELL",
+    "status": "PENDING",
+    "statusText": null,
+    "product": {
+      "id": "1969761981678358528",
+      "title": "测试不传warranty字段",
+      "price": 100,
+      "mainImage": "https://example.com/test.jpg",
+      "description": "测试完全不传warranty字段是否可以发布",
+      "condition": "NEW"
+    },
+    "counterpart": {
+      "id": "1962950810434408448",
+      "username": "API测试买家",
+      "avatar": "http://localhost:8080/api/v1/files/avatar/1758887892111_b410451f.png"
+    },
+    "transactionTime": "2025-09-26 20:07:40",
+    "meetingInfo": null,
+    "canRate": false,
+    "rating": null,
+    "transactionCode": null,
+    "codeExpiresAt": null,
+    "createdAt": "2025-09-26 20:07:40",
+    "completedAt": null,
+    "cancelledAt": null,
+    "cancelReason": null,
+    "cancelType": null,
+    "feedback": null
+  },
+  "timestamp": 1760109254263
+}

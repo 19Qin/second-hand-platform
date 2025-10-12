@@ -1,0 +1,181 @@
+{
+  "code": 200,
+  "message": "success",
+  "data": {
+    "content": [
+      {
+        "chatRoomId": 1976621042612965400,
+        "transactionId": 1976621912847159300,
+        "activeTransactions": [
+          {
+            "transactionId": "tx_1976621912847159296",
+            "productId": 1968947273484341200,
+            "productTitle": "完整测试商品 MacBook Pro",
+            "productImage": null,
+            "productPrice": 8999,
+            "status": "PENDING",
+            "role": "BUYER",
+            "transactionCode": null,
+            "codeExpiresAt": null,
+            "requestedAt": "2025-10-10 20:12:43"
+          }
+        ],
+        "product": null,
+        "participant": {
+          "id": 1968926156120002600,
+          "username": "买家用户",
+          "avatar": "https://cdn.fliliy.com/avatar/default.png",
+          "isOnline": true,
+          "lastSeenAt": null
+        },
+        "lastMessage": {
+          "id": 1976621912868130800,
+          "content": "我想购买这个MacBook，能否当面交易？",
+          "type": "TRANSACTION_REQUEST",
+          "sentAt": "2025-10-11 04:12:42",
+          "senderName": null,
+          "isFromMe": true
+        },
+        "unreadCount": 0,
+        "totalMessages": 3,
+        "createdAt": "2025-10-10 20:09:15",
+        "updatedAt": "2025-10-11 04:12:42",
+        "transactionStatus": null
+      },
+      {
+        "chatRoomId": 1970366144393121800,
+        "transactionId": null,
+        "activeTransactions": [],
+        "product": null,
+        "participant": {
+          "id": 1962925440754651100,
+          "username": "测试用户",
+          "avatar": "https://cdn.fliliy.com/avatar/default.png",
+          "isOnline": true,
+          "lastSeenAt": null
+        },
+        "lastMessage": {
+          "id": 1970389470737993700,
+          "content": "🎉 聊天功能自动化测试完成！系统运行正常。",
+          "type": "TEXT",
+          "sentAt": "2025-09-23 23:27:12",
+          "senderName": null,
+          "isFromMe": false
+        },
+        "unreadCount": 0,
+        "totalMessages": 5,
+        "createdAt": "2025-09-23 13:54:31",
+        "updatedAt": "2025-10-10 22:52:13",
+        "transactionStatus": null
+      },
+      {
+        "chatRoomId": 1971547214450921500,
+        "transactionId": 1976597649247309800,
+        "activeTransactions": [
+          {
+            "transactionId": "tx_1976597649247309824",
+            "productId": 1969760518407327700,
+            "productTitle": "测试商品 - 前端调试用",
+            "productImage": null,
+            "productPrice": 100,
+            "status": "AGREED",
+            "role": "SELLER",
+            "transactionCode": null,
+            "codeExpiresAt": null,
+            "requestedAt": "2025-10-10 18:36:18"
+          },
+          {
+            "transactionId": "tx_1971547214497058816",
+            "productId": 1969761981678358500,
+            "productTitle": "测试不传warranty字段",
+            "productImage": null,
+            "productPrice": 100,
+            "status": "PENDING",
+            "role": "SELLER",
+            "transactionCode": null,
+            "codeExpiresAt": null,
+            "requestedAt": "2025-09-26 20:07:40"
+          }
+        ],
+        "product": null,
+        "participant": {
+          "id": 1962950810434408400,
+          "username": "API测试买家",
+          "avatar": "http://localhost:8080/api/v1/files/avatar/1758887892111_b410451f.png",
+          "isOnline": true,
+          "lastSeenAt": null
+        },
+        "lastMessage": {
+          "id": 1976597730256097300,
+          "content": "交易申请已同意，交易码已生成",
+          "type": "SYSTEM",
+          "sentAt": "2025-10-10 18:36:37",
+          "senderName": null,
+          "isFromMe": false
+        },
+        "unreadCount": 7,
+        "totalMessages": 12,
+        "createdAt": "2025-09-26 20:07:40",
+        "updatedAt": "2025-10-10 18:36:37",
+        "transactionStatus": null
+      },
+      {
+        "chatRoomId": 1971600306999529500,
+        "transactionId": null,
+        "activeTransactions": [],
+        "product": null,
+        "participant": {
+          "id": 1959111298646151200,
+          "username": "jack",
+          "avatar": "https://cdn.fliliy.com/avatar/default.png",
+          "isOnline": true,
+          "lastSeenAt": null
+        },
+        "lastMessage": null,
+        "unreadCount": 0,
+        "totalMessages": 0,
+        "createdAt": "2025-09-26 23:38:38",
+        "updatedAt": "2025-09-26 23:38:38",
+        "transactionStatus": null
+      },
+      {
+        "chatRoomId": 1970392226659963000,
+        "transactionId": null,
+        "activeTransactions": [],
+        "product": null,
+        "participant": {
+          "id": 1968947060988317700,
+          "username": "新买家用户",
+          "avatar": "https://cdn.fliliy.com/avatar/default.png",
+          "isOnline": true,
+          "lastSeenAt": null
+        },
+        "lastMessage": {
+          "id": 1970392992279826400,
+          "content": "这个商品还在吗？什么时候方便看看？",
+          "type": "TEXT",
+          "sentAt": "2025-09-23 23:41:12",
+          "senderName": null,
+          "isFromMe": false
+        },
+        "unreadCount": 3,
+        "totalMessages": 3,
+        "createdAt": "2025-09-23 15:38:10",
+        "updatedAt": "2025-09-23 23:41:12",
+        "transactionStatus": null
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "size": 20,
+      "total": 5,
+      "totalPages": 1,
+      "hasNext": false,
+      "hasPrevious": false,
+      "isFirst": true,
+      "isLast": true
+    },
+    "filters": null
+  },
+  "timestamp": 1760109253994
+}

@@ -8,19 +8,19 @@ import java.util.List;
 
 @Data
 public class PublishProductRequest {
-    
+
     @NotBlank(message = "商品标题不能为空")
     @Size(max = 200, message = "商品标题不能超过200字")
     private String title;
-    
+
     @Size(max = 5000, message = "商品描述不能超过5000字")
     private String description;
-    
+
     @NotNull(message = "商品价格不能为空")
     @DecimalMin(value = "0.01", message = "商品价格必须大于0")
     @DecimalMax(value = "999999.99", message = "商品价格不能超过999999.99")
     private BigDecimal price;
-    
+
     @DecimalMin(value = "0.01", message = "原价必须大于0")
     @DecimalMax(value = "999999.99", message = "原价不能超过999999.99")
     private BigDecimal originalPrice;

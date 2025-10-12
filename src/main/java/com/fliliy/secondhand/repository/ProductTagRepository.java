@@ -60,7 +60,13 @@ public interface ProductTagRepository extends JpaRepository<ProductTag, Integer>
      */
     @Modifying
     @Query(value = "INSERT INTO product_tags (product_id, tag_name, created_at) " +
-                   "VALUES (:productId, :tagName, NOW())", 
+                   "VALUES (:productId, :tagName, NOW())",
            nativeQuery = true)
     void batchInsert(@Param("productId") Long productId, @Param("tagName") String tagName);
+
+    /**
+     * 批量获取多个商品的标签 (优化N+1查询)
+     */
+    @Query("SELECT pt FROM ProductTag pt WHERE pt.productId IN :productIds ORDER BY pt.productId")
+    List<ProductTag> findByProductIdIn(@Param("productIds") List<Long> productIds);
 }

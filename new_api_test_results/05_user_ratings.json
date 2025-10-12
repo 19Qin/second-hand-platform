@@ -1,0 +1,19 @@
+{
+  "code": 200,
+  "message": "获取成功",
+  "data": {
+    "content": [],
+    "pagination": {
+      "page": 1,
+      "size": 10,
+      "total": 0,
+      "totalPages": 0,
+      "hasNext": false,
+      "hasPrevious": false,
+      "isFirst": true,
+      "isLast": true
+    },
+    "filters": null
+  },
+  "timestamp": 1760112047981
+}

@@ -1,0 +1,78 @@
+{
+  "code": 200,
+  "message": "获取成功",
+  "data": {
+    "total": 2,
+    "products": [
+      {
+        "id": "1969760934960435200",
+        "title": "测试错误案例1",
+        "price": 100,
+        "originalPrice": null,
+        "discount": null,
+        "mainImage": "https://example.com/test.jpg",
+        "condition": "NEW",
+        "conditionText": "全新",
+        "location": "北京市北京市朝阳区",
+        "distance": null,
+        "publishTime": "2025-09-21 21:49:38",
+        "hasWarranty": false,
+        "warrantyText": null,
+        "status": "ACTIVE",
+        "statusText": "在售中",
+        "soldAt": null,
+        "seller": {
+          "id": "1959106057909440512",
+          "username": "testuser1",
+          "avatar": "https://cdn.fliliy.com/avatar/default.png",
+          "verified": false,
+          "rating": null,
+          "ratingCount": null
+        },
+        "stats": {
+          "viewCount": 0,
+          "favoriteCount": 0,
+          "chatCount": 0,
+          "isOwn": false,
+          "isFavorited": false
+        },
+        "tags": null
+      },
+      {
+        "id": "1969760518407327744",
+        "title": "测试商品 - 前端调试用",
+        "price": 100,
+        "originalPrice": null,
+        "discount": null,
+        "mainImage": "https://example.com/test.jpg",
+        "condition": "NEW",
+        "conditionText": "全新",
+        "location": "北京市北京市朝阳区",
+        "distance": null,
+        "publishTime": "2025-09-21 21:47:59",
+        "hasWarranty": true,
+        "warrantyText": "保修12个月",
+        "status": "ACTIVE",
+        "statusText": "在售中",
+        "soldAt": null,
+        "seller": {
+          "id": "1959106057909440512",
+          "username": "testuser1",
+          "avatar": "https://cdn.fliliy.com/avatar/default.png",
+          "verified": false,
+          "rating": null,
+          "ratingCount": null
+        },
+        "stats": {
+          "viewCount": 0,
+          "favoriteCount": 0,
+          "chatCount": 0,
+          "isOwn": false,
+          "isFavorited": false
+        },
+        "tags": null
+      }
+    ]
+  },
+  "timestamp": 1760112047269
+}

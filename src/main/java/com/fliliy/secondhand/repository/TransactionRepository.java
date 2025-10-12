@@ -109,4 +109,11 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     @Query("SELECT t FROM Transaction t WHERE t.status = :status AND t.codeExpiresAt < :expireTime")
     List<Transaction> findByStatusAndCodeExpiresAtBefore(@Param("status") Transaction.TransactionStatus status,
                                                           @Param("expireTime") LocalDateTime expireTime);
+
+    /**
+     * 查找聊天室中所有进行中的交易（PENDING或AGREED状态）
+     */
+    @Query("SELECT t FROM Transaction t WHERE t.chatRoomId = :chatRoomId AND t.status IN :statuses ORDER BY t.createdAt DESC")
+    List<Transaction> findActiveByChatRoomId(@Param("chatRoomId") Long chatRoomId,
+                                             @Param("statuses") List<Transaction.TransactionStatus> statuses);
 }

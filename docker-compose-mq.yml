@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3.12-management
+    container_name: fliliy-rabbitmq
+    hostname: fliliy-rabbitmq
+    ports:
+      - "5672:5672"    # AMQP协议端口
+      - "15672:15672"  # 管理界面端口
+    environment:
+      # 默认用户名和密码
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin123
+      # 默认虚拟主机
+      RABBITMQ_DEFAULT_VHOST: /fliliy
+    volumes:
+      # 数据持久化
+      - rabbitmq-data:/var/lib/rabbitmq
+      # 日志持久化
+      - rabbitmq-logs:/var/log/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+    restart: unless-stopped
+    networks:
+      - fliliy-network
+
+volumes:
+  rabbitmq-data:
+    driver: local
+  rabbitmq-logs:
+    driver: local
+
+networks:
+  fliliy-network:
+    driver: bridge

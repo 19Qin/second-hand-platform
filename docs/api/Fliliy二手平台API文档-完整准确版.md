@@ -1,6 +1,6 @@
 # Fliliy 二手交易平台 - 统一完整API接口文档
 
-> **版本**: v8.0 | **更新时间**: 2025-09-27 00:45 | **状态**: 代码验证的100%准确版 🎯
+> **版本**: v8.2 | **更新时间**: 2025-10-12 18:45 | **状态**: 代码验证的100%准确版 + Bug修复确认 🎯
 
 ## 📋 文档说明
 
@@ -18,6 +18,159 @@
 - ✅ **API接口**: 80+个接口，**100%功能验证通过**
 - ✅ **核心测试**: 13项核心功能测试，100%通过率，测试等级优秀
 - ✅ **所有Controller**: AddressController、NotificationController、SystemController等全部实现
+
+**2025-10-01 完整API测试验证**：
+- ✅ **聊天模块**: 创建聊天室、发送消息（中英文）、消息列表 - 100%通过
+- ✅ **交易模块**: 发起申请、同意/拒绝、交易码、完成交易 - 100%通过
+- ✅ **中文编码**: UTF-8完美支持，前后端中英文消息收发正常
+- ✅ **业务流程**: 完整的买卖交易流程验证通过
+
+**2025-10-12 Bug修复与完整验证**：
+- ✅ **商品图片显示**: 图片URL正确存储到数据库，mainImage字段在列表和详情中正确返回
+- ✅ **交易消息systemType**: 修复ChatController中systemType字段未设置的问题
+- ✅ **交易消息完整性**: 所有系统消息(TRANSACTION_AGREED, TRANSACTION_COMPLETED)都包含systemType和transactionId
+- ✅ **完整流程测试**: 登录→发布商品→创建聊天→发起交易→同意交易→完成交易 全流程验证通过
+
+---
+
+## ⚠️ API调用重要注意事项
+
+### 1. 参数格式差异（容易出错）
+
+| 接口 | 正确格式 | 错误示例 | 说明 |
+|------|---------|---------|------|
+| `POST /chats/product-discussion` | **URL参数** | JSON body | 使用 `?productId=xxx&initialMessage=xxx` |
+| `POST /chats/{id}/messages` | 字段名 `type` | 字段名 `messageType` | 发送消息时使用 `type` |
+| `POST /user/addresses` | 字段名 `mobile` | 字段名 `phone` | 收货地址联系方式用 `mobile` |
+
+**详细说明**：
+
+```bash
+# ✅ 正确 - 发起商品讨论
+POST /chats/product-discussion?productId=123&initialMessage=你好
+Headers: Authorization: Bearer xxx
+
+# ❌ 错误 - 使用JSON body会返回400
+POST /chats/product-discussion
+Body: {"productId": 123, "message": "你好"}
+```
+
+```json
+// ✅ 正确 - 发送聊天消息
+{
+  "type": "TEXT",
+  "content": "你好"
+}
+
+// ❌ 错误 - 字段名错误会返回400
+{
+  "messageType": "TEXT",
+  "content": "你好"
+}
+```
+
+### 2. 响应数据结构（容易取错）
+
+**分页接口统一使用 `content` + `pagination` 结构**：
+
+| 接口 | 数据路径 | 常见错误 |
+|------|---------|---------|
+| `GET /chats` | `response.data.content` | ~~`response.data.chatRooms`~~ |
+| `GET /products` | `response.data.content` | ~~`response.data.products`~~ |
+| `GET /user/favorites` | `response.data.content` | ~~`response.data.favorites`~~ |
+| `GET /transactions` | `response.data.content` | ~~`response.data.transactions`~~ |
+
+```javascript
+// ✅ 正确取值
+const response = await fetch('/api/v1/chats');
+const chatList = response.data.content;        // 正确
+const pagination = response.data.pagination;   // 分页信息
+
+// ❌ 错误取值
+const chatList = response.data.chatRooms;      // undefined
+```
+
+### 3. 中文内容处理
+
+**发送中文**：
+- ✅ 直接发送，无需特殊处理
+- ✅ 建议设置：`Content-Type: application/json; charset=UTF-8`
+
+**接收中文**：
+- 后端返回Unicode转义格式：`"\u4f60\u597d"`
+- 现代框架（React/Vue/Flutter）会自动解析为中文
+- **无需手动处理**
+
+```javascript
+// ✅ 发送中文示例
+fetch('/api/v1/chats/123/messages', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json; charset=UTF-8',
+    'Authorization': 'Bearer xxx'
+  },
+  body: JSON.stringify({
+    type: 'TEXT',
+    content: '你好，这是中文消息'  // 直接发送
+  })
+});
+
+// ✅ 接收中文 - 自动解析
+const data = await response.json();
+console.log(data.content);  // 自动显示 "你好"
+```
+
+### 4. 交易码相关
+
+**交易码特性**：
+- 格式：4位数字（0000-9999）
+- 有效期：24小时
+- **自动刷新**：每日凌晨1点刷新，不会过期
+
+**重要提示**：
+- 买家获取交易码：`GET /transactions/{id}` → `data.transactionCode`
+- 卖家完成交易：`POST /transactions/{id}/complete` → `transactionCode` 参数
+- 交易码错误返回：`code: 500, message: "交易验证码错误"`
+
+```json
+// ✅ 卖家完成交易请求
+{
+  "transactionCode": "1234",  // 必填，4位数字
+  "rating": 5,                // 可选，1-5分
+  "feedback": "很好的买家"    // 可选
+}
+```
+
+### 5. 特殊字符处理
+
+**URL参数中的特殊字符**需要编码：
+
+```javascript
+// ✅ 正确 - URL编码
+const message = encodeURIComponent('你好，MacBook还在吗？');
+fetch(`/chats/product-discussion?productId=123&initialMessage=${message}`);
+
+// ❌ 错误 - 未编码可能导致400错误
+fetch('/chats/product-discussion?productId=123&initialMessage=你好，MacBook还在吗？');
+```
+
+**JSON body中的特殊字符**无需编码：
+
+```json
+// ✅ 正确 - JSON自动处理
+{
+  "content": "价格可以优惠吗？有发票吗！"
+}
+```
+
+### 6. 常见错误码及原因
+
+| 错误码 | 常见原因 | 解决方法 |
+|-------|---------|---------|
+| 400 | 参数格式错误、必填字段缺失 | 检查字段名、参数位置（URL/Body） |
+| 401 | Token过期或无效 | 重新登录获取新Token |
+| 500 (验证码错误) | 交易码输入错误 | 提示用户重新输入 |
+| 500 (商品不可交易) | 商品已售出或下架 | 刷新商品状态 |
 
 ---
 
@@ -67,10 +220,11 @@
   "message": "Service is running",
   "data": {
     "service": "fliliy-second-hand",
-    "version": "1.0.0", 
+    "version": "1.0.0",
     "status": "UP",
-    "timestamp": "2025-09-24 20:52:55"
-  }
+    "timestamp": "2025-10-10 22:52:12"
+  },
+  "timestamp": 1760107932911
 }
 ```
 
@@ -253,7 +407,7 @@
 **Controller**: `CategoryController.getCategories()`  
 **实现状态**: ✅ **功能完善** - 经过2025-09-26实际测试验证，完整分类树结构
 
-**实际响应示例**:（基于2025-09-26测试结果）
+**实际响应示例**:（基于2025-10-10测试结果）
 ```json
 {
   "code": 200,
@@ -283,10 +437,167 @@
           "createdAt": "2025-09-06 01:01:38",
           "updatedAt": "2025-09-06 01:01:38",
           "children": null
+        },
+        {
+          "id": 10,
+          "parentId": 1,
+          "name": "电脑",
+          "icon": null,
+          "description": null,
+          "sortOrder": 2,
+          "isActive": true,
+          "productCount": 1,
+          "createdAt": "2025-09-06 01:01:38",
+          "updatedAt": "2025-10-02 05:09:51",
+          "children": null
+        },
+        {
+          "id": 11,
+          "parentId": 1,
+          "name": "数码相机",
+          "icon": null,
+          "description": null,
+          "sortOrder": 3,
+          "isActive": true,
+          "productCount": 1,
+          "createdAt": "2025-09-06 01:01:38",
+          "updatedAt": "2025-09-19 23:38:45",
+          "children": null
+        },
+        {
+          "id": 12,
+          "parentId": 1,
+          "name": "游戏设备",
+          "icon": null,
+          "description": null,
+          "sortOrder": 4,
+          "isActive": true,
+          "productCount": 2,
+          "createdAt": "2025-09-06 01:01:38",
+          "updatedAt": "2025-09-19 23:56:25",
+          "children": null
+        },
+        {
+          "id": 13,
+          "parentId": 1,
+          "name": "智能穿戴",
+          "icon": null,
+          "description": null,
+          "sortOrder": 5,
+          "isActive": true,
+          "productCount": 0,
+          "createdAt": "2025-09-06 01:01:38",
+          "updatedAt": "2025-09-06 01:01:38",
+          "children": null
+        },
+        {
+          "id": 14,
+          "parentId": 1,
+          "name": "耳机音响",
+          "icon": null,
+          "description": null,
+          "sortOrder": 6,
+          "isActive": true,
+          "productCount": 0,
+          "createdAt": "2025-09-06 01:01:38",
+          "updatedAt": "2025-09-06 01:01:38",
+          "children": null
         }
       ]
+    },
+    {
+      "id": 2,
+      "parentId": 0,
+      "name": "服装配饰",
+      "icon": "https://cdn.fliliy.com/icons/fashion.png",
+      "description": "服装、鞋子、包包、饰品等",
+      "sortOrder": 2,
+      "isActive": true,
+      "productCount": 0,
+      "createdAt": "2025-09-06 01:01:38",
+      "updatedAt": "2025-09-06 01:01:38",
+      "children": null
+    },
+    {
+      "id": 3,
+      "parentId": 0,
+      "name": "家居用品",
+      "icon": "https://cdn.fliliy.com/icons/home.png",
+      "description": "家具、装饰品、生活用品等",
+      "sortOrder": 3,
+      "isActive": true,
+      "productCount": 0,
+      "createdAt": "2025-09-06 01:01:38",
+      "updatedAt": "2025-09-06 01:01:38",
+      "children": null
+    },
+    {
+      "id": 4,
+      "parentId": 0,
+      "name": "运动户外",
+      "icon": "https://cdn.fliliy.com/icons/sports.png",
+      "description": "运动器材、户外用品等",
+      "sortOrder": 4,
+      "isActive": true,
+      "productCount": 0,
+      "createdAt": "2025-09-06 01:01:38",
+      "updatedAt": "2025-09-06 01:01:38",
+      "children": null
+    },
+    {
+      "id": 5,
+      "parentId": 0,
+      "name": "图书文具",
+      "icon": "https://cdn.fliliy.com/icons/books.png",
+      "description": "书籍、文具、办公用品等",
+      "sortOrder": 5,
+      "isActive": true,
+      "productCount": 0,
+      "createdAt": "2025-09-06 01:01:38",
+      "updatedAt": "2025-09-06 01:01:38",
+      "children": null
+    },
+    {
+      "id": 6,
+      "parentId": 0,
+      "name": "美妆护肤",
+      "icon": "https://cdn.fliliy.com/icons/beauty.png",
+      "description": "化妆品、护肤品、香水等",
+      "sortOrder": 6,
+      "isActive": true,
+      "productCount": 0,
+      "createdAt": "2025-09-06 01:01:38",
+      "updatedAt": "2025-09-06 01:01:38",
+      "children": null
+    },
+    {
+      "id": 7,
+      "parentId": 0,
+      "name": "母婴用品",
+      "icon": "https://cdn.fliliy.com/icons/baby.png",
+      "description": "婴儿用品、玩具、童装等",
+      "sortOrder": 7,
+      "isActive": true,
+      "productCount": 0,
+      "createdAt": "2025-09-06 01:01:38",
+      "updatedAt": "2025-09-06 01:01:38",
+      "children": null
+    },
+    {
+      "id": 8,
+      "parentId": 0,
+      "name": "其他",
+      "icon": "https://cdn.fliliy.com/icons/others.png",
+      "description": "其他物品",
+      "sortOrder": 8,
+      "isActive": true,
+      "productCount": 0,
+      "createdAt": "2025-09-06 01:01:38",
+      "updatedAt": "2025-09-06 01:01:38",
+      "children": null
     }
-  ]
+  ],
+  "timestamp": 1760107932959
 }
 ```
 
@@ -523,98 +834,118 @@ GET /products?filter=popular&category=11&condition=LIKE_NEW&hasWarranty=true&min
   "code": 200,
   "message": "获取成功",
   "data": {
-    "id": "1969757587893260288",
-    "title": "iPhone 15 Pro Max 256GB 钛金色",
-    "description": "全新iPhone 15 Pro Max，钛金色设计，256GB大容量存储。\n\n全新未拆封，原装正品，支持官方验证。\n配件包括：原装充电线、说明书、包装盒等全套配件。\n\n价格可小议，诚心购买联系。",
-    "price": 7999.00,
-    "originalPrice": 9999.00,
-    "discount": "8折",
-    "categoryId": 1,
-    "categoryName": "电子产品",
-    "categoryPath": "电子产品 > 手机",
+    "id": "1968947273484341248",
+    "title": "完整测试商品 MacBook Pro",
+    "description": "用于测试聊天和交易功能的完整流程",
+    "price": 8999,
+    "originalPrice": null,
+    "discount": null,
+    "categoryId": 12,
+    "categoryName": "游戏设备",
+    "categoryPath": "电子产品 > 游戏设备",
     "images": [
-      "https://example.com/images/iphone15_1.jpg",
-      "https://example.com/images/iphone15_2.jpg",
-      "https://example.com/images/iphone15_3.jpg"
+      "http://localhost:8080/api/v1/files/products/macbook.jpg"
     ],
-    "condition": "NEW",
-    "conditionText": "全新",
-    "usageInfo": {
-      "type": "TIME",
-      "value": 0,
-      "unit": "MONTH",
-      "displayText": "全新未使用"
-    },
+    "condition": "LIKE_NEW",
+    "conditionText": "几乎全新",
+    "usageInfo": null,
     "warranty": {
-      "hasWarranty": true,
-      "warrantyType": "OFFICIAL",
-      "remainingMonths": 11,
-      "description": "苹果官方保修",
-      "displayText": "官方保修，剩余11个月"
+      "hasWarranty": false,
+      "warrantyType": "NONE",
+      "remainingMonths": 0,
+      "description": null,
+      "displayText": null
     },
     "location": {
-      "province": "广东省",
-      "city": "深圳市",
-      "district": "南山区",
-      "detailAddress": "科技园",
-      "displayText": "广东省深圳市南山区科技园",
-      "distance": "2.5km"
+      "province": "北京市",
+      "city": "北京市",
+      "district": "朝阳区",
+      "detailAddress": "三里屯",
+      "displayText": "北京市北京市朝阳区三里屯",
+      "distance": null
     },
     "seller": {
-      "id": "1959106057909440512",
-      "username": "testuser1",
+      "id": "1968926156120002560",
+      "username": "买家用户",
       "avatar": "https://cdn.fliliy.com/avatar/default.png",
       "verified": false,
-      "registeredDays": 32,
-      "totalProducts": 15,
-      "soldCount": 8,
-      "rating": 4.6,
-      "reviewCount": 12,
-      "responseRate": "90%",
-      "avgResponseTime": "1小时内"
+      "registeredDays": 21,
+      "totalProducts": null,
+      "soldCount": null,
+      "rating": null,
+      "reviewCount": null,
+      "responseRate": null,
+      "avgResponseTime": null
     },
     "stats": {
-      "viewCount": 120,
-      "favoriteCount": 15,
-      "chatCount": 5,
+      "viewCount": 0,
+      "favoriteCount": 1,
+      "chatCount": 0,
       "isOwn": false,
       "isFavorited": false
     },
-    "publishTime": "2025-09-21 21:36:20",
-    "updatedTime": "2025-09-21 21:36:20",
+    "publishTime": "2025-09-19 15:56:26",
+    "updatedTime": "2025-10-11 04:04:03",
     "status": "ACTIVE",
-    "tags": ["苹果", "手机", "全新", "未拆封", "钛金色"],
-    "relatedProducts": [              // 相关推荐商品（可选）
-      {
-        "id": "1969761981678358528", 
-        "title": "iPhone 14 Pro Max 512GB",
-        "price": 6999.00,
-        "mainImage": "https://example.com/images/iphone14_1.jpg"
-      }
-    ]
-  }
+    "tags": [
+      "测试商品",
+      "完整流程"
+    ],
+    "relatedProducts": null
+  },
+  "timestamp": 1760107933066
 }
 ```
 
-## 2.6 收藏/取消收藏商品 ✅
+## 2.6 收藏/取消收藏商品（Toggle方式）✅
 
-**接口**: `POST /products/{productId}/favorite`  
-**Controller**: `ProductController.toggleFavorite()`  
+**接口**: `POST /products/{productId}/favorite`
+**Controller**: `ProductController.toggleFavorite()`
 **实现状态**: ✅ 完全实现，需要USER角色权限
+**更新日期**: 2025-10-11
+**优化说明**: 已移除DELETE方法，统一使用Toggle方式
+
+**设计说明**:
+采用Toggle模式（一个接口自动切换收藏/取消收藏状态）的原因：
+1. 用户体验更好 - 一个按钮完成收藏和取消收藏
+2. 前端实现更简单 - 无需判断状态调用不同接口
+3. 行业主流做法 - 淘宝、微信等主流应用都采用此方式
+4. 减少接口维护成本 - 一个接口替代两个接口
 
 **请求头**: `Authorization: Bearer {accessToken}`
 
-**响应示例**:
+**功能说明**:
+- 如果用户未收藏该商品 → 添加收藏，返回 `isFavorited: true`
+- 如果用户已收藏该商品 → 取消收藏，返回 `isFavorited: false`
+
+**响应示例（收藏）**:
 ```json
 {
   "code": 200,
   "message": "收藏成功",
   "data": {
     "isFavorited": true,
-    "favoriteCount": 16
+    "favoriteCount": 2
   }
 }
 ```
+
+**响应示例（取消收藏）**:
+```json
+{
+  "code": 200,
+  "message": "取消收藏成功",
+  "data": {
+    "isFavorited": false,
+    "favoriteCount": 1
+  }
+}
+```
+
+**注意事项**:
+- ⚠️ DELETE方法 `DELETE /products/{productId}/favorite` 已移除
+- ✅ 请统一使用 POST Toggle方式进行收藏操作
+- ✅ 接口会自动判断当前状态并执行相应操作
 
 ## 2.7 编辑商品 ✅
 
@@ -667,6 +998,23 @@ GET /products?filter=popular&category=11&condition=LIKE_NEW&hasWarranty=true&min
 - ✅ 新增交易状态：PENDING（待响应）、REJECTED（已拒绝）、EXPIRED（已过期）
 - ✅ 交易码每24小时自动刷新（不再过期失效）
 - ✅ 地点信息改为在聊天中协商（不再通过接口提交）
+
+## ⚠️ 交易模块API调用注意事项
+
+### 关键要点
+
+1. **交易码格式** - ⚠️ 4位数字，有效期24小时，会自动刷新
+2. **交易完成** - ⚠️ `transactionCode` 参数必填，错误会返回500
+3. **商品状态联动** - ⚠️ 交易完成后，商品自动变为SOLD状态
+4. **响应操作** - ⚠️ `action` 参数：`AGREE` 或 `REJECT`
+
+### 测试验证结果（2025-10-01）
+
+✅ **已验证完整流程**：
+1. 买家发起交易申请 → 状态PENDING
+2. 卖家同意 → 生成交易码（如：8416）
+3. 买家查看交易码
+4. 卖家输入交易码完成交易 → 商品变为SOLD
 
 ---
 
@@ -868,39 +1216,109 @@ size=10
   "code": 200,
   "message": "获取成功",
   "data": {
+    "pagination": {
+      "total": 8,
+      "size": 10,
+      "hasNext": false,
+      "page": 1
+    },
     "transactions": [
       {
-        "id": "tx_1640995200000001",
+        "id": "tx_1976621912847159296",
         "type": "BUY",
+        "status": "PENDING",
+        "statusText": null,
+        "product": {
+          "id": "1968947273484341248",
+          "title": "完整测试商品 MacBook Pro",
+          "price": 8999,
+          "mainImage": "http://localhost:8080/api/v1/files/products/macbook.jpg",
+          "description": null,
+          "condition": null
+        },
+        "counterpart": {
+          "id": "1968926156120002560",
+          "username": "买家用户",
+          "avatar": "https://cdn.fliliy.com/avatar/default.png"
+        },
+        "transactionTime": "2025-10-10 20:12:43",
+        "meetingInfo": null,
+        "canRate": false,
+        "rating": null,
+        "transactionCode": null,
+        "codeExpiresAt": null,
+        "createdAt": null,
+        "completedAt": null,
+        "cancelledAt": null,
+        "cancelReason": null,
+        "cancelType": null,
+        "feedback": null
+      },
+      {
+        "id": "tx_1976597649247309824",
+        "type": "SELL",
+        "status": "AGREED",
+        "statusText": "已同意",
+        "product": {
+          "id": "1969760518407327744",
+          "title": "测试商品 - 前端调试用",
+          "price": 100,
+          "mainImage": "https://example.com/test.jpg",
+          "description": null,
+          "condition": null
+        },
+        "counterpart": {
+          "id": "1962950810434408448",
+          "username": "API测试买家",
+          "avatar": "http://localhost:8080/api/v1/files/avatar/1758887892111_b410451f.png"
+        },
+        "transactionTime": "2025-10-10 18:36:18",
+        "meetingInfo": null,
+        "canRate": false,
+        "rating": null,
+        "transactionCode": null,
+        "codeExpiresAt": null,
+        "createdAt": null,
+        "completedAt": null,
+        "cancelledAt": null,
+        "cancelReason": null,
+        "cancelType": null,
+        "feedback": null
+      },
+      {
+        "id": "tx_1976596589673844736",
+        "type": "SELL",
         "status": "COMPLETED",
         "statusText": "交易完成",
         "product": {
-          "id": "1640995200000001",
-          "title": "iPhone 12 Pro Max",
-          "price": 5999.00,
-          "mainImage": "http://localhost:8080/api/v1/files/products/img1.jpg"
+          "id": "1969757702427119616",
+          "title": "小米13 Ultra 12GB+256GB 黑色",
+          "price": 3299,
+          "mainImage": "https://example.com/images/mi13ultra_1.jpg",
+          "description": null,
+          "condition": null
         },
-        "counterpart": {              // 交易对方
-          "id": "1640995200000002",
-          "username": "张三",
-          "avatar": "https://cdn.fliliy.com/avatar/user.jpg"
+        "counterpart": {
+          "id": "1962950810434408448",
+          "username": "API测试买家",
+          "avatar": "http://localhost:8080/api/v1/files/avatar/1758887892111_b410451f.png"
         },
-        "transactionTime": "2025-01-01T15:30:00",
-        "meetingInfo": {
-          "meetingTime": "2025-01-02T15:00:00",
-          "locationName": "三里屯太古里"
-        },
-        "canRate": false,             // 是否可以评价
-        "rating": 5                   // 已评分
+        "transactionTime": "2025-10-10 18:32:49",
+        "meetingInfo": null,
+        "canRate": false,
+        "rating": 5,
+        "transactionCode": null,
+        "codeExpiresAt": null,
+        "createdAt": null,
+        "completedAt": null,
+        "cancelledAt": null,
+        "cancelReason": null,
+        "cancelType": null,
+        "feedback": null
       }
-    ],
-    "pagination": {
-      "page": 1,
-      "size": 10,
-      "total": 25,
-      "hasNext": true
-    }
-  }
+    ]
+  },
+  "timestamp": 1760107933462
 }
 ```
 
@@ -915,9 +1333,40 @@ size=10
 **响应示例**:
 ```json
 {
-  "code": 500,
-  "message": "交易不存在",
-  "data": null
+  "code": 200,
+  "message": "获取成功",
+  "data": {
+    "id": "tx_1971547214497058816",
+    "type": "SELL",
+    "status": "PENDING",
+    "statusText": null,
+    "product": {
+      "id": "1969761981678358528",
+      "title": "测试不传warranty字段",
+      "price": 100,
+      "mainImage": "https://example.com/test.jpg",
+      "description": "测试完全不传warranty字段是否可以发布",
+      "condition": "NEW"
+    },
+    "counterpart": {
+      "id": "1962950810434408448",
+      "username": "API测试买家",
+      "avatar": "http://localhost:8080/api/v1/files/avatar/1758887892111_b410451f.png"
+    },
+    "transactionTime": "2025-09-26 20:07:40",
+    "meetingInfo": null,
+    "canRate": false,
+    "rating": null,
+    "transactionCode": null,
+    "codeExpiresAt": null,
+    "createdAt": "2025-09-26 20:07:40",
+    "completedAt": null,
+    "cancelledAt": null,
+    "cancelReason": null,
+    "cancelType": null,
+    "feedback": null
+  },
+  "timestamp": 1760107933488
 }
 ```
 **注意**: 当交易ID不存在时返回500错误，这是正常的业务逻辑。
@@ -926,19 +1375,48 @@ size=10
 
 # 4. 聊天系统模块 ✅ [功能丰富且完全实现]
 
+## ⚠️ 聊天模块API调用注意事项
+
+### 关键参数格式
+
+1. **`POST /chats/product-discussion`** - ⚠️ 使用URL参数，不是JSON body
+2. **`POST /chats/{id}/messages`** - ⚠️ 字段名是 `type`，不是 `messageType`
+3. **`GET /chats`** - ⚠️ 返回数据在 `data.content`，不是 `data.chatRooms`
+4. **消息发送限流** - 30次/分钟（每用户）
+
+### 测试验证结果（2025-10-01）
+
+✅ **已验证功能**：
+- 中英文消息发送接收完全正常
+- 商品讨论创建聊天室成功
+- 聊天列表、消息列表正常
+- URL参数和JSON body格式均已确认
+
+---
+
 ## 4.1 开始商品讨论 ✅
 
-**接口**: `POST /chats/product-discussion`  
-**Controller**: `ChatController.startProductDiscussion()` (第88行)  
-**实现状态**: ✅ **完全实现** - 验证确认接口正常响应403（需要认证），功能完整
+**接口**: `POST /chats/product-discussion`
+**Controller**: `ChatController.startProductDiscussion()` (第88行)
+**实现状态**: ✅ **完全实现** - 2025-10-01测试验证通过
 
 **功能说明**: 用户点击商品咨询按钮时调用，自动创建聊天室并发送商品卡片
 
 **请求头**: `Authorization: Bearer {accessToken}`
 
-**请求参数**:
+**请求参数**: ⚠️ **使用URL参数，不是JSON body**
 - `productId`: 商品ID（必填）
 - `initialMessage`: 初始消息（可选）
+
+**调用示例**:
+```bash
+# 正确方式 - URL参数
+POST /api/v1/chats/product-discussion?productId=1973374803641503744&initialMessage=Hello
+
+# 错误方式 - JSON body (会返回400错误)
+POST /api/v1/chats/product-discussion
+Body: { "productId": "xxx", "message": "xxx" }
+```
 
 **响应示例**:
 ```json
@@ -977,45 +1455,109 @@ size=10
   "data": {
     "content": [
       {
-        "chatRoomId": "chat_1640995200000001",
-        "transactionId": "tx_1640995200000001",
-        "product": {
-          "id": "1640995200000001",
-          "title": "iPhone 12 Pro Max",
-          "price": 5999.00,
-          "mainImage": "http://localhost:8080/api/v1/files/products/img1.jpg",
-          "status": "ACTIVE"
-        },
-        "participant": {                // 聊天对方
-          "id": "1640995200000002",
-          "username": "李四",
-          "avatar": "https://cdn.fliliy.com/avatar/user2.jpg",
+        "chatRoomId": 1976621042612965400,
+        "transactionId": 1976621912847159300,
+        "activeTransactions": [
+          {
+            "transactionId": "tx_1976621912847159296",
+            "productId": 1968947273484341200,
+            "productTitle": "完整测试商品 MacBook Pro",
+            "productImage": null,
+            "productPrice": 8999,
+            "status": "PENDING",
+            "role": "BUYER",
+            "transactionCode": null,
+            "codeExpiresAt": null,
+            "requestedAt": "2025-10-10 20:12:43"
+          }
+        ],
+        "product": null,
+        "participant": {
+          "id": 1968926156120002600,
+          "username": "买家用户",
+          "avatar": "https://cdn.fliliy.com/avatar/default.png",
           "isOnline": true,
-          "lastSeenAt": "2025-01-01T14:30:00"
+          "lastSeenAt": null
         },
         "lastMessage": {
-          "id": "msg_1640995200000005",
-          "content": "好的，明天下午见面交易",
-          "type": "TEXT",
-          "sentAt": "2025-01-01T14:30:00",
-          "senderName": "李四",
+          "id": 1976621912868130800,
+          "content": "我想购买这个MacBook，能否当面交易？",
+          "type": "TRANSACTION_REQUEST",
+          "sentAt": "2025-10-11 04:12:42",
+          "senderName": null,
+          "isFromMe": true
+        },
+        "unreadCount": 0,
+        "totalMessages": 3,
+        "createdAt": "2025-10-10 20:09:15",
+        "updatedAt": "2025-10-11 04:12:42",
+        "transactionStatus": null
+      },
+      {
+        "chatRoomId": 1971547214450921500,
+        "transactionId": 1976597649247309800,
+        "activeTransactions": [
+          {
+            "transactionId": "tx_1976597649247309824",
+            "productId": 1969760518407327700,
+            "productTitle": "测试商品 - 前端调试用",
+            "productImage": null,
+            "productPrice": 100,
+            "status": "AGREED",
+            "role": "SELLER",
+            "transactionCode": null,
+            "codeExpiresAt": null,
+            "requestedAt": "2025-10-10 18:36:18"
+          },
+          {
+            "transactionId": "tx_1971547214497058816",
+            "productId": 1969761981678358500,
+            "productTitle": "测试不传warranty字段",
+            "productImage": null,
+            "productPrice": 100,
+            "status": "PENDING",
+            "role": "SELLER",
+            "transactionCode": null,
+            "codeExpiresAt": null,
+            "requestedAt": "2025-09-26 20:07:40"
+          }
+        ],
+        "product": null,
+        "participant": {
+          "id": 1962950810434408400,
+          "username": "API测试买家",
+          "avatar": "http://localhost:8080/api/v1/files/avatar/1758887892111_b410451f.png",
+          "isOnline": true,
+          "lastSeenAt": null
+        },
+        "lastMessage": {
+          "id": 1976597730256097300,
+          "content": "交易申请已同意，交易码已生成",
+          "type": "SYSTEM",
+          "sentAt": "2025-10-10 18:36:37",
+          "senderName": null,
           "isFromMe": false
         },
-        "unreadCount": 2,
-        "totalMessages": 15,
-        "createdAt": "2025-01-01T10:00:00",
-        "updatedAt": "2025-01-01T14:30:00",
-        "transactionStatus": "AGREED"     // 对应交易状态
+        "unreadCount": 7,
+        "totalMessages": 12,
+        "createdAt": "2025-09-26 20:07:40",
+        "updatedAt": "2025-10-10 18:36:37",
+        "transactionStatus": null
       }
     ],
     "pagination": {
       "page": 1,
       "size": 20,
-      "total": 4,
+      "total": 5,
       "totalPages": 1,
-      "hasNext": false
-    }
-  }
+      "hasNext": false,
+      "hasPrevious": false,
+      "isFirst": true,
+      "isLast": true
+    },
+    "filters": null
+  },
+  "timestamp": 1760107933293
 }
 ```
 
@@ -1040,65 +1582,113 @@ before=2025-01-01T10:00:00    // 获取指定时间之前的消息（可选）
   "code": 200,
   "message": "success",
   "data": {
-    "chatInfo": {
-      "chatRoomId": "chat_1640995200000001",
-      "product": {
-        "id": "1640995200000001",
-        "title": "iPhone 12 Pro Max",
-        "mainImage": "http://localhost:8080/api/v1/files/products/img1.jpg",
-        "status": "ACTIVE",
-        "price": 5999.00
-      },
-      "participant": {
-        "id": "1640995200000002",
-        "username": "李四",
-        "avatar": "https://cdn.fliliy.com/avatar/user2.jpg",
-        "isOnline": true
-      }
+    "pagination": {
+      "oldestTimestamp": "2025-09-23 13:55:24",
+      "size": 50,
+      "hasMore": false,
+      "page": 1
     },
     "messages": [
       {
-        "id": "msg_1640995200000001",
-        "senderId": "1640995200000001",
-        "senderName": "张三",
+        "id": 1970389470737993700,
+        "senderId": 1962925440754651100,
+        "senderName": "测试用户",
         "type": "TEXT",
-        "content": "你好，这个商品还在吗？",
-        "sentAt": "2025-01-01T10:00:00",
-        "isFromMe": true,
-        "status": "READ"                // SENT已发送, DELIVERED已送达, READ已读
-      },
-      {
-        "id": "msg_1640995200000002",
-        "senderId": "1640995200000002",
-        "senderName": "李四",
-        "type": "IMAGE",
-        "content": "http://localhost:8080/api/v1/files/chat/img1.jpg",
-        "thumbnail": "http://localhost:8080/api/v1/files/chat/thumb_img1.jpg",
-        "imageSize": {
-          "width": 800,
-          "height": 600
-        },
-        "sentAt": "2025-01-01T10:05:00",
+        "content": "🎉 聊天功能自动化测试完成！系统运行正常。",
+        "sentAt": "2025-09-23 15:27:13",
+        "transactionId": null,
+        "relatedProductId": null,
+        "inquiryType": null,
         "isFromMe": false,
-        "status": "READ"
+        "status": "SENT",
+        "thumbnail": null,
+        "imageSize": null,
+        "duration": null,
+        "waveform": null,
+        "systemData": null,
+        "isRecalled": false,
+        "recalledAt": null,
+        "imageWidth": null,
+        "imageHeight": null
       },
       {
-        "id": "msg_1640995200000003", 
-        "senderId": "1640995200000002",
-        "senderName": "李四",
-        "type": "VOICE",
-        "content": "http://localhost:8080/api/v1/files/chat/voice1.aac",
-        "duration": 15,                  // 语音时长（秒）
-        "waveform": "data:audio/wav;base64,...",  // 语音波形数据（可选）
-        "sentAt": "2025-01-01T10:10:00",
+        "id": 1970388764484309000,
+        "senderId": 1962925440754651100,
+        "senderName": "测试用户",
+        "type": "TEXT",
+        "content": "你好，这是聊天系统的自动化测试消息！",
+        "sentAt": "2025-09-23 15:24:24",
+        "transactionId": null,
+        "relatedProductId": null,
+        "inquiryType": null,
         "isFromMe": false,
-        "status": "DELIVERED"
+        "status": "SENT",
+        "thumbnail": null,
+        "imageSize": null,
+        "duration": null,
+        "waveform": null,
+        "systemData": null,
+        "isRecalled": false,
+        "recalledAt": null,
+        "imageWidth": null,
+        "imageHeight": null
       },
       {
-        "id": "msg_1640995200000004",
-        "senderId": "1640995200000001",
-        "senderName": "张三",
-        "type": "SYSTEM",
+        "id": 1970367140997501000,
+        "senderId": 1962925440754651100,
+        "senderName": "测试用户",
+        "type": "TEXT",
+        "content": "发个商品链接给我看看：iPhone 15 Pro Max 的详细信息",
+        "sentAt": "2025-09-23 13:58:29",
+        "transactionId": null,
+        "relatedProductId": null,
+        "inquiryType": null,
+        "isFromMe": false,
+        "status": "SENT",
+        "thumbnail": null,
+        "imageSize": null,
+        "duration": null,
+        "waveform": null,
+        "systemData": null,
+        "isRecalled": false,
+        "recalledAt": null,
+        "imageWidth": null,
+        "imageHeight": null
+      },
+      {
+        "id": 1970366505560445000,
+        "senderId": 1962925440754651100,
+        "senderName": "测试用户",
+        "type": "TEXT",
+        "content": "另外，我还想看看你的小米13 Ultra，这两个商品能打包优惠吗？",
+        "sentAt": "2025-09-23 13:55:57",
+        "transactionId": null,
+        "relatedProductId": null,
+        "inquiryType": null,
+        "isFromMe": false,
+        "status": "SENT",
+        "thumbnail": null,
+        "imageSize": null,
+        "duration": null,
+        "waveform": null,
+        "systemData": null,
+        "isRecalled": false,
+        "recalledAt": null,
+        "imageWidth": null,
+        "imageHeight": null
+      },
+      {
+        "id": 1970366366263414800,
+        "senderId": 1962925440754651100,
+        "senderName": "测试用户",
+        "type": "TEXT",
+        "content": "你好！我对你的iPhone 15 Pro Max很感兴趣，价格能再商量吗？",
+        "sentAt": "2025-09-23 13:55:24",
+        "transactionId": null,
+        "relatedProductId": null,
+        "inquiryType": null,
+        "isFromMe": false,
+        "status": "SENT",
         "content": "双方已同意线下交易，交易码：1234",
         "sentAt": "2025-01-01T14:00:00",
         "isFromMe": false,
@@ -1315,7 +1905,18 @@ before=2025-01-01T10:00:00    // 获取指定时间之前的消息（可选）
 **Controller**: `ChatController.toggleChatRoomMute()`
 
 ### 获取未读消息数 ✅
-**接口**: `GET /chats/unread-count`  
+**接口**: `GET /chats/unread-count`
+**实际响应示例**:
+```json
+{
+  "code": 200,
+  "message": "success",
+  "data": {
+    "unreadCount": 10
+  },
+  "timestamp": 1760107933406
+}
+```  
 **Controller**: `ChatController.getUnreadCount()`
 
 ### 获取在线状态 ✅
@@ -1358,36 +1959,56 @@ sort=time_desc   // time_desc收藏时间, price_asc价格升序, price_desc价�
   "data": {
     "content": [
       {
-        "id": "1640995200000001",
-        "title": "iPhone 12 Pro Max",
-        "price": 5999.00,
-        "originalPrice": 6999.00,
-        "discount": "85折",
-        "mainImage": "http://localhost:8080/api/v1/files/products/img1.jpg",
+        "id": "1968947273484341248",
+        "title": "完整测试商品 MacBook Pro",
+        "price": 8999,
+        "originalPrice": null,
+        "discount": null,
+        "mainImage": "http://localhost:8080/api/v1/files/products/macbook.jpg",
         "condition": "LIKE_NEW",
         "conditionText": "几乎全新",
-        "location": "北京市朝阳区",
-        "publishTime": "2025-01-01T10:00:00",
-        "favoriteTime": "2025-01-01T12:00:00",
+        "location": "北京市北京市朝阳区",
+        "distance": null,
+        "publishTime": "2025-09-19 15:56:26",
+        "hasWarranty": false,
+        "warrantyText": null,
+        "status": "ACTIVE",
+        "statusText": "在售中",
+        "soldAt": null,
         "seller": {
-          "id": "1640995200000002",
-          "username": "张三",
-          "avatar": "https://cdn.fliliy.com/avatar/user.jpg"
+          "id": "1968926156120002560",
+          "username": "买家用户",
+          "avatar": "https://cdn.fliliy.com/avatar/default.png",
+          "verified": false,
+          "rating": null,
+          "ratingCount": null
         },
         "stats": {
-          "viewCount": 120,
-          "favoriteCount": 15,
-          "chatCount": 5
-        }
+          "viewCount": 1,
+          "favoriteCount": 1,
+          "chatCount": 0,
+          "isOwn": false,
+          "isFavorited": true
+        },
+        "tags": [
+          "测试商品",
+          "完整流程"
+        ]
       }
     ],
     "pagination": {
       "page": 1,
       "size": 10,
-      "total": 25,
-      "hasNext": true
-    }
-  }
+      "total": 1,
+      "totalPages": 1,
+      "hasNext": false,
+      "hasPrevious": false,
+      "isFirst": true,
+      "isLast": true
+    },
+    "filters": null
+  },
+  "timestamp": 1760107933624
 }
 ```
 
@@ -1586,6 +2207,16 @@ sort=time_desc   // time_desc最新, time_asc最早, price_desc价格高到低, 
 **请求头**: `Authorization: Bearer {accessToken}`
 
 **响应示例**:
+```json
+{
+  "code": 200,
+  "message": "获取成功",
+  "data": [],
+  "timestamp": 1760107933190
+}
+```
+
+**响应示例（有地址时）**:
 ```json
 {
   "code": 200,

@@ -1,0 +1,65 @@
+{
+  "code": 200,
+  "message": "获取成功",
+  "data": {
+    "id": "1968947273484341248",
+    "title": "完整测试商品 MacBook Pro",
+    "description": "用于测试聊天和交易功能的完整流程",
+    "price": 8999,
+    "originalPrice": null,
+    "discount": null,
+    "categoryId": 12,
+    "categoryName": "游戏设备",
+    "categoryPath": "电子产品 > 游戏设备",
+    "images": [
+      "http://localhost:8080/api/v1/files/products/macbook.jpg"
+    ],
+    "condition": "LIKE_NEW",
+    "conditionText": "几乎全新",
+    "usageInfo": null,
+    "warranty": {
+      "hasWarranty": false,
+      "warrantyType": "NONE",
+      "remainingMonths": 0,
+      "description": null,
+      "displayText": null
+    },
+    "location": {
+      "province": "北京市",
+      "city": "北京市",
+      "district": "朝阳区",
+      "detailAddress": "三里屯",
+      "displayText": "北京市北京市朝阳区三里屯",
+      "distance": null
+    },
+    "seller": {
+      "id": "1968926156120002560",
+      "username": "买家用户",
+      "avatar": "https://cdn.fliliy.com/avatar/default.png",
+      "verified": false,
+      "registeredDays": 21,
+      "totalProducts": null,
+      "soldCount": null,
+      "rating": null,
+      "reviewCount": null,
+      "responseRate": null,
+      "avgResponseTime": null
+    },
+    "stats": {
+      "viewCount": 1,
+      "favoriteCount": 1,
+      "chatCount": 0,
+      "isOwn": false,
+      "isFavorited": false
+    },
+    "publishTime": "2025-09-19 15:56:26",
+    "updatedTime": "2025-10-11 06:52:13",
+    "status": "ACTIVE",
+    "tags": [
+      "测试商品",
+      "完整流程"
+    ],
+    "relatedProducts": null
+  },
+  "timestamp": 1760109253780
+}

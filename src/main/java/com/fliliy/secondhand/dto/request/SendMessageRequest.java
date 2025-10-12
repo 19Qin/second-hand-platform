@@ -1,14 +1,15 @@
 package com.fliliy.secondhand.dto.request;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 
 public class SendMessageRequest {
-    
-    @NotNull(message = "消息类型不能为空")
+
+    @NotBlank(message = "消息类型不能为空")
+    @Pattern(regexp = "TEXT|IMAGE|VOICE", message = "消息类型只能是TEXT、IMAGE或VOICE")
     private String type; // TEXT, IMAGE, VOICE
-    
-    @NotEmpty(message = "消息内容不能为空")
+
+    @NotBlank(message = "消息内容不能为空")
+    @Size(max = 5000, message = "消息内容不能超过5000字符")
     private String content;
     
     // 图片消息相关字段

@@ -1,0 +1,88 @@
+# ============================================
+# Fliliy二手平台 - 开发环境配置
+# 使用方法: docker-compose -f docker-compose.dev.yml up
+# ============================================
+version: '3.8'
+
+services:
+  # ==================== MySQL数据库 ====================
+  mysql:
+    image: mysql:8.0
+    container_name: fliliy-mysql-dev
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: fliliy_db
+      TZ: Asia/Shanghai
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-dev-data:/var/lib/mysql
+    networks:
+      - fliliy-dev-network
+
+  # ==================== Redis缓存 ====================
+  redis:
+    image: redis:7-alpine
+    container_name: fliliy-redis-dev
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-dev-data:/data
+    networks:
+      - fliliy-dev-network
+
+  # ==================== Elasticsearch搜索引擎 ====================
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.10
+    container_name: fliliy-es-dev
+    restart: unless-stopped
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
+      - xpack.security.enabled=false
+    ports:
+      - "9200:9200"
+    volumes:
+      - es-dev-data:/usr/share/elasticsearch/data
+    networks:
+      - fliliy-dev-network
+
+  # ==================== Kibana可视化 ====================
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.17.10
+    container_name: fliliy-kibana-dev
+    restart: unless-stopped
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+    networks:
+      - fliliy-dev-network
+
+  # ==================== RabbitMQ消息队列 ====================
+  rabbitmq:
+    image: rabbitmq:3.12-management-alpine
+    container_name: fliliy-rabbitmq-dev
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - fliliy-dev-network
+
+volumes:
+  mysql-dev-data:
+  redis-dev-data:
+  es-dev-data:
+
+networks:
+  fliliy-dev-network:
+    driver: bridge

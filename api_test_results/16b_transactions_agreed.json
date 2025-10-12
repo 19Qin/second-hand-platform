@@ -1,0 +1,46 @@
+{
+  "code": 200,
+  "message": "获取成功",
+  "data": {
+    "pagination": {
+      "total": 1,
+      "size": 10,
+      "hasNext": false,
+      "page": 1
+    },
+    "transactions": [
+      {
+        "id": "tx_1976597649247309824",
+        "type": "SELL",
+        "status": "AGREED",
+        "statusText": "已同意",
+        "product": {
+          "id": "1969760518407327744",
+          "title": "测试商品 - 前端调试用",
+          "price": 100,
+          "mainImage": "https://example.com/test.jpg",
+          "description": null,
+          "condition": null
+        },
+        "counterpart": {
+          "id": "1962950810434408448",
+          "username": "API测试买家",
+          "avatar": "http://localhost:8080/api/v1/files/avatar/1758887892111_b410451f.png"
+        },
+        "transactionTime": "2025-10-10 18:36:18",
+        "meetingInfo": null,
+        "canRate": false,
+        "rating": null,
+        "transactionCode": null,
+        "codeExpiresAt": null,
+        "createdAt": null,
+        "completedAt": null,
+        "cancelledAt": null,
+        "cancelReason": null,
+        "cancelType": null,
+        "feedback": null
+      }
+    ]
+  },
+  "timestamp": 1760109254331
+}

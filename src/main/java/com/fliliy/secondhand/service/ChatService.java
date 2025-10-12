@@ -6,6 +6,8 @@ import com.fliliy.secondhand.entity.ChatMessage;
 import com.fliliy.secondhand.entity.ChatRoom;
 import com.fliliy.secondhand.entity.Product;
 import com.fliliy.secondhand.entity.User;
+import com.fliliy.secondhand.exception.BusinessException;
+import com.fliliy.secondhand.exception.ErrorCode;
 import com.fliliy.secondhand.repository.ChatMessageRepository;
 import com.fliliy.secondhand.repository.ChatRoomRepository;
 import com.fliliy.secondhand.repository.ProductRepository;
@@ -57,15 +59,15 @@ public class ChatService {
     public ChatRoom createOrGetChatRoom(Long userId1, Long userId2) {
         // 验证用户存在
         if (!userRepository.existsById(userId1)) {
-            throw new RuntimeException("用户不存在: " + userId1);
+            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
         }
         if (!userRepository.existsById(userId2)) {
-            throw new RuntimeException("用户不存在: " + userId2);
+            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
         }
-        
+
         // 用户不能与自己聊天
         if (userId1.equals(userId2)) {
-            throw new RuntimeException("不能与自己聊天");
+            throw new BusinessException(ErrorCode.CANNOT_CHAT_WITH_SELF);
         }
         
         // 首先检查两个用户之间是否已存在聊天室（不区分角色）
@@ -119,9 +121,9 @@ public class ChatService {
     public List<Long> getDiscussedProducts(Long chatRoomId, Long userId) {
         // 验证权限
         if (!canAccessChatRoom(chatRoomId, userId)) {
-            throw new RuntimeException("无权限访问此聊天室");
+            throw new BusinessException(ErrorCode.CHAT_ROOM_ACCESS_DENIED);
         }
-        
+
         return chatMessageRepository.getDiscussedProducts(chatRoomId);
     }
     
@@ -168,7 +170,7 @@ public class ChatService {
     @Transactional(readOnly = true)
     public ChatRoom getChatRoomById(Long chatRoomId) {
         return chatRoomRepository.findById(chatRoomId)
-                .orElseThrow(() -> new RuntimeException("聊天室不存在"));
+                .orElseThrow(() -> new BusinessException(ErrorCode.CHAT_ROOM_NOT_FOUND));
     }
     
     /**
@@ -186,11 +188,11 @@ public class ChatService {
     public Page<ChatMessage> getChatMessages(Long chatRoomId, Long userId, int page, int size, LocalDateTime before) {
         // 验证访问权限
         if (!canAccessChatRoom(chatRoomId, userId)) {
-            throw new RuntimeException("无权限访问此聊天室");
+            throw new BusinessException(ErrorCode.CHAT_ROOM_ACCESS_DENIED);
         }
-        
+
         Pageable pageable = PageRequest.of(page - 1, size);
-        
+
         if (before != null) {
             return chatMessageRepository.findByChatRoomIdAndSentAtBefore(chatRoomId, before, pageable);
         } else {
@@ -205,9 +207,9 @@ public class ChatService {
         // 验证聊天室和权限
         ChatRoom chatRoom = getChatRoomById(chatRoomId);
         if (!chatRoom.isParticipant(senderId)) {
-            throw new RuntimeException("无权限在此聊天室发送消息");
+            throw new BusinessException(ErrorCode.CHAT_ROOM_ACCESS_DENIED);
         }
-        
+
         // 创建消息
         ChatMessage message = ChatMessage.createTextMessage(chatRoomId, senderId, content);
         message.setId(IdGenerator.generateProductId());
@@ -242,16 +244,16 @@ public class ChatService {
     /**
      * 发送图片消息
      */
-    public ChatMessage sendImageMessage(Long chatRoomId, Long senderId, String fileUrl, 
+    public ChatMessage sendImageMessage(Long chatRoomId, Long senderId, String fileUrl,
                                       String thumbnailUrl, Integer width, Integer height, Integer fileSize) {
         // 验证聊天室和权限
         ChatRoom chatRoom = getChatRoomById(chatRoomId);
         if (!chatRoom.isParticipant(senderId)) {
-            throw new RuntimeException("无权限在此聊天室发送消息");
+            throw new BusinessException(ErrorCode.CHAT_ROOM_ACCESS_DENIED);
         }
-        
+
         // 创建图片消息
-        ChatMessage message = ChatMessage.createImageMessage(chatRoomId, senderId, fileUrl, 
+        ChatMessage message = ChatMessage.createImageMessage(chatRoomId, senderId, fileUrl,
                 thumbnailUrl, width, height, fileSize);
         message.setId(IdGenerator.generateProductId());
         
@@ -269,14 +271,14 @@ public class ChatService {
     /**
      * 发送语音消息
      */
-    public ChatMessage sendVoiceMessage(Long chatRoomId, Long senderId, String fileUrl, 
+    public ChatMessage sendVoiceMessage(Long chatRoomId, Long senderId, String fileUrl,
                                       Integer duration, Integer fileSize) {
         // 验证聊天室和权限
         ChatRoom chatRoom = getChatRoomById(chatRoomId);
         if (!chatRoom.isParticipant(senderId)) {
-            throw new RuntimeException("无权限在此聊天室发送消息");
+            throw new BusinessException(ErrorCode.CHAT_ROOM_ACCESS_DENIED);
         }
-        
+
         // 创建语音消息
         ChatMessage message = ChatMessage.createVoiceMessage(chatRoomId, senderId, fileUrl, duration, fileSize);
         message.setId(IdGenerator.generateProductId());
@@ -327,17 +329,17 @@ public class ChatService {
     public void markMessagesAsRead(Long chatRoomId, Long userId) {
         // 验证权限
         if (!canAccessChatRoom(chatRoomId, userId)) {
-            throw new RuntimeException("无权限访问此聊天室");
+            throw new BusinessException(ErrorCode.CHAT_ROOM_ACCESS_DENIED);
         }
-        
+
         // 批量标记消息为已读
         chatMessageRepository.markChatRoomMessagesAsRead(chatRoomId, userId);
-        
+
         // 更新聊天室未读计数
         ChatRoom chatRoom = getChatRoomById(chatRoomId);
         chatRoom.markAsRead(userId);
         chatRoomRepository.save(chatRoom);
-        
+
         logger.info("标记消息为已读 - 聊天室ID: {}, 用户ID: {}", chatRoomId, userId);
     }
     
@@ -346,14 +348,14 @@ public class ChatService {
      */
     public void markMessageAsDelivered(Long messageId, Long userId) {
         ChatMessage message = chatMessageRepository.findById(messageId)
-                .orElseThrow(() -> new RuntimeException("消息不存在"));
-        
+                .orElseThrow(() -> new BusinessException(ErrorCode.CHAT_MESSAGE_NOT_FOUND));
+
         // 验证权限：只有接收者可以标记为已送达
         ChatRoom chatRoom = getChatRoomById(message.getChatRoomId());
         if (!chatRoom.isParticipant(userId) || message.getSenderId().equals(userId)) {
-            throw new RuntimeException("无权限标记此消息");
+            throw new BusinessException(ErrorCode.CHAT_ROOM_ACCESS_DENIED);
         }
-        
+
         chatMessageRepository.markAsDelivered(messageId);
         logger.info("标记消息为已送达 - 消息ID: {}, 用户ID: {}", messageId, userId);
     }
@@ -363,14 +365,14 @@ public class ChatService {
      */
     public void markMessageAsRead(Long messageId, Long userId) {
         ChatMessage message = chatMessageRepository.findById(messageId)
-                .orElseThrow(() -> new RuntimeException("消息不存在"));
-        
+                .orElseThrow(() -> new BusinessException(ErrorCode.CHAT_MESSAGE_NOT_FOUND));
+
         // 验证权限：只有接收者可以标记为已读
         ChatRoom chatRoom = getChatRoomById(message.getChatRoomId());
         if (!chatRoom.isParticipant(userId) || message.getSenderId().equals(userId)) {
-            throw new RuntimeException("无权限标记此消息");
+            throw new BusinessException(ErrorCode.CHAT_ROOM_ACCESS_DENIED);
         }
-        
+
         chatMessageRepository.markAsRead(messageId);
         logger.info("标记消息为已读 - 消息ID: {}, 用户ID: {}", messageId, userId);
     }
@@ -382,15 +384,15 @@ public class ChatService {
     public Map<String, Long> getMessageDeliveryStats(Long chatRoomId, Long userId) {
         // 验证权限
         if (!canAccessChatRoom(chatRoomId, userId)) {
-            throw new RuntimeException("无权限访问此聊天室");
+            throw new BusinessException(ErrorCode.CHAT_ROOM_ACCESS_DENIED);
         }
-        
+
         Map<String, Long> stats = new HashMap<>();
         stats.put("sent", chatMessageRepository.countByChatRoomIdAndSenderIdAndStatus(chatRoomId, userId, ChatMessage.MessageStatus.SENT));
         stats.put("delivered", chatMessageRepository.countByChatRoomIdAndSenderIdAndStatus(chatRoomId, userId, ChatMessage.MessageStatus.DELIVERED));
         stats.put("read", chatMessageRepository.countByChatRoomIdAndSenderIdAndStatus(chatRoomId, userId, ChatMessage.MessageStatus.READ));
         stats.put("failed", chatMessageRepository.countByChatRoomIdAndSenderIdAndStatus(chatRoomId, userId, ChatMessage.MessageStatus.FAILED));
-        
+
         return stats;
     }
     
@@ -429,9 +431,9 @@ public class ChatService {
     public List<ChatMessage> searchMessages(Long chatRoomId, Long userId, String keyword) {
         // 验证权限
         if (!canAccessChatRoom(chatRoomId, userId)) {
-            throw new RuntimeException("无权限搜索此聊天室消息");
+            throw new BusinessException(ErrorCode.CHAT_ROOM_ACCESS_DENIED);
         }
-        
+
         return chatMessageRepository.searchMessages(chatRoomId, keyword);
     }
     
@@ -442,9 +444,9 @@ public class ChatService {
     public List<ChatMessage> getImageMessages(Long chatRoomId, Long userId) {
         // 验证权限
         if (!canAccessChatRoom(chatRoomId, userId)) {
-            throw new RuntimeException("无权限访问此聊天室");
+            throw new BusinessException(ErrorCode.CHAT_ROOM_ACCESS_DENIED);
         }
-        
+
         return chatMessageRepository.findImageMessages(chatRoomId);
     }
     
@@ -454,11 +456,11 @@ public class ChatService {
     public void closeChatRoom(Long chatRoomId, Long userId) {
         // 验证权限
         if (!canAccessChatRoom(chatRoomId, userId)) {
-            throw new RuntimeException("无权限关闭此聊天室");
+            throw new BusinessException(ErrorCode.CHAT_ROOM_ACCESS_DENIED);
         }
-        
+
         chatRoomRepository.closeChatRoom(chatRoomId);
-        
+
         logger.info("关闭聊天室 - 聊天室ID: {}, 操作用户ID: {}", chatRoomId, userId);
     }
     
@@ -489,18 +491,18 @@ public class ChatService {
     @Transactional(readOnly = true)
     public User getChatRoomParticipant(Long chatRoomId, Long currentUserId) {
         ChatRoom chatRoom = getChatRoomById(chatRoomId);
-        
+
         if (!chatRoom.isParticipant(currentUserId)) {
-            throw new RuntimeException("无权限访问此聊天室");
+            throw new BusinessException(ErrorCode.CHAT_ROOM_ACCESS_DENIED);
         }
-        
+
         Long otherUserId = chatRoom.getOtherParticipant(currentUserId);
         if (otherUserId == null) {
-            throw new RuntimeException("无法找到聊天对象");
+            throw new BusinessException(ErrorCode.USER_NOT_FOUND);
         }
-        
+
         return userRepository.findById(otherUserId)
-                .orElseThrow(() -> new RuntimeException("聊天对象不存在"));
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
     }
 
     /**
@@ -531,9 +533,9 @@ public class ChatService {
                     request.getDuration(), null);
                 break;
             default:
-                throw new RuntimeException("不支持的消息类型: " + request.getType());
+                throw new BusinessException(ErrorCode.CHAT_FILE_TYPE_UNSUPPORTED);
         }
-        
+
         return convertToChatMessageResponse(message);
     }
 
@@ -549,18 +551,18 @@ public class ChatService {
      */
     public void toggleChatRoomPin(Long chatRoomId, Long userId) {
         ChatRoom chatRoom = getChatRoomById(chatRoomId);
-        
+
         // 验证权限
         if (!chatRoom.isParticipant(userId)) {
-            throw new RuntimeException("无权限操作此聊天室");
+            throw new BusinessException(ErrorCode.CHAT_ROOM_ACCESS_DENIED);
         }
-        
+
         boolean currentPinned = chatRoom.isPinned(userId);
         chatRoom.setPinned(userId, !currentPinned);
-        
+
         chatRoomRepository.save(chatRoom);
-        
-        logger.info("切换聊天室置顶状态 - 聊天室ID: {}, 用户ID: {}, 置顶: {}", 
+
+        logger.info("切换聊天室置顶状态 - 聊天室ID: {}, 用户ID: {}, 置顶: {}",
                 chatRoomId, userId, !currentPinned);
     }
     
@@ -569,18 +571,18 @@ public class ChatService {
      */
     public void toggleChatRoomMute(Long chatRoomId, Long userId) {
         ChatRoom chatRoom = getChatRoomById(chatRoomId);
-        
+
         // 验证权限
         if (!chatRoom.isParticipant(userId)) {
-            throw new RuntimeException("无权限操作此聊天室");
+            throw new BusinessException(ErrorCode.CHAT_ROOM_ACCESS_DENIED);
         }
-        
+
         boolean currentMuted = chatRoom.isMuted(userId);
         chatRoom.setMuted(userId, !currentMuted);
-        
+
         chatRoomRepository.save(chatRoom);
-        
-        logger.info("切换聊天室免打扰状态 - 聊天室ID: {}, 用户ID: {}, 免打扰: {}", 
+
+        logger.info("切换聊天室免打扰状态 - 聊天室ID: {}, 用户ID: {}, 免打扰: {}",
                 chatRoomId, userId, !currentMuted);
     }
     
@@ -588,13 +590,13 @@ public class ChatService {
      * 导出聊天记录
      */
     @Transactional(readOnly = true)
-    public Map<String, Object> exportChatHistory(Long chatRoomId, Long userId, 
+    public Map<String, Object> exportChatHistory(Long chatRoomId, Long userId,
                                                 LocalDateTime startTime, LocalDateTime endTime) {
         // 验证权限
         if (!canAccessChatRoom(chatRoomId, userId)) {
-            throw new RuntimeException("无权限访问此聊天室");
+            throw new BusinessException(ErrorCode.CHAT_ROOM_ACCESS_DENIED);
         }
-        
+
         ChatRoom chatRoom = getChatRoomById(chatRoomId);
         List<ChatMessage> messages;
         
@@ -662,19 +664,19 @@ public class ChatService {
     @Transactional(readOnly = true)
     public Map<String, Object> getChatRoomSettings(Long chatRoomId, Long userId) {
         ChatRoom chatRoom = getChatRoomById(chatRoomId);
-        
+
         // 验证权限
         if (!chatRoom.isParticipant(userId)) {
-            throw new RuntimeException("无权限访问此聊天室");
+            throw new BusinessException(ErrorCode.CHAT_ROOM_ACCESS_DENIED);
         }
-        
+
         Map<String, Object> settings = new HashMap<>();
         settings.put("chatRoomId", chatRoomId);
         settings.put("isPinned", chatRoom.isPinned(userId));
         settings.put("isMuted", chatRoom.isMuted(userId));
         settings.put("unreadCount", chatRoom.getUnreadCount(userId));
         settings.put("totalMessages", chatRoom.getTotalMessages());
-        
+
         return settings;
     }
 
@@ -685,6 +687,21 @@ public class ChatService {
         ChatMessageResponse response = new ChatMessageResponse();
         response.setId(message.getId());
         response.setSenderId(message.getSenderId());
+
+        // 设置发送者名称
+        if (message.getSenderId() != null) {
+            try {
+                User sender = userRepository.findById(message.getSenderId()).orElse(null);
+                if (sender != null) {
+                    response.setSenderName(sender.getUsername());
+                }
+            } catch (Exception e) {
+                logger.warn("获取发送者信息失败: {}", message.getSenderId(), e);
+            }
+        } else if (message.getMessageType() == ChatMessage.MessageType.SYSTEM) {
+            response.setSenderName("系统");
+        }
+
         response.setType(message.getMessageType().name());
         response.setContent(message.getContent());
         response.setSentAt(message.getSentAt());
@@ -701,6 +718,14 @@ public class ChatService {
         } else if (message.getMessageType() == ChatMessage.MessageType.VOICE) {
             response.setDuration(message.getDuration());
         } else if (message.getMessageType() == ChatMessage.MessageType.SYSTEM) {
+            // 设置系统消息类型
+            if (message.getSystemType() != null) {
+                response.setSystemType(message.getSystemType().name());
+            }
+            // 设置交易ID
+            if (message.getTransactionId() != null) {
+                response.setTransactionId(message.getTransactionId());
+            }
             // 需要将systemData从String转换为Map
             if (message.getSystemData() != null) {
                 Map<String, Object> systemDataMap = new HashMap<>();
@@ -738,17 +763,17 @@ public class ChatService {
         // 1. 验证商品存在且有效
         Optional<Product> productOpt = productRepository.findByIdAndNotDeleted(productId);
         if (!productOpt.isPresent()) {
-            throw new RuntimeException("商品不存在或已删除");
+            throw new BusinessException(ErrorCode.PRODUCT_NOT_FOUND);
         }
-        
+
         Product product = productOpt.get();
         if (!Product.ProductStatus.ACTIVE.equals(product.getStatus())) {
-            throw new RuntimeException("商品不可讨论，当前状态: " + product.getStatus());
+            throw new BusinessException(ErrorCode.PRODUCT_STATUS_INVALID);
         }
-        
+
         // 2. 验证不能与自己讨论
         if (buyerId.equals(product.getSellerId())) {
-            throw new RuntimeException("不能讨论自己发布的商品");
+            throw new BusinessException(ErrorCode.PRODUCT_CANNOT_BUY_OWN);
         }
         
         // 3. 创建或获取聊天室

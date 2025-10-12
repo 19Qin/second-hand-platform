@@ -10,6 +10,8 @@ import com.fliliy.secondhand.entity.ChatMessage;
 import com.fliliy.secondhand.entity.ChatRoom;
 import com.fliliy.secondhand.entity.Product;
 import com.fliliy.secondhand.entity.User;
+import com.fliliy.secondhand.entity.Transaction;
+import com.fliliy.secondhand.repository.TransactionRepository;
 import com.fliliy.secondhand.service.ChatService;
 import com.fliliy.secondhand.service.FileService;
 import com.fliliy.secondhand.service.ProductService;
@@ -54,6 +56,9 @@ public class ChatController {
     
     @Autowired
     private JwtUtil jwtUtil;
+
+    @Autowired
+    private TransactionRepository transactionRepository;
     
     /**
      * 创建或获取聊天室（直接指定卖家ID - 用于测试）
@@ -126,20 +131,44 @@ public class ChatController {
         try {
             Long userId = getCurrentUserId(request);
             Page<ChatRoom> chatRooms = chatService.getChatList(userId, page, size);
-            
+
             List<ChatRoomResponse> chatList = chatRooms.getContent().stream()
                     .map(room -> convertToChatRoomResponse(room, userId))
                     .collect(Collectors.toList());
-            
+
             PagedResponse<ChatRoomResponse> response = PagedResponse.of(chatList, chatRooms);
-            
+
             return ResponseEntity.ok(ApiResponse.success(response));
         } catch (Exception e) {
             logger.error("获取聊天列表失败", e);
             return ResponseEntity.ok(ApiResponse.error(e.getMessage()));
         }
     }
-    
+
+    /**
+     * 获取聊天室详情
+     */
+    @GetMapping("/{chatRoomId}")
+    public ResponseEntity<ApiResponse> getChatRoomDetail(@PathVariable Long chatRoomId,
+                                                         HttpServletRequest request) {
+        try {
+            Long userId = getCurrentUserId(request);
+            ChatRoom chatRoom = chatService.getChatRoomById(chatRoomId);
+
+            // 验证用户是否有权限访问
+            if (!chatRoom.getBuyerId().equals(userId) && !chatRoom.getSellerId().equals(userId)) {
+                return ResponseEntity.ok(ApiResponse.error("无权访问此聊天室"));
+            }
+
+            ChatRoomResponse response = convertToChatRoomResponse(chatRoom, userId);
+
+            return ResponseEntity.ok(ApiResponse.success(response));
+        } catch (Exception e) {
+            logger.error("获取聊天室详情失败: chatRoomId={}", chatRoomId, e);
+            return ResponseEntity.ok(ApiResponse.error(e.getMessage()));
+        }
+    }
+
     /**
      * 获取聊天记录
      */
@@ -216,6 +245,7 @@ public class ChatController {
      * 发送消息
      */
     @PostMapping("/{chatRoomId}/messages")
+    @com.fliliy.secondhand.annotation.RateLimit(key = "sendMessage", limitType = com.fliliy.secondhand.util.RateLimiter.LimitType.USER, maxCount = 30, period = 60, message = "发送消息过于频繁，请稍后再试")
     public ResponseEntity<ApiResponse> sendMessage(@PathVariable Long chatRoomId,
                                                   @Valid @RequestBody SendMessageRequest request,
                                                   HttpServletRequest httpRequest) {
@@ -271,6 +301,7 @@ public class ChatController {
      * 上传聊天文件（图片/语音）
      */
     @PostMapping("/upload")
+    @com.fliliy.secondhand.annotation.RateLimit(key = "uploadChatFile", limitType = com.fliliy.secondhand.util.RateLimiter.LimitType.USER, maxCount = 20, period = 60, message = "上传过于频繁，请稍后再试")
     public ResponseEntity<ApiResponse> uploadChatFile(@RequestParam("file") MultipartFile file,
                                                      @RequestParam("type") String type,
                                                      HttpServletRequest request) {
@@ -539,14 +570,72 @@ public class ChatController {
     private ChatRoomResponse convertToChatRoomResponse(ChatRoom chatRoom, Long currentUserId) {
         ChatRoomResponse response = new ChatRoomResponse();
         response.setChatRoomId(chatRoom.getId());
-        response.setTransactionId(chatRoom.getTransactionId());
+        response.setTransactionId(chatRoom.getTransactionId());  // 保留用于向后兼容
+
         // 根据当前用户角色获取未读数
-        Integer unreadCount = currentUserId.equals(chatRoom.getBuyerId()) ? 
+        Integer unreadCount = currentUserId.equals(chatRoom.getBuyerId()) ?
             chatRoom.getBuyerUnreadCount() : chatRoom.getSellerUnreadCount();
         response.setUnreadCount(unreadCount);
         response.setTotalMessages(chatRoom.getTotalMessages());
         response.setCreatedAt(chatRoom.getCreatedAt());
         response.setUpdatedAt(chatRoom.getUpdatedAt());
+
+        // 获取聊天室中所有进行中的交易（PENDING或AGREED状态）
+        try {
+            List<Transaction.TransactionStatus> activeStatuses = new ArrayList<>();
+            activeStatuses.add(Transaction.TransactionStatus.PENDING);
+            activeStatuses.add(Transaction.TransactionStatus.AGREED);
+
+            List<Transaction> activeTransactions = transactionRepository.findActiveByChatRoomId(
+                chatRoom.getId(), activeStatuses);
+
+            List<ChatRoomResponse.ActiveTransactionInfo> activeTransactionInfos = new ArrayList<>();
+
+            for (Transaction transaction : activeTransactions) {
+                try {
+                    Product product = productService.getProductById(transaction.getProductId());
+
+                    ChatRoomResponse.ActiveTransactionInfo info = new ChatRoomResponse.ActiveTransactionInfo();
+                    info.setTransactionId("tx_" + transaction.getId());
+                    info.setProductId(product.getId());
+                    info.setProductTitle(product.getTitle());
+                    info.setProductPrice(product.getPrice().doubleValue());
+                    info.setStatus(transaction.getStatus().name());
+                    info.setRequestedAt(transaction.getRequestedAt());
+
+                    // 设置商品主图
+                    if (product.getMainImage() != null && !product.getMainImage().isEmpty()) {
+                        info.setProductImage(product.getMainImage());
+                    }
+
+                    // 确定当前用户在此交易中的角色
+                    String role = currentUserId.equals(transaction.getBuyerId()) ? "BUYER" : "SELLER";
+                    info.setRole(role);
+
+                    // 只有AGREED状态且当前用户是买家时，才返回交易码
+                    if (transaction.getStatus() == Transaction.TransactionStatus.AGREED &&
+                        currentUserId.equals(transaction.getBuyerId())) {
+                        info.setTransactionCode(transaction.getTransactionCode());
+                        info.setCodeExpiresAt(transaction.getCodeExpiresAt());
+                    }
+
+                    activeTransactionInfos.add(info);
+                } catch (Exception e) {
+                    logger.warn("Failed to load transaction {} details: {}", transaction.getId(), e.getMessage());
+                }
+            }
+
+            response.setActiveTransactions(activeTransactionInfos);
+
+            // 如果有进行中的交易，更新旧的transactionId字段（向后兼容）
+            if (!activeTransactionInfos.isEmpty()) {
+                response.setTransactionId(activeTransactions.get(0).getId());
+            }
+
+        } catch (Exception e) {
+            logger.error("Failed to load active transactions for chatRoom {}: {}", chatRoom.getId(), e.getMessage());
+            response.setActiveTransactions(new ArrayList<>());
+        }
         
         // 设置讨论的商品信息（暂时注释掉，逐步调试）
         // try {
@@ -605,6 +694,11 @@ public class ChatController {
         response.setStatus(message.getStatus().toString());
         response.setIsRecalled(message.getIsRecalled());
         response.setRecalledAt(message.getRecalledAt());
+
+        // 设置交易相关字段
+        response.setTransactionId(message.getTransactionId());
+        response.setRelatedProductId(message.getRelatedProductId());
+        response.setInquiryType(message.getInquiryType());
         
         // 设置发送者姓名
         if (message.getSenderId() != null) {
@@ -630,7 +724,14 @@ public class ChatController {
         if (message.getMessageType() == ChatMessage.MessageType.VOICE) {
             response.setDuration(message.getDuration());
         }
-        
+
+        // 系统消息相关字段
+        if (message.getMessageType() == ChatMessage.MessageType.SYSTEM) {
+            if (message.getSystemType() != null) {
+                response.setSystemType(message.getSystemType().name());
+            }
+        }
+
         return response;
     }
 }

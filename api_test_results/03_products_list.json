@@ -1,0 +1,159 @@
+{
+  "code": 200,
+  "message": "获取成功",
+  "data": {
+    "content": [
+      {
+        "id": "1969761981678358528",
+        "title": "测试不传warranty字段",
+        "price": 100,
+        "originalPrice": null,
+        "discount": null,
+        "mainImage": "https://example.com/test.jpg",
+        "condition": "NEW",
+        "conditionText": "全新",
+        "location": "北京市北京市朝阳区",
+        "distance": null,
+        "publishTime": "2025-09-21 21:53:47",
+        "hasWarranty": false,
+        "warrantyText": null,
+        "status": "ACTIVE",
+        "statusText": "在售中",
+        "soldAt": null,
+        "seller": {
+          "id": "1959106057909440512",
+          "username": "testuser1",
+          "avatar": "https://cdn.fliliy.com/avatar/default.png",
+          "verified": false,
+          "rating": null,
+          "ratingCount": null
+        },
+        "stats": {
+          "viewCount": 6,
+          "favoriteCount": 0,
+          "chatCount": 0,
+          "isOwn": false,
+          "isFavorited": false
+        },
+        "tags": null
+      },
+      {
+        "id": "1969760934960435200",
+        "title": "测试错误案例1",
+        "price": 100,
+        "originalPrice": null,
+        "discount": null,
+        "mainImage": "https://example.com/test.jpg",
+        "condition": "NEW",
+        "conditionText": "全新",
+        "location": "北京市北京市朝阳区",
+        "distance": null,
+        "publishTime": "2025-09-21 21:49:38",
+        "hasWarranty": false,
+        "warrantyText": null,
+        "status": "ACTIVE",
+        "statusText": "在售中",
+        "soldAt": null,
+        "seller": {
+          "id": "1959106057909440512",
+          "username": "testuser1",
+          "avatar": "https://cdn.fliliy.com/avatar/default.png",
+          "verified": false,
+          "rating": null,
+          "ratingCount": null
+        },
+        "stats": {
+          "viewCount": 0,
+          "favoriteCount": 0,
+          "chatCount": 0,
+          "isOwn": false,
+          "isFavorited": false
+        },
+        "tags": null
+      },
+      {
+        "id": "1969760518407327744",
+        "title": "测试商品 - 前端调试用",
+        "price": 100,
+        "originalPrice": null,
+        "discount": null,
+        "mainImage": "https://example.com/test.jpg",
+        "condition": "NEW",
+        "conditionText": "全新",
+        "location": "北京市北京市朝阳区",
+        "distance": null,
+        "publishTime": "2025-09-21 21:47:59",
+        "hasWarranty": true,
+        "warrantyText": "保修12个月",
+        "status": "ACTIVE",
+        "statusText": "在售中",
+        "soldAt": null,
+        "seller": {
+          "id": "1959106057909440512",
+          "username": "testuser1",
+          "avatar": "https://cdn.fliliy.com/avatar/default.png",
+          "verified": false,
+          "rating": null,
+          "ratingCount": null
+        },
+        "stats": {
+          "viewCount": 0,
+          "favoriteCount": 0,
+          "chatCount": 0,
+          "isOwn": false,
+          "isFavorited": false
+        },
+        "tags": null
+      },
+      {
+        "id": "1968947273484341248",
+        "title": "完整测试商品 MacBook Pro",
+        "price": 8999,
+        "originalPrice": null,
+        "discount": null,
+        "mainImage": "http://localhost:8080/api/v1/files/products/macbook.jpg",
+        "condition": "LIKE_NEW",
+        "conditionText": "几乎全新",
+        "location": "北京市北京市朝阳区",
+        "distance": null,
+        "publishTime": "2025-09-19 15:56:26",
+        "hasWarranty": false,
+        "warrantyText": null,
+        "status": "ACTIVE",
+        "statusText": "在售中",
+        "soldAt": null,
+        "seller": {
+          "id": "1968926156120002560",
+          "username": "买家用户",
+          "avatar": "https://cdn.fliliy.com/avatar/default.png",
+          "verified": false,
+          "rating": null,
+          "ratingCount": null
+        },
+        "stats": {
+          "viewCount": 1,
+          "favoriteCount": 1,
+          "chatCount": 0,
+          "isOwn": false,
+          "isFavorited": false
+        },
+        "tags": [
+          "测试商品",
+          "完整流程"
+        ]
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "size": 10,
+      "total": 4,
+      "totalPages": 1,
+      "hasNext": false,
+      "hasPrevious": false,
+      "isFirst": true,
+      "isLast": true
+    },
+    "filters": null
+  },
+  "timestamp": 1760109253740
+}
